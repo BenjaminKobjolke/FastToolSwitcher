@@ -9,8 +9,13 @@ HandleToolHotkey:
 	{
 		if (tool.Hotkey = triggeredHotkey)
 		{
-			; Determine window detection method
-			if (tool.WindowTitle != "")
+			; Determine window detection method (priority: WindowClass > WindowTitle > ExeName)
+			if (tool.WindowClass != "")
+			{
+				; Use window class (for special cases like File Explorer)
+				windowSpec := "ahk_class " . tool.WindowClass
+			}
+			else if (tool.WindowTitle != "")
 			{
 				; Use window title
 				windowSpec := tool.WindowTitle

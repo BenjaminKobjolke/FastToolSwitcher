@@ -2,6 +2,7 @@
 ; Window picker - click a window to capture its info and auto-fill the tool dialog
 
 global PickerActive := false
+global PickedWindowClass := ""
 
 StartTargetPicker:
 	PickerActive := true
@@ -67,6 +68,14 @@ EndTargetPicker:
 	WinGet, procName, ProcessName, ahk_id %WinUnderCursor%
 	WinGet, procPath, ProcessPath, ahk_id %WinUnderCursor%
 	WinGetTitle, winTitle, ahk_id %WinUnderCursor%
+	WinGetClass, winClass, ahk_id %WinUnderCursor%
+
+	; Reset picked class
+	PickedWindowClass := ""
+
+	; Special case: File Explorer windows (explorer.exe is also the shell)
+	if (procName = "explorer.exe" && winClass = "CabinetWClass")
+		PickedWindowClass := winClass
 
 	; Derive name from exe (remove .exe, capitalize first letter)
 	derivedName := RegExReplace(procName, "i)\.exe$", "")
