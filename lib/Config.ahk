@@ -4,13 +4,14 @@
 ; Global variables
 global IniFile := ""
 global Tools := []
-global MainHotkeyEnabled := 1
-global MainHotkey := "^+Space"
+global MainHotkeyEnabled := 0
+global MainHotkey := ""
 global MoveMouse := 1
 global DarkMode := 1
 global MouseMoveSpeed := 0
 global StartWithWindows := 0
 global IconPath := ""
+global IconIndex := 0
 global ShowGuiOnStart := false
 global EditingToolIndex := 0
 
@@ -22,9 +23,9 @@ InitConfig() {
 	IniFile := A_ScriptDir . "\" . ScriptNameNoExt . ".ini"
 
 	; Read main settings from INI (use temp var, then assign to globals)
-	IniRead, tmp, %IniFile%, Settings, MainHotkeyEnabled, 1
+	IniRead, tmp, %IniFile%, Settings, MainHotkeyEnabled, 0
 	MainHotkeyEnabled := tmp
-	IniRead, tmp, %IniFile%, Settings, MainHotkey, ^+Space
+	IniRead, tmp, %IniFile%, Settings, MainHotkey, %A_Space%
 	MainHotkey := tmp
 	IniRead, tmp, %IniFile%, Settings, MoveMouse, 1
 	MoveMouse := tmp
@@ -36,10 +37,22 @@ InitConfig() {
 	StartWithWindows := tmp
 
 	; Set icon path based on theme (use opposite for visibility)
-	if (DarkMode = 1)
-		IconPath := A_ScriptDir . "\data\icon_light.ico"
+	; When compiled, load main icon from exe; otherwise use data folder
+	if (A_IsCompiled)
+	{
+		; Use the exe's embedded main icon (light icon)
+		IconPath := A_ScriptFullPath
+		IconIndex := 1
+	}
 	else
-		IconPath := A_ScriptDir . "\data\icon_dark.ico"
+	{
+		IconDir := A_ScriptDir . "\data"
+		if (DarkMode = 1)
+			IconPath := IconDir . "\icon_light.ico"
+		else
+			IconPath := IconDir . "\icon_dark.ico"
+		IconIndex := 0
+	}
 
 	; Check for command line arguments
 	ShowGuiOnStart := false
@@ -56,29 +69,6 @@ LoadTools() {
 	; Read tool count from INI
 	IniRead, ToolCount, %IniFile%, Tools, ToolCount, 0
 
-	; If no tools configured, create default INI
-	if (ToolCount = 0)
-	{
-		; Create default configuration
-		IniWrite, 2, %IniFile%, Tools, ToolCount
-
-		; Brave
-		IniWrite, Brave, %IniFile%, Tool1, Name
-		IniWrite, ^+b, %IniFile%, Tool1, Hotkey
-		IniWrite, brave.exe, %IniFile%, Tool1, ExeName
-		IniWrite, Brave, %IniFile%, Tool1, WindowTitle
-		IniWrite, %A_Space%, %IniFile%, Tool1, ExePath
-
-		; Firefox
-		IniWrite, Firefox, %IniFile%, Tool2, Name
-		IniWrite, ^+h, %IniFile%, Tool2, Hotkey
-		IniWrite, firefox.exe, %IniFile%, Tool2, ExeName
-		IniWrite, %A_Space%, %IniFile%, Tool2, WindowTitle
-		IniWrite, %A_Space%, %IniFile%, Tool2, ExePath
-
-		ToolCount := 2
-	}
-
 	; Initialize tool arrays
 	Tools := []
 
@@ -91,6 +81,7 @@ LoadTools() {
 		IniRead, ToolHotkey, %IniFile%, %ToolSection%, Hotkey, %A_Space%
 		IniRead, ToolExeName, %IniFile%, %ToolSection%, ExeName, %A_Space%
 		IniRead, ToolWindowTitle, %IniFile%, %ToolSection%, WindowTitle, %A_Space%
+		IniRead, ToolWindowClass, %IniFile%, %ToolSection%, WindowClass, %A_Space%
 		IniRead, ToolExePath, %IniFile%, %ToolSection%, ExePath, %A_Space%
 		IniRead, ToolArguments, %IniFile%, %ToolSection%, Arguments, %A_Space%
 		IniRead, ToolExcludeTitle, %IniFile%, %ToolSection%, ExcludeTitle, %A_Space%
@@ -105,6 +96,7 @@ LoadTools() {
 		Tool.Hotkey := ToolHotkey
 		Tool.ExeName := ToolExeName
 		Tool.WindowTitle := ToolWindowTitle
+		Tool.WindowClass := ToolWindowClass
 		Tool.ExePath := ToolExePath
 		Tool.Arguments := ToolArguments
 		Tool.ExcludeTitle := ToolExcludeTitle
