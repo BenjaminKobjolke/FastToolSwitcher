@@ -10,12 +10,15 @@ ShowToolDialog:
 	if (DarkMode = 1)
 	{
 		Gui, ToolDialog:Color, 0x1E1E1E, 0x2D2D2D
-		Gui, ToolDialog:Font, cSilver
+		Gui, ToolDialog:Font, s12 cWhite
 	}
 	else
 	{
-		Gui, ToolDialog:Font, cBlack
+		Gui, ToolDialog:Font, s12 cBlack
 	}
+
+	; Reset picked window class (will be set by Pick Window button)
+	PickedWindowClass := ""
 
 	; Get existing values if editing
 	if (EditingToolIndex > 0 && EditingToolIndex <= Tools.Length())
@@ -26,6 +29,7 @@ ShowToolDialog:
 		tdExeName := editTool.ExeName
 		tdExePath := editTool.ExePath
 		tdWindowTitle := editTool.WindowTitle
+		tdWindowClass := editTool.WindowClass
 		tdArguments := editTool.Arguments
 		tdExcludeTitle := editTool.ExcludeTitle
 	}
@@ -36,12 +40,13 @@ ShowToolDialog:
 		tdExeName := ""
 		tdExePath := ""
 		tdWindowTitle := ""
+		tdWindowClass := ""
 		tdArguments := ""
 		tdExcludeTitle := ""
 	}
 
-	Gui, ToolDialog:Add, Text, x10 y15 w80, Name:
-	Gui, ToolDialog:Add, Edit, x100 y12 w250 vTdName, %tdName%
+	Gui, ToolDialog:Add, Text, x15 y20 w100, Name:
+	Gui, ToolDialog:Add, Edit, x120 y17 w300 vTdName, %tdName%
 
 	; Parse current hotkey into components
 	parsedTdHk := ParseHotkey(tdHotkey)
@@ -51,40 +56,46 @@ ShowToolDialog:
 	tdWin := parsedTdHk.win
 	tdKeyVal := parsedTdHk.key
 
-	Gui, ToolDialog:Add, Text, x10 y45 w80, Hotkey:
-	Gui, ToolDialog:Add, Checkbox, x100 y45 vChkTdCtrl Checked%tdCtrl%, Ctrl
-	Gui, ToolDialog:Add, Checkbox, x150 y45 vChkTdShift Checked%tdShift%, Shift
-	Gui, ToolDialog:Add, Checkbox, x205 y45 vChkTdAlt Checked%tdAlt%, Alt
-	Gui, ToolDialog:Add, Checkbox, x250 y45 vChkTdWin Checked%tdWin%, Win
-	Gui, ToolDialog:Add, Text, x100 y70, Key:
-	Gui, ToolDialog:Add, Edit, x135 y67 w60 vTdKey ReadOnly, %tdKeyVal%
-	Gui, ToolDialog:Add, Button, x200 y66 w35 gSetToolKey, Set
+	Gui, ToolDialog:Add, Text, x15 y60 w100, Hotkey:
+	Gui, ToolDialog:Add, Checkbox, x120 y60 vChkTdCtrl Checked%tdCtrl%, Ctrl
+	Gui, ToolDialog:Add, Checkbox, x180 y60 vChkTdShift Checked%tdShift%, Shift
+	Gui, ToolDialog:Add, Checkbox, x250 y60 vChkTdAlt Checked%tdAlt%, Alt
+	Gui, ToolDialog:Add, Checkbox, x310 y60 vChkTdWin Checked%tdWin%, Win
+	Gui, ToolDialog:Add, Text, x120 y95, Key:
+	Gui, ToolDialog:Add, Edit, x165 y92 w70 vTdKey ReadOnly, %tdKeyVal%
+	Gui, ToolDialog:Add, Button, x245 y91 w45 gSetToolKey, Set
 
-	Gui, ToolDialog:Add, Text, x10 y100 w80, Exe Name:
-	Gui, ToolDialog:Add, Edit, x100 y97 w250 vTdExeName, %tdExeName%
+	Gui, ToolDialog:Add, Text, x15 y135 w100, Exe Name:
+	Gui, ToolDialog:Add, Edit, x120 y132 w300 vTdExeName, %tdExeName%
 
-	Gui, ToolDialog:Add, Text, x10 y130 w80, Exe Path:
-	Gui, ToolDialog:Add, Edit, x100 y127 w220 vTdExePath, %tdExePath%
-	Gui, ToolDialog:Add, Button, x325 y126 w25 gBrowseExePath, ...
+	Gui, ToolDialog:Add, Text, x15 y175 w100, Exe Path:
+	Gui, ToolDialog:Add, Edit, x120 y172 w260 vTdExePath, %tdExePath%
+	Gui, ToolDialog:Add, Button, x385 y171 w35 gBrowseExePath, ...
 
-	Gui, ToolDialog:Add, Text, x10 y160 w80, Window Title:
-	Gui, ToolDialog:Add, Edit, x100 y157 w250 vTdWindowTitle, %tdWindowTitle%
-	Gui, ToolDialog:Add, Text, x10 y180 cGray, (optional, for matching by title)
+	Gui, ToolDialog:Add, Text, x15 y215 w100, Window Title:
+	Gui, ToolDialog:Add, Edit, x120 y212 w300 vTdWindowTitle, %tdWindowTitle%
+	if (DarkMode = 1)
+		Gui, ToolDialog:Add, Text, x15 y245 cWhite, (optional, for matching by title)
+	else
+		Gui, ToolDialog:Add, Text, x15 y245 cGray, (optional, for matching by title)
 
-	Gui, ToolDialog:Add, Text, x10 y205 w80, Arguments:
-	Gui, ToolDialog:Add, Edit, x100 y202 w250 vTdArguments, %tdArguments%
+	Gui, ToolDialog:Add, Text, x15 y280 w100, Arguments:
+	Gui, ToolDialog:Add, Edit, x120 y277 w300 vTdArguments, %tdArguments%
 
-	Gui, ToolDialog:Add, Text, x10 y235 w80, Exclude Title:
-	Gui, ToolDialog:Add, Edit, x100 y232 w250 vTdExcludeTitle, %tdExcludeTitle%
-	Gui, ToolDialog:Add, Text, x10 y255 cGray, (windows containing this text are ignored)
+	Gui, ToolDialog:Add, Text, x15 y320 w100, Exclude Title:
+	Gui, ToolDialog:Add, Edit, x120 y317 w300 vTdExcludeTitle, %tdExcludeTitle%
+	if (DarkMode = 1)
+		Gui, ToolDialog:Add, Text, x15 y350 cWhite, (windows containing this text are ignored)
+	else
+		Gui, ToolDialog:Add, Text, x15 y350 cGray, (windows containing this text are ignored)
 
 	; Pick Window button
-	Gui, ToolDialog:Add, Button, x100 y280 w100 gStartTargetPicker, Pick Window
+	Gui, ToolDialog:Add, Button, x120 y385 w120 gStartTargetPicker, Pick Window
 
-	Gui, ToolDialog:Add, Button, x190 y320 w80 gToolDialogSave Default, Save
-	Gui, ToolDialog:Add, Button, x280 y320 w80 gToolDialogClose, Cancel
+	Gui, ToolDialog:Add, Button, x240 y435 w90 gToolDialogSave Default, Save
+	Gui, ToolDialog:Add, Button, x340 y435 w90 gToolDialogClose, Cancel
 
-	Gui, ToolDialog:Show, w360 h360
+	Gui, ToolDialog:Show, w440 h480
 
 	; Apply dark title bar after showing
 	if (DarkMode = 1)
@@ -128,6 +139,12 @@ ToolDialogSave:
 	; Build hotkey from checkboxes and key field
 	builtToolHotkey := BuildHotkey(ChkTdCtrl, ChkTdShift, ChkTdAlt, ChkTdWin, TdKey)
 
+	; Determine WindowClass: use PickedWindowClass if set (from Pick Window), else preserve existing
+	if (PickedWindowClass != "")
+		finalWindowClass := PickedWindowClass
+	else
+		finalWindowClass := tdWindowClass
+
 	; Create tool object
 	newTool := {}
 	newTool.Name := TdName
@@ -135,6 +152,7 @@ ToolDialogSave:
 	newTool.ExeName := TdExeName
 	newTool.ExePath := TdExePath
 	newTool.WindowTitle := TdWindowTitle
+	newTool.WindowClass := finalWindowClass
 	newTool.Arguments := TdArguments
 	newTool.ExcludeTitle := TdExcludeTitle
 

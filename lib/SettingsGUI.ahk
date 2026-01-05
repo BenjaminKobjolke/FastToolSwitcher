@@ -16,14 +16,14 @@ ShowSettings:
 	if (DarkMode = 1)
 	{
 		Gui, Settings:Color, 0x1E1E1E, 0x2D2D2D
-		Gui, Settings:Font, cSilver
+		Gui, Settings:Font, s12 cWhite
 	}
 	else
 	{
-		Gui, Settings:Font, cBlack
+		Gui, Settings:Font, s12 cBlack
 	}
 
-	Gui, Settings:Add, Tab3, x10 y10 w460 h350 vSettingsTab, Settings|Tools|Design
+	Gui, Settings:Add, Tab3, x10 y10 w520 h420 vSettingsTab, Settings|Tools|Design
 
 	; === Settings Tab ===
 	Gui, Settings:Tab, Settings
@@ -37,28 +37,28 @@ ShowSettings:
 	hkWin := parsedHk.win
 	hkKey := parsedHk.key
 
-	Gui, Settings:Add, Text, x20 y80, Hotkey:
-	Gui, Settings:Add, Checkbox, x70 y80 vChkHkCtrl Checked%hkCtrl%, Ctrl
-	Gui, Settings:Add, Checkbox, x120 y80 vChkHkShift Checked%hkShift%, Shift
-	Gui, Settings:Add, Checkbox, x175 y80 vChkHkAlt Checked%hkAlt%, Alt
-	Gui, Settings:Add, Checkbox, x220 y80 vChkHkWin Checked%hkWin%, Win
-	Gui, Settings:Add, Text, x265 y80, Key:
-	Gui, Settings:Add, Edit, x295 y77 w60 vHkMainKey ReadOnly, %hkKey%
-	Gui, Settings:Add, Button, x360 y76 w35 gSetMainKey, Set
+	Gui, Settings:Add, Text, x20 y90, Hotkey:
+	Gui, Settings:Add, Checkbox, x80 y90 vChkHkCtrl Checked%hkCtrl%, Ctrl
+	Gui, Settings:Add, Checkbox, x140 y90 vChkHkShift Checked%hkShift%, Shift
+	Gui, Settings:Add, Checkbox, x210 y90 vChkHkAlt Checked%hkAlt%, Alt
+	Gui, Settings:Add, Checkbox, x265 y90 vChkHkWin Checked%hkWin%, Win
+	Gui, Settings:Add, Text, x320 y90, Key:
+	Gui, Settings:Add, Edit, x360 y87 w70 vHkMainKey ReadOnly, %hkKey%
+	Gui, Settings:Add, Button, x435 y86 w45 gSetMainKey, Set
 
 	if (DarkMode = 1)
-		Gui, Settings:Add, Text, x20 y105 cGray, (Cycles windows of same process)
+		Gui, Settings:Add, Text, x20 y125 cWhite, (Cycles windows of same process)
 	else
-		Gui, Settings:Add, Text, x20 y105 cGray, (Cycles windows of same process)
-	Gui, Settings:Add, Checkbox, x20 y130 vChkMoveMouse Checked%MoveMouse% gToggleSpeedVisibility, Move mouse to center of window when switching
+		Gui, Settings:Add, Text, x20 y125 cGray, (Cycles windows of same process)
+	Gui, Settings:Add, Checkbox, x20 y165 vChkMoveMouse Checked%MoveMouse% gToggleSpeedVisibility, Move mouse to center of window when switching
 	hideSpeed := (MoveMouse = 1) ? 0 : 1
-	Gui, Settings:Add, Text, x40 y160 vTxtMouseSpeed Hidden%hideSpeed%, Mouse move speed (0 = instant):
-	Gui, Settings:Add, Slider, x200 y157 w150 h25 Range0-10 ToolTip vSliderMouseMoveSpeed Hidden%hideSpeed%, %MouseMoveSpeed%
-	Gui, Settings:Add, Checkbox, x20 y195 vChkStartWithWindows Checked%StartWithWindows%, Start with Windows
+	Gui, Settings:Add, Text, x40 y205 vTxtMouseSpeed Hidden%hideSpeed%, Mouse move speed (0 = instant):
+	Gui, Settings:Add, Slider, x280 y202 w150 h25 Range0-10 ToolTip vSliderMouseMoveSpeed Hidden%hideSpeed%, %MouseMoveSpeed%
+	Gui, Settings:Add, Checkbox, x20 y250 vChkStartWithWindows Checked%StartWithWindows%, Start with Windows
 
 	; === Tools Tab ===
 	Gui, Settings:Tab, Tools
-	Gui, Settings:Add, ListView, x20 y50 w430 h240 vToolListView gToolListViewAction AltSubmit +LV0x10000, Name|Hotkey|Exe Name|Path
+	Gui, Settings:Add, ListView, x20 y50 w490 h300 vToolListView gToolListViewAction AltSubmit +LV0x10000, Name|Hotkey|Exe Name|Path
 
 	; Populate ListView with tools
 	for index, tool in Tools
@@ -67,40 +67,40 @@ ShowSettings:
 	}
 
 	; Auto-size columns
-	LV_ModifyCol(1, 100)
-	LV_ModifyCol(2, 60)
-	LV_ModifyCol(3, 100)
+	LV_ModifyCol(1, 120)
+	LV_ModifyCol(2, 80)
+	LV_ModifyCol(3, 120)
 	LV_ModifyCol(4, 150)
 
-	Gui, Settings:Add, Button, x20 y300 w70 gToolAdd, Add
-	Gui, Settings:Add, Button, x100 y300 w70 gToolEdit, Edit
-	Gui, Settings:Add, Button, x180 y300 w70 gToolDelete, Delete
+	Gui, Settings:Add, Button, x20 y360 w80 gToolAdd, Add
+	Gui, Settings:Add, Button, x110 y360 w80 gToolEdit, Edit
+	Gui, Settings:Add, Button, x200 y360 w80 gToolDelete, Delete
 
 	; === Design Tab ===
 	Gui, Settings:Tab, Design
 	Gui, Settings:Add, Text, x20 y50, Theme:
 	darkModeChecked := (DarkMode = 1) ? 1 : 0
 	lightModeChecked := (DarkMode = 1) ? 0 : 1
-	Gui, Settings:Add, Radio, x20 y75 vRadioDarkMode Checked%darkModeChecked% gThemePreview, Dark Mode
-	Gui, Settings:Add, Radio, x20 y100 Checked%lightModeChecked% gThemePreview, Light Mode
+	Gui, Settings:Add, Radio, x20 y85 vRadioDarkMode Checked%darkModeChecked% gThemePreview, Dark Mode
+	Gui, Settings:Add, Radio, x20 y120 Checked%lightModeChecked% gThemePreview, Light Mode
 
 	; === Bottom buttons (outside tabs) ===
 	Gui, Settings:Tab
-	Gui, Settings:Add, Button, x300 y370 w80 gSaveSettings Default, Save
-	Gui, Settings:Add, Button, x390 y370 w80 gSettingsGuiClose, Cancel
+	Gui, Settings:Add, Button, x350 y440 w90 gSaveSettings Default, Save
+	Gui, Settings:Add, Button, x450 y440 w90 gSettingsGuiClose, Cancel
 
 	; Add link at bottom
 	if (DarkMode = 1)
 		Gui, Settings:Font, cAqua
 	else
 		Gui, Settings:Font, cBlue
-	Gui, Settings:Add, Text, x20 y378 gOpenMoreTools, More tools to improve your workflow
+	Gui, Settings:Add, Text, x20 y448 gOpenMoreTools, More tools to improve your workflow
 	if (DarkMode = 1)
-		Gui, Settings:Font, cSilver
+		Gui, Settings:Font, s12 cWhite
 	else
-		Gui, Settings:Font, cBlack
+		Gui, Settings:Font, s12 cBlack
 
-	Gui, Settings:Show, w480 h410
+	Gui, Settings:Show, w550 h480
 
 	; Apply dark mode to window after showing
 	if (DarkMode = 1)
@@ -200,11 +200,13 @@ SaveSettings:
 
 		; Get additional fields from Tools array if exists
 		tWindowTitle := ""
+		tWindowClass := ""
 		tArguments := ""
 		tExcludeTitle := ""
 		if (A_Index <= Tools.Length())
 		{
 			tWindowTitle := Tools[A_Index].WindowTitle
+			tWindowClass := Tools[A_Index].WindowClass
 			tArguments := Tools[A_Index].Arguments
 			tExcludeTitle := Tools[A_Index].ExcludeTitle
 		}
@@ -215,6 +217,7 @@ SaveSettings:
 		IniWrite, %tExeName%, %IniFile%, %section%, ExeName
 		IniWrite, %tExePath%, %IniFile%, %section%, ExePath
 		IniWrite, %tWindowTitle%, %IniFile%, %section%, WindowTitle
+		IniWrite, %tWindowClass%, %IniFile%, %section%, WindowClass
 		IniWrite, %tArguments%, %IniFile%, %section%, Arguments
 		IniWrite, %tExcludeTitle%, %IniFile%, %section%, ExcludeTitle
 	}
