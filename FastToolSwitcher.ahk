@@ -3,6 +3,10 @@ SendMode Input  ; Recommended for new scripts due to its superior speed and reli
 #SingleInstance force
 #Persistent ;Script nicht beenden nach der Auto-Execution-Section
 
+; Embed icons as resources (used by Ahk2Exe compiler)
+;@Ahk2Exe-SetMainIcon data\icon_light.ico
+;@Ahk2Exe-AddResource data\icon_dark.ico, 206
+
 SetWorkingDir %A_ScriptDir%
 SetTitleMatchMode, 2
 
@@ -27,7 +31,10 @@ if (!A_IsCompiled) {
 }
 Menu, Tray, Add  ; Separator
 Menu, Tray, Add, Exit
-Menu, Tray, Icon, %IconPath%
+if (A_IsCompiled)
+	Menu, Tray, Icon, %IconPath%, %IconIndex%
+else if (FileExist(IconPath))
+	Menu, Tray, Icon, %IconPath%
 
 ; Show GUI on start if command line arg was passed
 if (ShowGuiOnStart)
