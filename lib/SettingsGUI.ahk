@@ -23,7 +23,7 @@ ShowSettings:
 		Gui, Settings:Font, s12 cBlack
 	}
 
-	Gui, Settings:Add, Tab3, x10 y10 w520 h510 vSettingsTab, Settings|Tools|Design
+	Gui, Settings:Add, Tab3, x10 y10 w520 h510 vSettingsTab, Settings|Tools|Design|Release Notes
 
 	; === Settings Tab ===
 	Gui, Settings:Tab, Settings
@@ -109,6 +109,93 @@ ShowSettings:
 	lightModeChecked := (DarkMode = 1) ? 0 : 1
 	Gui, Settings:Add, Radio, x20 y85 vRadioDarkMode Checked%darkModeChecked% gThemePreview, Dark Mode
 	Gui, Settings:Add, Radio, x20 y120 Checked%lightModeChecked% gThemePreview, Light Mode
+
+	; === Release Notes Tab ===
+	Gui, Settings:Tab, Release Notes
+
+	global RNVersions, CurrentRNIndex
+	RNVersions := CollectReleaseNoteVersions()
+
+	if (!CurrentRNIndex || CurrentRNIndex < 1 || CurrentRNIndex > RNVersions.Length())
+		CurrentRNIndex := 1
+
+	; Build initial content for named controls
+	rnInitVersion := ""
+	rnInitDate := ""
+	rnInitNotes := ""
+	rnHasVersions := (RNVersions.Length() > 0)
+
+	if (rnHasVersions)
+	{
+		rnVersion := RNVersions[CurrentRNIndex]
+		rnNotesFile := A_ScriptDir . "\release_notes\" . rnVersion . "\en.json"
+
+		if (FileExist(rnNotesFile))
+		{
+			FileRead, rnJsonStr, %rnNotesFile%
+			rn := ParseReleaseNotesJson(rnJsonStr)
+			rnInitVersion := "Version " . rn.version
+			rnInitDate := rn.date
+			for rnIdx, rnNote in rn.notes
+			{
+				if (rnIdx > 1)
+					rnInitNotes .= "`n"
+				rnInitNotes .= chr(0x2022) . "  " . rnNote
+			}
+		}
+		else
+		{
+			rnInitVersion := "Version " . rnVersion
+			rnInitNotes := "No release notes file found for version " . rnVersion
+		}
+	}
+	else
+	{
+		rnInitNotes := "No release notes available."
+	}
+
+	; Version header
+	if (DarkMode = 1)
+		Gui, Settings:Font, s14 Bold cWhite
+	else
+		Gui, Settings:Font, s14 Bold cBlack
+	Gui, Settings:Add, Text, x20 y50 w300 vRNVersionText, %rnInitVersion%
+
+	; Navigation buttons
+	if (DarkMode = 1)
+		Gui, Settings:Font, s10 Normal cWhite
+	else
+		Gui, Settings:Font, s10 Normal cBlack
+	olderDisabled := (!rnHasVersions || CurrentRNIndex >= RNVersions.Length()) ? " Disabled" : ""
+	newerDisabled := (!rnHasVersions || CurrentRNIndex <= 1) ? " Disabled" : ""
+	Gui, Settings:Add, Button, x350 y47 w70 gRNOlder vBtnRNOlder%olderDisabled%, < Older
+	Gui, Settings:Add, Button, x425 y47 w70 gRNNewer vBtnRNNewer%newerDisabled%, Newer >
+
+	; Date
+	Gui, Settings:Font, s10 Normal
+	if (DarkMode = 1)
+		Gui, Settings:Font, cSilver
+	else
+		Gui, Settings:Font, cGray
+	Gui, Settings:Add, Text, x20 y78 w480 vRNDateText, %rnInitDate%
+
+	; Notes as read-only multi-line Edit
+	if (DarkMode = 1)
+	{
+		Gui, Settings:Font, s11 Normal cWhite
+		Gui, Settings:Add, Edit, x20 y115 w480 h350 vRNNotesEdit +ReadOnly +Multi -WantReturn -E0x200 -TabStop Background0x1E1E1E, %rnInitNotes%
+	}
+	else
+	{
+		Gui, Settings:Font, s11 Normal cBlack
+		Gui, Settings:Add, Edit, x20 y115 w480 h350 vRNNotesEdit +ReadOnly +Multi -WantReturn -E0x200 -TabStop, %rnInitNotes%
+	}
+
+	; Reset font for bottom buttons
+	if (DarkMode = 1)
+		Gui, Settings:Font, s12 cWhite
+	else
+		Gui, Settings:Font, s12 cBlack
 
 	; === Bottom buttons (outside tabs) ===
 	Gui, Settings:Tab
@@ -335,4 +422,64 @@ return
 
 OpenMoreTools:
 	Run, http://workflow-tools.com/fast-tool-switcher/app-link
+return
+
+RNOlder:
+	global CurrentRNIndex, RNVersions
+	if (CurrentRNIndex < RNVersions.Length())
+		CurrentRNIndex++
+	Gosub, UpdateReleaseNotes
+return
+
+RNNewer:
+	global CurrentRNIndex
+	if (CurrentRNIndex > 1)
+		CurrentRNIndex--
+	Gosub, UpdateReleaseNotes
+return
+
+UpdateReleaseNotes:
+	global CurrentRNIndex, RNVersions
+	if (RNVersions.Length() = 0)
+		return
+
+	rnVersion := RNVersions[CurrentRNIndex]
+	rnNotesFile := A_ScriptDir . "\release_notes\" . rnVersion . "\en.json"
+
+	rnNewVersion := "Version " . rnVersion
+	rnNewDate := ""
+	rnNewNotes := ""
+
+	if (FileExist(rnNotesFile))
+	{
+		FileRead, rnJsonStr, %rnNotesFile%
+		rn := ParseReleaseNotesJson(rnJsonStr)
+		rnNewVersion := "Version " . rn.version
+		rnNewDate := rn.date
+		for rnIdx, rnNote in rn.notes
+		{
+			if (rnIdx > 1)
+				rnNewNotes .= "`n"
+			rnNewNotes .= chr(0x2022) . "  " . rnNote
+		}
+	}
+	else
+	{
+		rnNewNotes := "No release notes file found for version " . rnVersion
+	}
+
+	GuiControl, Settings:, RNVersionText, %rnNewVersion%
+	GuiControl, Settings:, RNDateText, %rnNewDate%
+	GuiControl, Settings:, RNNotesEdit, %rnNewNotes%
+
+	; Enable/disable navigation buttons at boundaries
+	if (CurrentRNIndex >= RNVersions.Length())
+		GuiControl, Settings:Disable, BtnRNOlder
+	else
+		GuiControl, Settings:Enable, BtnRNOlder
+
+	if (CurrentRNIndex <= 1)
+		GuiControl, Settings:Disable, BtnRNNewer
+	else
+		GuiControl, Settings:Enable, BtnRNNewer
 return
