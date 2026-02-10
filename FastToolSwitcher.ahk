@@ -23,7 +23,6 @@ RegisterHotkeys()
 ; Setup system tray menu
 Menu, Tray, NoStandard
 Menu, Tray, Add, Settings, ShowSettings
-Menu, Tray, Add  ; Separator
 Menu, Tray, Add, More tools, OpenMoreTools
 if (!A_IsCompiled) {
 	Menu, Tray, Add  ; Separator
