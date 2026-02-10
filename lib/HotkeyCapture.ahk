@@ -68,6 +68,38 @@ BuildHotkey(ctrl, shift, alt, win, key) {
     return hotkeyStr
 }
 
+; Check if a hotkey conflicts with any existing tool or global hotkey
+; Returns "" if no conflict, or a description like "tool 'Brave' (Ctrl + B)"
+; excludeToolIndex: skip this tool index (used when editing an existing tool)
+FindHotkeyConflict(hotkeyToCheck, excludeToolIndex := 0) {
+	global Tools, MainHotkeyEnabled, MainHotkey, OverviewHotkeyEnabled, OverviewHotkey
+
+	if (hotkeyToCheck = "")
+		return ""
+
+	; Check against all tool hotkeys
+	for index, tool in Tools
+	{
+		if (index = excludeToolIndex)
+			continue
+		if (tool.Hotkey != "" && tool.Hotkey = hotkeyToCheck)
+		{
+			displayName := tool.Name != "" ? tool.Name : tool.ExeName
+			return "tool '" . displayName . "' (" . FormatHotkeyDisplay(tool.Hotkey) . ")"
+		}
+	}
+
+	; Check against MainHotkey
+	if (MainHotkeyEnabled = 1 && MainHotkey != "" && MainHotkey = hotkeyToCheck)
+		return "Window Cycling hotkey (" . FormatHotkeyDisplay(MainHotkey) . ")"
+
+	; Check against OverviewHotkey
+	if (OverviewHotkeyEnabled = 1 && OverviewHotkey != "" && OverviewHotkey = hotkeyToCheck)
+		return "Shortcuts Overview hotkey (" . FormatHotkeyDisplay(OverviewHotkey) . ")"
+
+	return ""
+}
+
 ; Capture a single key (no modifiers) and update the control
 CaptureKeyToControl(guiName, controlVar) {
     ; Show placeholder

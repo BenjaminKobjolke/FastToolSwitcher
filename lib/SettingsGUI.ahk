@@ -193,6 +193,38 @@ SaveSettings:
 	; Build overview hotkey from checkboxes and key field
 	builtOverviewHotkey := BuildHotkey(ChkOvCtrl, ChkOvShift, ChkOvAlt, ChkOvWin, HkOverviewKey)
 
+	; Check for duplicate hotkey assignments
+	; Cannot reuse FindHotkeyConflict() because globals still hold old values
+	if (ChkMainHotkeyEnabled = 1 && builtMainHotkey != "")
+	{
+		for idx, tool in Tools
+		{
+			if (tool.Hotkey != "" && tool.Hotkey = builtMainHotkey)
+			{
+				conflictName := tool.Name != "" ? tool.Name : tool.ExeName
+				MsgBox, 48, Tool Switcher, Window Cycling hotkey is already assigned to tool '%conflictName%'.`n`nPlease choose a different hotkey.
+				return
+			}
+		}
+	}
+	if (ChkOverviewHotkeyEnabled = 1 && builtOverviewHotkey != "")
+	{
+		for idx, tool in Tools
+		{
+			if (tool.Hotkey != "" && tool.Hotkey = builtOverviewHotkey)
+			{
+				conflictName := tool.Name != "" ? tool.Name : tool.ExeName
+				MsgBox, 48, Tool Switcher, Shortcuts Overview hotkey is already assigned to tool '%conflictName%'.`n`nPlease choose a different hotkey.
+				return
+			}
+		}
+	}
+	if (ChkMainHotkeyEnabled = 1 && builtMainHotkey != "" && ChkOverviewHotkeyEnabled = 1 && builtOverviewHotkey != "" && builtMainHotkey = builtOverviewHotkey)
+	{
+		MsgBox, 48, Tool Switcher, Window Cycling hotkey and Shortcuts Overview hotkey cannot be the same.`n`nPlease choose different hotkeys.
+		return
+	}
+
 	; Save main settings
 	IniWrite, %ChkMainHotkeyEnabled%, %IniFile%, Settings, MainHotkeyEnabled
 	IniWrite, %builtMainHotkey%, %IniFile%, Settings, MainHotkey

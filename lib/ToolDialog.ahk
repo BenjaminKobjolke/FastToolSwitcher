@@ -144,6 +144,17 @@ ToolDialogSave:
 	; Build hotkey from checkboxes and key field
 	builtToolHotkey := BuildHotkey(ChkTdCtrl, ChkTdShift, ChkTdAlt, ChkTdWin, TdKey)
 
+	; Check for duplicate hotkey assignment
+	if (builtToolHotkey != "")
+	{
+		conflict := FindHotkeyConflict(builtToolHotkey, EditingToolIndex)
+		if (conflict != "")
+		{
+			MsgBox, 48, Tool Switcher, Hotkey %builtToolHotkey% is already assigned to %conflict%.`n`nPlease choose a different hotkey.
+			return
+		}
+	}
+
 	; Determine WindowClass: use PickedWindowClass if set (from Pick Window), else preserve existing
 	if (PickedWindowClass != "")
 		finalWindowClass := PickedWindowClass

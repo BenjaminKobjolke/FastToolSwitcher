@@ -200,6 +200,45 @@ SearchMissingExePaths() {
 RegisterHotkeys() {
 	global Tools, MainHotkeyEnabled, MainHotkey, OverviewHotkeyEnabled, OverviewHotkey
 
+	; Startup duplicate detection - warn about duplicate hotkeys in config
+	seenHotkeys := {}
+	duplicateWarnings := ""
+	for index, tool in Tools
+	{
+		if (tool.Hotkey = "")
+			continue
+		StringLower, normalizedKey, % tool.Hotkey
+		toolLabel := tool.Name != "" ? tool.Name : tool.ExeName
+		if (seenHotkeys.HasKey(normalizedKey))
+		{
+			duplicateWarnings .= "- '" . toolLabel . "' conflicts with '" . seenHotkeys[normalizedKey] . "' (hotkey: " . tool.Hotkey . ")`n"
+		}
+		else
+		{
+			seenHotkeys[normalizedKey] := toolLabel
+		}
+	}
+	if (MainHotkeyEnabled = 1 && MainHotkey != "")
+	{
+		StringLower, normalizedKey, % MainHotkey
+		if (seenHotkeys.HasKey(normalizedKey))
+			duplicateWarnings .= "- 'Window Cycling' conflicts with '" . seenHotkeys[normalizedKey] . "' (hotkey: " . MainHotkey . ")`n"
+		else
+			seenHotkeys[normalizedKey] := "Window Cycling"
+	}
+	if (OverviewHotkeyEnabled = 1 && OverviewHotkey != "")
+	{
+		StringLower, normalizedKey, % OverviewHotkey
+		if (seenHotkeys.HasKey(normalizedKey))
+			duplicateWarnings .= "- 'Shortcuts Overview' conflicts with '" . seenHotkeys[normalizedKey] . "' (hotkey: " . OverviewHotkey . ")`n"
+		else
+			seenHotkeys[normalizedKey] := "Shortcuts Overview"
+	}
+	if (duplicateWarnings != "")
+	{
+		MsgBox, 48, Tool Switcher - Duplicate Hotkeys, The following hotkey conflicts were detected:`n`n%duplicateWarnings%`nOnly one assignment per hotkey will work. Please fix this in Settings.
+	}
+
 	; Create hotkeys dynamically
 	for index, tool in Tools
 	{
