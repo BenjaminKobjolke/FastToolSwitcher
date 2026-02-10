@@ -55,6 +55,7 @@ return
 ; Include files with LABELS after auto-execute section
 #Include lib/HotkeyCapture.ahk
 #Include lib/WindowManager.ahk
+#Include lib/HotkeyPreview.ahk
 #Include lib/SettingsGUI.ahk
 #Include lib/ToolDialog.ahk
 #Include lib/TargetPicker.ahk
