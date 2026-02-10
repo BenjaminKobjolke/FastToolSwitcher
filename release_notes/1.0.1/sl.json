@@ -1,0 +1,13 @@
+{
+  "version": "1.0.1",
+  "date": "2026-02-10",
+  "notes": [
+    "Novo: zavihek z opombami ob izdaji v nastavitvah z navigacijo brez utripanja",
+    "Novo: prekrivni prikaz predogleda bližnjic v preglednem seznamu bližnjic",
+    "Novo: možnost pošlji v ozadje za upravljanje okna orodja",
+    "Novo: samodejno zaznavanje razreda okna Raziskovalca datotek",
+    "Izboljšano: prepreči podvojene dodelitve bližnjic med orodji",
+    "Izboljšano: slog temnega načina in povečana velikost pisave",
+    "Popravljeno: ikone exe prek vdelave virov Ahk2Exe"
+  ]
+}

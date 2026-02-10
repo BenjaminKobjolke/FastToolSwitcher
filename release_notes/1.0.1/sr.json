@@ -1,0 +1,13 @@
+{
+  "version": "1.0.1",
+  "date": "2026-02-10",
+  "notes": [
+    "Novo: kartica beleški o izdanju u podešavanjima sa navigacijom bez treperenja",
+    "Novo: preklopni prikaz pregleda prečica putem prečice na tastaturi",
+    "Novo: opcija „pošalji u pozadinu” za upravljanje prozorom alata",
+    "Novo: automatsko prepoznavanje klase prozora File Explorer-a",
+    "Poboljšano: sprečavanje duplih dodela prečica na tastaturi između alata",
+    "Poboljšano: stilizovanje tamnog režima i povećana veličina fonta",
+    "Ispravljeno: ikone .exe fajlova putem ugradnje resursa u Ahk2Exe"
+  ]
+}

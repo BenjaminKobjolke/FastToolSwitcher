@@ -1,0 +1,13 @@
+{
+  "version": "1.0.1",
+  "date": "2026-02-10",
+  "notes": [
+    "Uutta: julkaisutiedotteet-välilehti asetuksissa välkkymättömällä siirtymisellä",
+    "Uutta: pikanäppäinten yleiskatsauksen pikanäppäinesikatselupeite",
+    "Uutta: lähetä taustalle -vaihtoehto työkalun ikkunan käsittelyyn",
+    "Uutta: File Explorer -ikkunaluokan automaattinen tunnistus",
+    "Parannettu: estä pikanäppäinten kaksoismääritykset työkalujen välillä",
+    "Parannettu: tumman tilan tyyli ja suurempi fonttikoko",
+    "Korjattu: exe-kuvakkeet Ahk2Exe-resurssien upotuksen kautta"
+  ]
+}

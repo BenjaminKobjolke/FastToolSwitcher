@@ -1,0 +1,13 @@
+{
+  "version": "1.0.1",
+  "date": "2026-02-10",
+  "notes": [
+    "Nou: filă cu notele de lansare în setări, cu navigare fără pâlpâire",
+    "Nou: suprapunere de previzualizare a tastelor rapide pentru prezentarea generală a scurtăturilor",
+    "Nou: opțiune de trimitere în fundal pentru gestionarea ferestrei instrumentului",
+    "Nou: detectare automată a clasei ferestrei File Explorer",
+    "Îmbunătățit: prevenirea atribuirii duplicate a tastelor rapide între instrumente",
+    "Îmbunătățit: stilizare pentru modul întunecat și mărirea dimensiunii fontului",
+    "Remediat: pictogramele .exe prin încorporarea resurselor Ahk2Exe"
+  ]
+}

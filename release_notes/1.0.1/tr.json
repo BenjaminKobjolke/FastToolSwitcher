@@ -1,0 +1,13 @@
+{
+  "version": "1.0.1",
+  "date": "2026-02-10",
+  "notes": [
+    "Yeni: ayarlarda titreşimsiz gezinmeye sahip sürüm notları sekmesi",
+    "Yeni: kısayollar genel bakışı için kısayol tuşu önizleme katmanı",
+    "Yeni: araç penceresi yönetimi için arka plana gönder seçeneği",
+    "Yeni: Dosya Gezgini pencere sınıfını otomatik algılama",
+    "İyileştirildi: araçlar arasında yinelenen kısayol tuşu atamalarını önleme",
+    "İyileştirildi: koyu mod stili ve artırılmış yazı tipi boyutu",
+    "Düzeltildi: Ahk2Exe kaynak gömme yoluyla exe simgeleri"
+  ]
+}

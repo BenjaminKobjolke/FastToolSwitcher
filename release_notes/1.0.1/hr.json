@@ -1,0 +1,13 @@
+{
+  "version": "1.0.1",
+  "date": "2026-02-10",
+  "notes": [
+    "Novo: kartica s bilješkama o izdanju u postavkama s navigacijom bez treperenja",
+    "Novo: pregled prečaca – preklopni sloj s prikazom tipkovnih prečaca",
+    "Novo: opcija slanja u pozadinu za upravljanje prozorom alata",
+    "Novo: automatsko otkrivanje klase prozora Eksploratora datoteka",
+    "Poboljšano: spriječeno dodjeljivanje istog tipkovnog prečaca na više alata",
+    "Poboljšano: stiliziranje tamnog načina rada i povećana veličina fonta",
+    "Ispravljeno: ikone .exe datoteka putem ugrađivanja resursa u Ahk2Exe"
+  ]
+}

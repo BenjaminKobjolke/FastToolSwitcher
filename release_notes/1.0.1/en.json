@@ -1,7 +1,13 @@
 {
-    "version": "1.0.0",
-    "date": "2026-01-01",
+    "version": "1.0.1",
+    "date": "2026-02-10",
     "notes": [
-        "Initial release"        
+        "New: release notes tab in settings with flicker-free navigation",
+        "New: shortcuts overview hotkey preview overlay",
+        "New: send-to-background option for tool window handling",
+        "New: auto-detect File Explorer window class",
+        "Improved: prevent duplicate hotkey assignments across tools",
+        "Improved: dark mode styling and increased font size",
+        "Fixed: exe icons via Ahk2Exe resource embedding"
     ]
 }

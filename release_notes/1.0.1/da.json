@@ -1,0 +1,13 @@
+{
+  "version": "1.0.1",
+  "date": "2026-02-10",
+  "notes": [
+    "Nyhed: fane med udgivelsesnoter i indstillinger med flimmerfri navigation",
+    "Nyhed: genvejsoverblik – hotkey-forhåndsvisningsoverlay",
+    "Nyhed: mulighed for at sende til baggrunden ved håndtering af værktøjsvindue",
+    "Nyhed: automatisk registrering af File Explorer-vinduesklasse",
+    "Forbedret: forhindr dublerede hotkey-tildelinger på tværs af værktøjer",
+    "Forbedret: dark mode-styling og øget skriftstørrelse",
+    "Rettet: exe-ikoner via Ahk2Exe-ressourceindlejring"
+  ]
+}

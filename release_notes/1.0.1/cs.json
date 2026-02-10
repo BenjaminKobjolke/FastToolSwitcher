@@ -1,0 +1,13 @@
+{
+  "version": "1.0.1",
+  "date": "2026-02-10",
+  "notes": [
+    "Nové: karta s poznámkami k vydání v nastavení s navigací bez blikání",
+    "Nové: přehled zkratek – náhledová překryvná vrstva pro klávesové zkratky",
+    "Nové: možnost odeslat na pozadí pro správu okna nástroje",
+    "Nové: automatická detekce třídy okna Průzkumníka souborů",
+    "Vylepšeno: zabránění duplicitnímu přiřazení klávesových zkratek napříč nástroji",
+    "Vylepšeno: stylování tmavého režimu a zvětšení velikosti písma",
+    "Opraveno: ikony exe přes vkládání prostředků Ahk2Exe"
+  ]
+}

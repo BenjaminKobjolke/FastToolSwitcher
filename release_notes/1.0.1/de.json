@@ -1,0 +1,13 @@
+{
+  "version": "1.0.1",
+  "date": "2026-02-10",
+  "notes": [
+    "Neu: Registerkarte „Versionshinweise“ in den Einstellungen mit flackerfreier Navigation",
+    "Neu: Hotkey-Vorschau-Overlay für die Shortcut-Übersicht",
+    "Neu: Option „In den Hintergrund senden“ für die Handhabung von Tool-Fenstern",
+    "Neu: Automatische Erkennung der Fensterklasse des Datei-Explorers",
+    "Verbessert: Verhindert doppelte Hotkey-Zuweisungen über mehrere Tools hinweg",
+    "Verbessert: Dark-Mode-Styling und größere Schriftgröße",
+    "Behoben: EXE-Symbole über Ressourcen-Einbettung mit Ahk2Exe"
+  ]
+}

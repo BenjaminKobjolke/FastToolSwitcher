@@ -1,0 +1,13 @@
+{
+  "version": "1.0.1",
+  "date": "2026-02-10",
+  "notes": [
+    "Nuevo: pestaña de notas de la versión en la configuración con navegación sin parpadeos",
+    "Nuevo: superposición de vista previa de la tecla rápida del resumen de atajos",
+    "Nuevo: opción de enviar al fondo para la gestión de la ventana de herramientas",
+    "Nuevo: detección automática de la clase de ventana del Explorador de archivos",
+    "Mejorado: evitar asignaciones duplicadas de teclas rápidas entre herramientas",
+    "Mejorado: estilo del modo oscuro y aumento del tamaño de fuente",
+    "Corregido: iconos de exe mediante incrustación de recursos con Ahk2Exe"
+  ]
+}

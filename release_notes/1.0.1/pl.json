@@ -1,0 +1,13 @@
+{
+  "version": "1.0.1",
+  "date": "2026-02-10",
+  "notes": [
+    "Nowość: zakładka z informacjami o wydaniu w ustawieniach z nawigacją bez migotania",
+    "Nowość: nakładka podglądu skrótów klawiszowych w przeglądzie skrótów",
+    "Nowość: opcja wysyłania do tła dla obsługi okna narzędzia",
+    "Nowość: automatyczne wykrywanie klasy okna Eksploratora plików",
+    "Ulepszenie: zapobieganie duplikowaniu przypisań skrótów klawiszowych między narzędziami",
+    "Ulepszenie: styl trybu ciemnego i zwiększony rozmiar czcionki",
+    "Naprawiono: ikony plików exe poprzez osadzanie zasobów przez Ahk2Exe"
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "version": "1.0.1",
+  "date": "2026-02-10",
+  "notes": [
+    "Uus: seadetes väljalaske märkmete vahekaart värelusvaba navigeerimisega",
+    "Uus: otseteede ülevaate kiirklahvi eelvaate ülekate",
+    "Uus: tööriista akna halduses valik „saada taustale“",
+    "Uus: automaatne File Exploreri aknaklassi tuvastamine",
+    "Parandatud: väldi tööriistade vahel dubleeritud kiirklahvide määramisi",
+    "Täiustatud: tumerežiimi stiil ja suurem fondisuurus",
+    "Parandatud: exe-ikoonid Ahk2Exe ressursi manustamise kaudu"
+  ]
+}

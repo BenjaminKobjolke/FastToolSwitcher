@@ -1,0 +1,13 @@
+{
+  "version": "1.0.1",
+  "date": "2026-02-10",
+  "notes": [
+    "Jauns: izlaiduma piezīmju cilne iestatījumos ar navigāciju bez mirgošanas",
+    "Jauns: saīsņu pārskata karsto taustiņu priekšskatījuma pārklājums",
+    "Jauns: opcija \"sūtīt uz fonu\" rīka loga apstrādei",
+    "Jauns: automātiska File Explorer loga klases noteikšana",
+    "Uzlabots: novērsta dublētu karsto taustiņu piešķiršana starp rīkiem",
+    "Uzlabots: tumšā režīma stils un palielināts fonta izmērs",
+    "Labots: exe ikonas, izmantojot Ahk2Exe resursu iegulšanu"
+  ]
+}

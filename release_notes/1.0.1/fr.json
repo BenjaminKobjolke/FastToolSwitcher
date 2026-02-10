@@ -1,0 +1,13 @@
+{
+  "version": "1.0.1",
+  "date": "2026-02-10",
+  "notes": [
+    "Nouveau : onglet des notes de version dans les paramètres, avec une navigation sans scintillement",
+    "Nouveau : superposition d’aperçu des raccourcis clavier dans l’aperçu des raccourcis",
+    "Nouveau : option d’envoi en arrière-plan pour la gestion de la fenêtre de l’outil",
+    "Nouveau : détection automatique de la classe de fenêtre de l’Explorateur de fichiers",
+    "Amélioré : empêcher les affectations de raccourcis clavier en double entre les outils",
+    "Amélioré : style du mode sombre et augmentation de la taille de police",
+    "Corrigé : icônes .exe via l’intégration de ressources Ahk2Exe"
+  ]
+}

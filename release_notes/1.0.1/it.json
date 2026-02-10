@@ -1,0 +1,13 @@
+{
+  "version": "1.0.1",
+  "date": "2026-02-10",
+  "notes": [
+    "Novità: scheda note di rilascio nelle impostazioni con navigazione senza sfarfallio",
+    "Novità: overlay di anteprima dei tasti di scelta rapida per la panoramica delle scorciatoie",
+    "Novità: opzione invia in background per la gestione della finestra dello strumento",
+    "Novità: rilevamento automatico della classe della finestra di Esplora file",
+    "Migliorato: prevenzione delle assegnazioni duplicate di tasti di scelta rapida tra gli strumenti",
+    "Migliorato: stile della modalità scura e dimensione del carattere aumentata",
+    "Corretto: icone exe tramite incorporamento delle risorse con Ahk2Exe"
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "version": "1.0.1",
+  "date": "2026-02-10",
+  "notes": [
+    "Novo: aba de notas de versão nas configurações com navegação sem cintilação",
+    "Novo: sobreposição de pré-visualização de atalhos (hotkeys) na visão geral",
+    "Novo: opção de enviar para o segundo plano no gerenciamento da janela da ferramenta",
+    "Novo: detectar automaticamente a classe da janela do Explorador de Arquivos",
+    "Melhorado: evitar atribuições duplicadas de atalhos (hotkeys) entre ferramentas",
+    "Melhorado: estilo do modo escuro e aumento do tamanho da fonte",
+    "Corrigido: ícones do exe via incorporação de recursos do Ahk2Exe"
+  ]
+}

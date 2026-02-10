@@ -1,0 +1,13 @@
+{
+  "version": "1.0.1",
+  "date": "2026-02-10",
+  "notes": [
+    "Nytt: flik för versionsnyheter i inställningar med flimmerfri navigering",
+    "Nytt: snabbkommandon-översikt med förhandsvisningsöverlägg för snabbtangenter",
+    "Nytt: alternativ för att skicka till bakgrunden vid hantering av verktygsfönster",
+    "Nytt: automatisk identifiering av File Explorer-fönsterklass",
+    "Förbättrat: förhindra dubbla snabbtangentstilldelningar mellan verktyg",
+    "Förbättrat: mörkt läge-styling och ökad teckenstorlek",
+    "Åtgärdat: exe-ikoner via resursinbäddning med Ahk2Exe"
+  ]
+}

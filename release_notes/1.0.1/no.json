@@ -1,0 +1,13 @@
+{
+  "version": "1.0.1",
+  "date": "2026-02-10",
+  "notes": [
+    "Nyhet: fane for versjonsnotater i innstillinger med flimmerfri navigasjon",
+    "Nyhet: oversikt over hurtigtaster med forhåndsvisningsoverlegg",
+    "Nyhet: send-til-bakgrunn-alternativ for håndtering av verktøyvindu",
+    "Nyhet: automatisk gjenkjenning av vindusklasse for Filutforsker",
+    "Forbedret: forhindre dupliserte hurtigtast-tilordninger på tvers av verktøy",
+    "Forbedret: stil for mørk modus og økt skriftstørrelse",
+    "Rettet: exe-ikoner via ressursinnbygging i Ahk2Exe"
+  ]
+}

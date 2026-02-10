@@ -1,0 +1,13 @@
+{
+  "version": "1.0.1",
+  "date": "2026-02-10",
+  "notes": [
+    "Nauja: leidimo pastabų skirtukas nustatymuose su navigacija be mirgėjimo",
+    "Nauja: sparčiųjų klavišų apžvalgos karštojo klavišo peržiūros perdanga",
+    "Nauja: parinktis siųsti į foną įrankio lango valdymui",
+    "Nauja: automatiškai aptikti Failų naršyklės lango klasę",
+    "Patobulinta: užkirsti kelią pasikartojantiems karštųjų klavišų priskyrimams tarp įrankių",
+    "Patobulinta: tamsiojo režimo stilius ir padidintas šrifto dydis",
+    "Pataisyta: exe piktogramos per Ahk2Exe išteklių įterpimą"
+  ]
+}

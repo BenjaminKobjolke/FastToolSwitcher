@@ -1,0 +1,13 @@
+{
+  "version": "1.0.1",
+  "date": "2026-02-10",
+  "notes": [
+    "Mới: tab ghi chú phát hành trong cài đặt với điều hướng không bị nhấp nháy",
+    "Mới: lớp phủ xem trước phím tắt tổng quan phím tắt",
+    "Mới: tùy chọn gửi ra nền để xử lý cửa sổ công cụ",
+    "Mới: tự động phát hiện lớp cửa sổ File Explorer",
+    "Cải thiện: ngăn gán phím tắt trùng lặp giữa các công cụ",
+    "Cải thiện: kiểu dáng chế độ tối và tăng kích thước phông chữ",
+    "Sửa lỗi: biểu tượng exe thông qua nhúng tài nguyên Ahk2Exe"
+  ]
+}

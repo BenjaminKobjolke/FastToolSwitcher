@@ -1,0 +1,13 @@
+{
+  "version": "1.0.1",
+  "date": "2026-02-10",
+  "notes": [
+    "Nieuw: tabblad met release-opmerkingen in instellingen met navigatie zonder flikkeren",
+    "Nieuw: overlay voor hotkey-voorbeeld in het overzicht van sneltoetsen",
+    "Nieuw: optie 'naar de achtergrond sturen' voor het afhandelen van toolvensters",
+    "Nieuw: vensterklasse van Verkenner automatisch detecteren",
+    "Verbeterd: dubbele sneltoets-toewijzingen tussen tools voorkomen",
+    "Verbeterd: styling voor donkere modus en grotere lettergrootte",
+    "Opgelost: exe-pictogrammen via resource-embedding van Ahk2Exe"
+  ]
+}

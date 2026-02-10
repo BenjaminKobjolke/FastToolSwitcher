@@ -1,0 +1,13 @@
+{
+  "version": "1.0.1",
+  "date": "2026-02-10",
+  "notes": [
+    "Új: kiadási megjegyzések fül a beállításokban villódzásmentes navigációval",
+    "Új: parancsikon-áttekintő gyorsbillentyű-előnézeti overlay",
+    "Új: háttérbe küldés opció az eszközablak kezeléséhez",
+    "Új: a Fájlkezelő ablakosztályának automatikus felismerése",
+    "Fejlesztés: a duplikált gyorsbillentyű-hozzárendelések megakadályozása az eszközök között",
+    "Fejlesztés: sötét mód stílusának finomítása és nagyobb betűméret",
+    "Javítás: exe ikonok az Ahk2Exe erőforrás-beágyazásán keresztül"
+  ]
+}
