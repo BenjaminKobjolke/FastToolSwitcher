@@ -83,7 +83,7 @@ Verify that the version folder now contains multiple `.json` files (ar.json, bg.
 Build the exe using the AutoHotkey compiler:
 
 ```bash
-build.bat
+tools\build.bat
 ```
 
 This compiles `FastToolSwitcher.ahk` into `FastToolSwitcher.exe` using `C:\Program Files\AutoHotkey\Compiler\Ahk2Exe.exe` with the light icon.

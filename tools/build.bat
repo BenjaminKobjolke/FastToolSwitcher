@@ -3,7 +3,8 @@ setlocal
 
 set "AHK_COMPILER=C:\Program Files\AutoHotkey\Compiler\Ahk2Exe.exe"
 set "SCRIPT_NAME=FastToolSwitcher"
-set "ICON_PATH=%~dp0data\icon_light.ico"
+set "PROJECT_DIR=%~dp0.."
+set "ICON_PATH=%PROJECT_DIR%\data\icon_light.ico"
 
 echo Building %SCRIPT_NAME%.exe...
 
@@ -16,7 +17,7 @@ if not exist "%AHK_COMPILER%" (
     exit /b 1
 )
 
-"%AHK_COMPILER%" /in "%~dp0%SCRIPT_NAME%.ahk" /out "%~dp0%SCRIPT_NAME%.exe" /icon "%ICON_PATH%"
+"%AHK_COMPILER%" /in "%PROJECT_DIR%\%SCRIPT_NAME%.ahk" /out "%PROJECT_DIR%\%SCRIPT_NAME%.exe" /icon "%ICON_PATH%"
 
 if %errorlevel% equ 0 (
     echo.
