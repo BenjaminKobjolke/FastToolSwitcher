@@ -32,6 +32,7 @@ ShowToolDialog:
 		tdWindowClass := editTool.WindowClass
 		tdArguments := editTool.Arguments
 		tdExcludeTitle := editTool.ExcludeTitle
+		tdSendToBackground := editTool.SendToBackground
 	}
 	else
 	{
@@ -43,6 +44,7 @@ ShowToolDialog:
 		tdWindowClass := ""
 		tdArguments := ""
 		tdExcludeTitle := ""
+		tdSendToBackground := 0
 	}
 
 	Gui, ToolDialog:Add, Text, x15 y20 w100, Name:
@@ -89,13 +91,16 @@ ShowToolDialog:
 	else
 		Gui, ToolDialog:Add, Text, x15 y350 cGray, (windows containing this text are ignored)
 
+	; Send to background option
+	Gui, ToolDialog:Add, Checkbox, x15 y385 vChkSendToBackground Checked%tdSendToBackground%, Send to background when already focused
+
 	; Pick Window button
-	Gui, ToolDialog:Add, Button, x120 y385 w120 gStartTargetPicker, Pick Window
+	Gui, ToolDialog:Add, Button, x120 y425 w120 gStartTargetPicker, Pick Window
 
-	Gui, ToolDialog:Add, Button, x240 y435 w90 gToolDialogSave Default, Save
-	Gui, ToolDialog:Add, Button, x340 y435 w90 gToolDialogClose, Cancel
+	Gui, ToolDialog:Add, Button, x240 y475 w90 gToolDialogSave Default, Save
+	Gui, ToolDialog:Add, Button, x340 y475 w90 gToolDialogClose, Cancel
 
-	Gui, ToolDialog:Show, w440 h480
+	Gui, ToolDialog:Show, w440 h520
 
 	; Apply dark title bar after showing
 	if (DarkMode = 1)
@@ -155,6 +160,7 @@ ToolDialogSave:
 	newTool.WindowClass := finalWindowClass
 	newTool.Arguments := TdArguments
 	newTool.ExcludeTitle := TdExcludeTitle
+	newTool.SendToBackground := ChkSendToBackground
 
 	Gui, Settings:Default
 	Gui, ListView, ToolListView

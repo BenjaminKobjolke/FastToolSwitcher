@@ -9,10 +9,15 @@ HandleToolHotkey:
 	{
 		if (tool.Hotkey = triggeredHotkey)
 		{
-			; Determine window detection method (priority: WindowClass > WindowTitle > ExeName)
-			if (tool.WindowClass != "")
+			; Determine window detection method
+			if (tool.WindowClass != "" && tool.WindowTitle != "")
 			{
-				; Use window class (for special cases like File Explorer)
+				; Use both class and title (e.g., specific Explorer folder)
+				windowSpec := tool.WindowTitle . " ahk_class " . tool.WindowClass
+			}
+			else if (tool.WindowClass != "")
+			{
+				; Use window class only (for special cases like File Explorer)
 				windowSpec := "ahk_class " . tool.WindowClass
 			}
 			else if (tool.WindowTitle != "")
@@ -93,8 +98,9 @@ HandleToolHotkey:
 					; A valid window is active
 					if (validWindows.Length() = 1)
 					{
-						; Only one valid window, send to background
-						Send !{Esc}
+						; Only one valid window - send to background if enabled for this tool
+						if (tool.SendToBackground = 1)
+							Send !{Esc}
 					}
 					else
 					{
@@ -107,7 +113,11 @@ HandleToolHotkey:
 						{
 							CoordMode, Mouse, Screen
 							WinGetPos, winX, winY, winW, winH, A
-							MouseMove, winX + winW // 2, winY + winH // 2, %MouseMoveSpeed%
+							; we are not scaling it right now, thats why * 1
+							scaledSpeed := MouseMoveSpeed * 1
+							SendMode, Event
+							MouseMove, winX + winW // 2, winY + winH // 2, %scaledSpeed%
+							SendMode, Input
 						}
 					}
 				}
@@ -119,7 +129,11 @@ HandleToolHotkey:
 					{
 						CoordMode, Mouse, Screen
 						WinGetPos, winX, winY, winW, winH, A
-						MouseMove, winX + winW // 2, winY + winH // 2, %MouseMoveSpeed%
+						; we are not scaling it right now, thats why * 1
+						scaledSpeed := MouseMoveSpeed * 1
+						SendMode, Event
+						MouseMove, winX + winW // 2, winY + winH // 2, %scaledSpeed%
+						SendMode, Input
 					}
 				}
 			}
@@ -182,6 +196,9 @@ MainWindowCycleHotkey:
 	{
 		CoordMode, Mouse, Screen
 		WinGetPos, winX, winY, winW, winH, A
-		MouseMove, winX + winW // 2, winY + winH // 2, %MouseMoveSpeed%
+		scaledSpeed := MouseMoveSpeed * 10
+		SendMode, Event
+		MouseMove, winX + winW // 2, winY + winH // 2, %scaledSpeed%
+		SendMode, Input
 	}
 return

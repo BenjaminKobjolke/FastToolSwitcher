@@ -6,6 +6,8 @@ global IniFile := ""
 global Tools := []
 global MainHotkeyEnabled := 0
 global MainHotkey := ""
+global OverviewHotkeyEnabled := 0
+global OverviewHotkey := ""
 global MoveMouse := 1
 global DarkMode := 1
 global MouseMoveSpeed := 0
@@ -27,6 +29,10 @@ InitConfig() {
 	MainHotkeyEnabled := tmp
 	IniRead, tmp, %IniFile%, Settings, MainHotkey, %A_Space%
 	MainHotkey := tmp
+	IniRead, tmp, %IniFile%, Settings, OverviewHotkeyEnabled, 0
+	OverviewHotkeyEnabled := tmp
+	IniRead, tmp, %IniFile%, Settings, OverviewHotkey, %A_Space%
+	OverviewHotkey := tmp
 	IniRead, tmp, %IniFile%, Settings, MoveMouse, 1
 	MoveMouse := tmp
 	IniRead, tmp, %IniFile%, Settings, DarkMode, 1
@@ -85,6 +91,7 @@ LoadTools() {
 		IniRead, ToolExePath, %IniFile%, %ToolSection%, ExePath, %A_Space%
 		IniRead, ToolArguments, %IniFile%, %ToolSection%, Arguments, %A_Space%
 		IniRead, ToolExcludeTitle, %IniFile%, %ToolSection%, ExcludeTitle, %A_Space%
+		IniRead, ToolSendToBackground, %IniFile%, %ToolSection%, SendToBackground, 0
 
 		; Skip tools with empty ExeName (invalid/missing tool definition)
 		if (ToolExeName = "")
@@ -100,6 +107,7 @@ LoadTools() {
 		Tool.ExePath := ToolExePath
 		Tool.Arguments := ToolArguments
 		Tool.ExcludeTitle := ToolExcludeTitle
+		Tool.SendToBackground := ToolSendToBackground
 		Tool.Section := ToolSection
 
 		Tools.Push(Tool)
@@ -190,7 +198,7 @@ SearchMissingExePaths() {
 }
 
 RegisterHotkeys() {
-	global Tools, MainHotkeyEnabled, MainHotkey
+	global Tools, MainHotkeyEnabled, MainHotkey, OverviewHotkeyEnabled, OverviewHotkey
 
 	; Create hotkeys dynamically
 	for index, tool in Tools
@@ -205,5 +213,11 @@ RegisterHotkeys() {
 	if (MainHotkeyEnabled = 1 && MainHotkey != "")
 	{
 		Hotkey, %MainHotkey%, MainWindowCycleHotkey
+	}
+
+	; Create overview hotkey if enabled
+	if (OverviewHotkeyEnabled = 1 && OverviewHotkey != "")
+	{
+		Hotkey, %OverviewHotkey%, ToggleHotkeyPreview
 	}
 }

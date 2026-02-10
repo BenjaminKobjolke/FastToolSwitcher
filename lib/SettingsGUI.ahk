@@ -23,7 +23,7 @@ ShowSettings:
 		Gui, Settings:Font, s12 cBlack
 	}
 
-	Gui, Settings:Add, Tab3, x10 y10 w520 h420 vSettingsTab, Settings|Tools|Design
+	Gui, Settings:Add, Tab3, x10 y10 w520 h510 vSettingsTab, Settings|Tools|Design
 
 	; === Settings Tab ===
 	Gui, Settings:Tab, Settings
@@ -50,11 +50,37 @@ ShowSettings:
 		Gui, Settings:Add, Text, x20 y125 cWhite, (Cycles windows of same process)
 	else
 		Gui, Settings:Add, Text, x20 y125 cGray, (Cycles windows of same process)
-	Gui, Settings:Add, Checkbox, x20 y165 vChkMoveMouse Checked%MoveMouse% gToggleSpeedVisibility, Move mouse to center of window when switching
+
+	; === Shortcuts Overview Hotkey ===
+	Gui, Settings:Add, Checkbox, x20 y160 vChkOverviewHotkeyEnabled Checked%OverviewHotkeyEnabled%, Enable shortcuts overview hotkey
+
+	; Parse current overview hotkey into components
+	parsedOvHk := ParseHotkey(OverviewHotkey)
+	ovCtrl := parsedOvHk.ctrl
+	ovShift := parsedOvHk.shift
+	ovAlt := parsedOvHk.alt
+	ovWin := parsedOvHk.win
+	ovKey := parsedOvHk.key
+
+	Gui, Settings:Add, Text, x20 y200, Hotkey:
+	Gui, Settings:Add, Checkbox, x80 y200 vChkOvCtrl Checked%ovCtrl%, Ctrl
+	Gui, Settings:Add, Checkbox, x140 y200 vChkOvShift Checked%ovShift%, Shift
+	Gui, Settings:Add, Checkbox, x210 y200 vChkOvAlt Checked%ovAlt%, Alt
+	Gui, Settings:Add, Checkbox, x265 y200 vChkOvWin Checked%ovWin%, Win
+	Gui, Settings:Add, Text, x320 y200, Key:
+	Gui, Settings:Add, Edit, x360 y197 w70 vHkOverviewKey ReadOnly, %ovKey%
+	Gui, Settings:Add, Button, x435 y196 w45 gSetOverviewKey, Set
+
+	if (DarkMode = 1)
+		Gui, Settings:Add, Text, x20 y235 cWhite, (Shows all tool hotkeys in an overlay)
+	else
+		Gui, Settings:Add, Text, x20 y235 cGray, (Shows all tool hotkeys in an overlay)
+
+	Gui, Settings:Add, Checkbox, x20 y275 vChkMoveMouse Checked%MoveMouse% gToggleSpeedVisibility, Move mouse to center of window when switching
 	hideSpeed := (MoveMouse = 1) ? 0 : 1
-	Gui, Settings:Add, Text, x40 y205 vTxtMouseSpeed Hidden%hideSpeed%, Mouse move speed (0 = instant):
-	Gui, Settings:Add, Slider, x280 y202 w150 h25 Range0-10 ToolTip vSliderMouseMoveSpeed Hidden%hideSpeed%, %MouseMoveSpeed%
-	Gui, Settings:Add, Checkbox, x20 y250 vChkStartWithWindows Checked%StartWithWindows%, Start with Windows
+	Gui, Settings:Add, Text, x40 y315 vTxtMouseSpeed Hidden%hideSpeed%, Mouse move speed (0 = instant):
+	Gui, Settings:Add, Slider, x280 y312 w150 h25 Range0-10 ToolTip vSliderMouseMoveSpeed Hidden%hideSpeed%, %MouseMoveSpeed%
+	Gui, Settings:Add, Checkbox, x20 y360 vChkStartWithWindows Checked%StartWithWindows%, Start with Windows
 
 	; === Tools Tab ===
 	Gui, Settings:Tab, Tools
@@ -86,21 +112,21 @@ ShowSettings:
 
 	; === Bottom buttons (outside tabs) ===
 	Gui, Settings:Tab
-	Gui, Settings:Add, Button, x350 y440 w90 gSaveSettings Default, Save
-	Gui, Settings:Add, Button, x450 y440 w90 gSettingsGuiClose, Cancel
+	Gui, Settings:Add, Button, x350 y530 w90 gSaveSettings Default, Save
+	Gui, Settings:Add, Button, x450 y530 w90 gSettingsGuiClose, Cancel
 
 	; Add link at bottom
 	if (DarkMode = 1)
 		Gui, Settings:Font, cAqua
 	else
 		Gui, Settings:Font, cBlue
-	Gui, Settings:Add, Text, x20 y448 gOpenMoreTools, More tools to improve your workflow
+	Gui, Settings:Add, Text, x20 y538 gOpenMoreTools, More tools to improve your workflow
 	if (DarkMode = 1)
 		Gui, Settings:Font, s12 cWhite
 	else
 		Gui, Settings:Font, s12 cBlack
 
-	Gui, Settings:Show, w550 h480
+	Gui, Settings:Show, w550 h560
 
 	; Apply dark mode to window after showing
 	if (DarkMode = 1)
@@ -126,8 +152,11 @@ ThemePreview:
 return
 
 SetMainKey:
-	; Capture single key when Set button is clicked
 	CaptureKeyToControl("Settings", "HkMainKey")
+return
+
+SetOverviewKey:
+	CaptureKeyToControl("Settings", "HkOverviewKey")
 return
 
 ToggleSpeedVisibility:
@@ -161,9 +190,14 @@ SaveSettings:
 	; Build main hotkey from checkboxes and key field
 	builtMainHotkey := BuildHotkey(ChkHkCtrl, ChkHkShift, ChkHkAlt, ChkHkWin, HkMainKey)
 
+	; Build overview hotkey from checkboxes and key field
+	builtOverviewHotkey := BuildHotkey(ChkOvCtrl, ChkOvShift, ChkOvAlt, ChkOvWin, HkOverviewKey)
+
 	; Save main settings
 	IniWrite, %ChkMainHotkeyEnabled%, %IniFile%, Settings, MainHotkeyEnabled
 	IniWrite, %builtMainHotkey%, %IniFile%, Settings, MainHotkey
+	IniWrite, %ChkOverviewHotkeyEnabled%, %IniFile%, Settings, OverviewHotkeyEnabled
+	IniWrite, %builtOverviewHotkey%, %IniFile%, Settings, OverviewHotkey
 	IniWrite, %ChkMoveMouse%, %IniFile%, Settings, MoveMouse
 	IniWrite, %SliderMouseMoveSpeed%, %IniFile%, Settings, MouseMoveSpeed
 	IniWrite, %RadioDarkMode%, %IniFile%, Settings, DarkMode
@@ -203,12 +237,14 @@ SaveSettings:
 		tWindowClass := ""
 		tArguments := ""
 		tExcludeTitle := ""
+		tSendToBackground := 0
 		if (A_Index <= Tools.Length())
 		{
 			tWindowTitle := Tools[A_Index].WindowTitle
 			tWindowClass := Tools[A_Index].WindowClass
 			tArguments := Tools[A_Index].Arguments
 			tExcludeTitle := Tools[A_Index].ExcludeTitle
+			tSendToBackground := Tools[A_Index].SendToBackground
 		}
 
 		section := "Tool" . A_Index
@@ -220,6 +256,7 @@ SaveSettings:
 		IniWrite, %tWindowClass%, %IniFile%, %section%, WindowClass
 		IniWrite, %tArguments%, %IniFile%, %section%, Arguments
 		IniWrite, %tExcludeTitle%, %IniFile%, %section%, ExcludeTitle
+		IniWrite, %tSendToBackground%, %IniFile%, %section%, SendToBackground
 	}
 
 	Suspend, Off
