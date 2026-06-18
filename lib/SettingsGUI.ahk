@@ -82,6 +82,31 @@ ShowSettings:
 	Gui, Settings:Add, Slider, x280 y312 w150 h25 Range0-10 ToolTip vSliderMouseMoveSpeed Hidden%hideSpeed%, %MouseMoveSpeed%
 	Gui, Settings:Add, Checkbox, x20 y360 vChkStartWithWindows Checked%StartWithWindows%, Start with Windows
 
+	; === Reverse Window Cycling Hotkey ===
+	Gui, Settings:Add, Checkbox, x20 y400 vChkMainHotkeyReversedEnabled Checked%MainHotkeyReversedEnabled%, Enable reverse window cycling hotkey
+
+	; Parse current reverse hotkey into components
+	parsedRevHk := ParseHotkey(MainHotkeyReversed)
+	revCtrl := parsedRevHk.ctrl
+	revShift := parsedRevHk.shift
+	revAlt := parsedRevHk.alt
+	revWin := parsedRevHk.win
+	revKey := parsedRevHk.key
+
+	Gui, Settings:Add, Text, x20 y440, Hotkey:
+	Gui, Settings:Add, Checkbox, x80 y440 vChkRevCtrl Checked%revCtrl%, Ctrl
+	Gui, Settings:Add, Checkbox, x140 y440 vChkRevShift Checked%revShift%, Shift
+	Gui, Settings:Add, Checkbox, x210 y440 vChkRevAlt Checked%revAlt%, Alt
+	Gui, Settings:Add, Checkbox, x265 y440 vChkRevWin Checked%revWin%, Win
+	Gui, Settings:Add, Text, x320 y440, Key:
+	Gui, Settings:Add, Edit, x360 y437 w70 vHkRevKey ReadOnly, %revKey%
+	Gui, Settings:Add, Button, x435 y436 w45 gSetRevKey, Set
+
+	if (DarkMode = 1)
+		Gui, Settings:Add, Text, x20 y475 cWhite, (Cycles windows of same process in reverse)
+	else
+		Gui, Settings:Add, Text, x20 y475 cGray, (Cycles windows of same process in reverse)
+
 	; === Tools Tab ===
 	Gui, Settings:Tab, Tools
 	Gui, Settings:Add, ListView, x20 y50 w490 h300 vToolListView gToolListViewAction AltSubmit +LV0x10000, Name|Hotkey|Exe Name|Path
@@ -246,6 +271,10 @@ SetOverviewKey:
 	CaptureKeyToControl("Settings", "HkOverviewKey")
 return
 
+SetRevKey:
+	CaptureKeyToControl("Settings", "HkRevKey")
+return
+
 ToggleSpeedVisibility:
 	Gui, Settings:Submit, NoHide
 	if (ChkMoveMouse)
@@ -280,6 +309,9 @@ SaveSettings:
 	; Build overview hotkey from checkboxes and key field
 	builtOverviewHotkey := BuildHotkey(ChkOvCtrl, ChkOvShift, ChkOvAlt, ChkOvWin, HkOverviewKey)
 
+	; Build reverse window cycling hotkey from checkboxes and key field
+	builtReverseHotkey := BuildHotkey(ChkRevCtrl, ChkRevShift, ChkRevAlt, ChkRevWin, HkRevKey)
+
 	; Check for duplicate hotkey assignments
 	; Cannot reuse FindHotkeyConflict() because globals still hold old values
 	if (ChkMainHotkeyEnabled = 1 && builtMainHotkey != "")
@@ -311,10 +343,34 @@ SaveSettings:
 		MsgBox, 48, Tool Switcher, Window Cycling hotkey and Shortcuts Overview hotkey cannot be the same.`n`nPlease choose different hotkeys.
 		return
 	}
+	if (ChkMainHotkeyReversedEnabled = 1 && builtReverseHotkey != "")
+	{
+		for idx, tool in Tools
+		{
+			if (tool.Hotkey != "" && tool.Hotkey = builtReverseHotkey)
+			{
+				conflictName := tool.Name != "" ? tool.Name : tool.ExeName
+				MsgBox, 48, Tool Switcher, Reverse Window Cycling hotkey is already assigned to tool '%conflictName%'.`n`nPlease choose a different hotkey.
+				return
+			}
+		}
+		if (ChkMainHotkeyEnabled = 1 && builtMainHotkey != "" && builtReverseHotkey = builtMainHotkey)
+		{
+			MsgBox, 48, Tool Switcher, Reverse Window Cycling hotkey and Window Cycling hotkey cannot be the same.`n`nPlease choose different hotkeys.
+			return
+		}
+		if (ChkOverviewHotkeyEnabled = 1 && builtOverviewHotkey != "" && builtReverseHotkey = builtOverviewHotkey)
+		{
+			MsgBox, 48, Tool Switcher, Reverse Window Cycling hotkey and Shortcuts Overview hotkey cannot be the same.`n`nPlease choose different hotkeys.
+			return
+		}
+	}
 
 	; Save main settings
 	IniWrite, %ChkMainHotkeyEnabled%, %IniFile%, Settings, MainHotkeyEnabled
 	IniWrite, %builtMainHotkey%, %IniFile%, Settings, MainHotkey
+	IniWrite, %ChkMainHotkeyReversedEnabled%, %IniFile%, Settings, MainHotkeyReversedEnabled
+	IniWrite, %builtReverseHotkey%, %IniFile%, Settings, MainHotkeyReversed
 	IniWrite, %ChkOverviewHotkeyEnabled%, %IniFile%, Settings, OverviewHotkeyEnabled
 	IniWrite, %builtOverviewHotkey%, %IniFile%, Settings, OverviewHotkey
 	IniWrite, %ChkMoveMouse%, %IniFile%, Settings, MoveMouse

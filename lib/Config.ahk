@@ -6,6 +6,8 @@ global IniFile := ""
 global Tools := []
 global MainHotkeyEnabled := 0
 global MainHotkey := ""
+global MainHotkeyReversedEnabled := 0
+global MainHotkeyReversed := ""
 global OverviewHotkeyEnabled := 0
 global OverviewHotkey := ""
 global MoveMouse := 1
@@ -29,6 +31,10 @@ InitConfig() {
 	MainHotkeyEnabled := tmp
 	IniRead, tmp, %IniFile%, Settings, MainHotkey, %A_Space%
 	MainHotkey := tmp
+	IniRead, tmp, %IniFile%, Settings, MainHotkeyReversedEnabled, 0
+	MainHotkeyReversedEnabled := tmp
+	IniRead, tmp, %IniFile%, Settings, MainHotkeyReversed, %A_Space%
+	MainHotkeyReversed := tmp
 	IniRead, tmp, %IniFile%, Settings, OverviewHotkeyEnabled, 0
 	OverviewHotkeyEnabled := tmp
 	IniRead, tmp, %IniFile%, Settings, OverviewHotkey, %A_Space%
@@ -198,7 +204,7 @@ SearchMissingExePaths() {
 }
 
 RegisterHotkeys() {
-	global Tools, MainHotkeyEnabled, MainHotkey, OverviewHotkeyEnabled, OverviewHotkey
+	global Tools, MainHotkeyEnabled, MainHotkey, MainHotkeyReversedEnabled, MainHotkeyReversed, OverviewHotkeyEnabled, OverviewHotkey
 
 	; Startup duplicate detection - warn about duplicate hotkeys in config
 	seenHotkeys := {}
@@ -226,6 +232,14 @@ RegisterHotkeys() {
 		else
 			seenHotkeys[normalizedKey] := "Window Cycling"
 	}
+	if (MainHotkeyReversedEnabled = 1 && MainHotkeyReversed != "")
+	{
+		StringLower, normalizedKey, % MainHotkeyReversed
+		if (seenHotkeys.HasKey(normalizedKey))
+			duplicateWarnings .= "- 'Window Cycling (Reverse)' conflicts with '" . seenHotkeys[normalizedKey] . "' (hotkey: " . MainHotkeyReversed . ")`n"
+		else
+			seenHotkeys[normalizedKey] := "Window Cycling (Reverse)"
+	}
 	if (OverviewHotkeyEnabled = 1 && OverviewHotkey != "")
 	{
 		StringLower, normalizedKey, % OverviewHotkey
@@ -252,6 +266,12 @@ RegisterHotkeys() {
 	if (MainHotkeyEnabled = 1 && MainHotkey != "")
 	{
 		Hotkey, %MainHotkey%, MainWindowCycleHotkey
+	}
+
+	; Create reverse window cycling hotkey if enabled
+	if (MainHotkeyReversedEnabled = 1 && MainHotkeyReversed != "")
+	{
+		Hotkey, %MainHotkeyReversed%, MainWindowCycleHotkeyReversed
 	}
 
 	; Create overview hotkey if enabled

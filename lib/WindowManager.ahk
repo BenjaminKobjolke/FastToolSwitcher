@@ -144,6 +144,17 @@ HandleToolHotkey:
 return
 
 MainWindowCycleHotkey:
+	CycleProcessWindows(1)
+return
+
+MainWindowCycleHotkeyReversed:
+	CycleProcessWindows(-1)
+return
+
+; Cycle through windows of the active process. direction = 1 forward, -1 backward.
+CycleProcessWindows(direction) {
+	global MoveMouse, MouseMoveSpeed
+
 	; Get active window's process name
 	WinGet, activeExe, ProcessName, A
 	if (activeExe = "")
@@ -177,21 +188,23 @@ MainWindowCycleHotkey:
 		}
 	}
 
-	; Find current window and cycle to next
+	; Find current window and cycle in the requested direction
 	WinGet, activeID, ID, A
-	nextIndex := 1
+	targetIndex := 1
 	for idx, winID in validWindows
 	{
 		if (winID = activeID)
 		{
-			nextIndex := idx + 1
-			if (nextIndex > validWindows.Length())
-				nextIndex := 1
+			targetIndex := idx + direction
+			if (targetIndex > validWindows.Length())
+				targetIndex := 1
+			else if (targetIndex < 1)
+				targetIndex := validWindows.Length()
 			break
 		}
 	}
 
-	WinActivate, % "ahk_id " . validWindows[nextIndex]
+	WinActivate, % "ahk_id " . validWindows[targetIndex]
 	if (MoveMouse = 1)
 	{
 		CoordMode, Mouse, Screen
@@ -201,4 +214,4 @@ MainWindowCycleHotkey:
 		MouseMove, winX + winW // 2, winY + winH // 2, %scaledSpeed%
 		SendMode, Input
 	}
-return
+}
