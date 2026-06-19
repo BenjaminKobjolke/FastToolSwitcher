@@ -13,7 +13,6 @@ if not exist "%AHK_COMPILER%" (
     echo %AHK_COMPILER%
     echo.
     echo Please install AutoHotkey or update the path in this script.
-    pause
     exit /b 1
 )
 
@@ -26,5 +25,3 @@ if %errorlevel% equ 0 (
     echo.
     echo Build failed with error code: %errorlevel%
 )
-
-pause
