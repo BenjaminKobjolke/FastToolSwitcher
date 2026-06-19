@@ -1,0 +1,8 @@
+{
+  "version": "1.0.2",
+  "date": "2026-06-19",
+  "notes": [
+    "Neu: Tastenkürzel zum Rückwärtswechseln der Fenster, um zum vorherigen Fenster des aktiven Tools zu wechseln",
+    "Neu: Steuerelemente für umgekehrte Tastenkürzel in den Einstellungen"
+  ]
+}

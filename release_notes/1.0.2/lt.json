@@ -1,0 +1,8 @@
+{
+  "version": "1.0.2",
+  "date": "2026-06-19",
+  "notes": [
+    "Nauja: atvirkštinio langų perjungimo spartusis klavišas, leidžiantis pereiti prie ankstesnio aktyvaus įrankio lango",
+    "Nauja: atvirkštinių sparčiųjų klavišų valdikliai nustatymuose"
+  ]
+}

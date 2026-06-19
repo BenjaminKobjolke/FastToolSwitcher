@@ -12,7 +12,9 @@ A lightweight AutoHotkey tool for quickly switching between applications using c
 - **Background send** - If the application is already focused, pressing the hotkey sends it to the background
 
 ### Window Cycling
-- **Main cycling hotkey** (default: `Ctrl+Shift+Space`) - Cycles through all windows of the currently active application
+- **Main cycling hotkey** (default: `Ctrl+Shift+Space`) - Cycles **forward** through all windows of the currently active application
+- **Reverse cycling hotkey** (default: `Ctrl+Shift+Alt+Space`) - Cycles **backward** to the previous window of the same application
+- Both wrap around at the ends and are independently configurable in Settings
 - Useful when you have multiple instances of the same program open
 
 ### Mouse Positioning
@@ -89,6 +91,8 @@ Settings are stored in `FastToolSwitcher.ini`:
 [Settings]
 MainHotkeyEnabled=1
 MainHotkey=^+Space
+MainHotkeyReversedEnabled=1
+MainHotkeyReversed=^+!Space
 MoveMouse=1
 DarkMode=1
 

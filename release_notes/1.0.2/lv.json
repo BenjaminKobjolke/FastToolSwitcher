@@ -1,0 +1,8 @@
+{
+  "version": "1.0.2",
+  "date": "2026-06-19",
+  "notes": [
+    "Jaunums: apgrieztā logu pārslēgšanas karstā taustiņa funkcija, lai pārietu uz iepriekšējo aktīvā rīka logu",
+    "Jaunums: apgrieztās karsto taustiņu vadīklas iestatījumos"
+  ]
+}

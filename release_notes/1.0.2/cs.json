@@ -1,0 +1,8 @@
+{
+  "version": "1.0.2",
+  "date": "2026-06-19",
+  "notes": [
+    "Novinka: klávesová zkratka pro opačné procházení oken k přepnutí na předchozí okno aktivního nástroje",
+    "Novinka: ovládání klávesových zkratek pro opačný směr v nastavení"
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "version": "1.0.2",
+  "date": "2026-06-19",
+  "notes": [
+    "Mới: phím tắt chuyển vòng cửa sổ theo chiều ngược để chuyển sang cửa sổ trước đó của công cụ đang hoạt động",
+    "Mới: điều khiển phím tắt đảo chiều trong cài đặt"
+  ]
+}

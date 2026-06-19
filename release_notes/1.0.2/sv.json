@@ -1,0 +1,8 @@
+{
+  "version": "1.0.2",
+  "date": "2026-06-19",
+  "notes": [
+    "Nytt: kortkommando för omvänd fönsterväxling för att stega till föregående fönster i det aktiva verktyget",
+    "Nytt: omvända kortkommandokontroller i inställningarna"
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "version": "1.0.2",
+  "date": "2026-06-19",
+  "notes": [
+    "Novo: atalho de teclado para percorrer as janelas no sentido inverso e passar para a janela anterior da ferramenta ativa",
+    "Novo: controlos de atalhos inversos nas definições"
+  ]
+}

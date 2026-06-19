@@ -1,0 +1,8 @@
+{
+    "version": "1.0.2",
+    "date": "2026-06-19",
+    "notes": [
+        "New: reverse window cycling hotkey to step to the previous window of the active tool",
+        "New: reverse hotkey controls in settings"
+    ]
+}

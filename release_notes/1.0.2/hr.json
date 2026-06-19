@@ -1,0 +1,8 @@
+{
+  "version": "1.0.2",
+  "date": "2026-06-19",
+  "notes": [
+    "Novo: tipkovni prečac za obrnuto kruženje kroz prozore za prelazak na prethodni prozor aktivnog alata",
+    "Novo: obrnute kontrole tipkovnih prečaca u postavkama"
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "version": "1.0.2",
+  "date": "2026-06-19",
+  "notes": [
+    "Yeni: aktif aracın önceki penceresine geçmek için pencere döngüsünü tersine çeviren kısayol tuşu",
+    "Yeni: ayarlarda ters kısayol tuşu kontrolleri"
+  ]
+}

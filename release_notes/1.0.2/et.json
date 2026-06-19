@@ -1,0 +1,8 @@
+{
+  "version": "1.0.2",
+  "date": "2026-06-19",
+  "notes": [
+    "Uus: akna vahetamise kiirklahv tagurpidi, et liikuda aktiivse tööriista eelmisele aknale",
+    "Uus: seadetes tagurpidi kiirklahvide juhtelemendid"
+  ]
+}

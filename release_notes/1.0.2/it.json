@@ -1,0 +1,8 @@
+{
+  "version": "1.0.2",
+  "date": "2026-06-19",
+  "notes": [
+    "Novità: tasto di scelta rapida per il ciclo inverso delle finestre per passare alla finestra precedente dello strumento attivo",
+    "Novità: controlli dei tasti di scelta rapida inversi nelle impostazioni"
+  ]
+}
