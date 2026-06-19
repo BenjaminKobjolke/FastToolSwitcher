@@ -1,6 +1,36 @@
 ; ==================== WindowManager.ahk ====================
 ; Window cycling and hotkey handlers
 
+; Sort an array of window IDs by handle for consistent ordering.
+; (WinGet returns windows in Z-order, which changes after each activation.)
+SortByHandle(ByRef windows) {
+	Loop % windows.Length() - 1
+	{
+		for i, val in windows
+		{
+			if (i < windows.Length() && windows[i] > windows[i+1])
+			{
+				temp := windows[i]
+				windows[i] := windows[i+1]
+				windows[i+1] := temp
+			}
+		}
+	}
+}
+
+; Move the mouse to the center of the active window when enabled.
+MoveMouseToActiveCenter() {
+	global MoveMouse, MouseMoveSpeed
+	if (MoveMouse != 1)
+		return
+	CoordMode, Mouse, Screen
+	WinGetPos, winX, winY, winW, winH, A
+	scaledSpeed := MouseMoveSpeed * 10
+	SendMode, Event
+	MouseMove, winX + winW // 2, winY + winH // 2, %scaledSpeed%
+	SendMode, Input
+}
+
 HandleToolHotkey:
 	; Find which tool triggered this hotkey
 	triggeredHotkey := A_ThisHotkey
@@ -49,19 +79,7 @@ HandleToolHotkey:
 			}
 
 			; Sort validWindows by window handle for consistent ordering
-			; (WinGet returns windows in Z-order which changes after each activation)
-			Loop % validWindows.Length() - 1
-			{
-				for i, val in validWindows
-				{
-					if (i < validWindows.Length() && validWindows[i] > validWindows[i+1])
-					{
-						temp := validWindows[i]
-						validWindows[i] := validWindows[i+1]
-						validWindows[i+1] := temp
-					}
-				}
-			}
+			SortByHandle(validWindows)
 
 			; Handle based on valid window count
 			if (validWindows.Length() = 0)
@@ -109,32 +127,14 @@ HandleToolHotkey:
 						if (nextIndex > validWindows.Length())
 							nextIndex := 1
 						WinActivate, % "ahk_id " . validWindows[nextIndex]
-						if (MoveMouse = 1)
-						{
-							CoordMode, Mouse, Screen
-							WinGetPos, winX, winY, winW, winH, A
-							; we are not scaling it right now, thats why * 1
-							scaledSpeed := MouseMoveSpeed * 1
-							SendMode, Event
-							MouseMove, winX + winW // 2, winY + winH // 2, %scaledSpeed%
-							SendMode, Input
-						}
+						MoveMouseToActiveCenter()
 					}
 				}
 				else
 				{
 					; No valid window is active, activate first one
 					WinActivate, % "ahk_id " . validWindows[1]
-					if (MoveMouse = 1)
-					{
-						CoordMode, Mouse, Screen
-						WinGetPos, winX, winY, winW, winH, A
-						; we are not scaling it right now, thats why * 1
-						scaledSpeed := MouseMoveSpeed * 1
-						SendMode, Event
-						MouseMove, winX + winW // 2, winY + winH // 2, %scaledSpeed%
-						SendMode, Input
-					}
+					MoveMouseToActiveCenter()
 				}
 			}
 
@@ -153,8 +153,6 @@ return
 
 ; Cycle through windows of the active process. direction = 1 forward, -1 backward.
 CycleProcessWindows(direction) {
-	global MoveMouse, MouseMoveSpeed
-
 	; Get active window's process name
 	WinGet, activeExe, ProcessName, A
 	if (activeExe = "")
@@ -175,18 +173,7 @@ CycleProcessWindows(direction) {
 		return
 
 	; Sort by handle for consistent ordering
-	Loop % validWindows.Length() - 1
-	{
-		for i, val in validWindows
-		{
-			if (i < validWindows.Length() && validWindows[i] > validWindows[i+1])
-			{
-				temp := validWindows[i]
-				validWindows[i] := validWindows[i+1]
-				validWindows[i+1] := temp
-			}
-		}
-	}
+	SortByHandle(validWindows)
 
 	; Find current window and cycle in the requested direction
 	WinGet, activeID, ID, A
@@ -205,13 +192,5 @@ CycleProcessWindows(direction) {
 	}
 
 	WinActivate, % "ahk_id " . validWindows[targetIndex]
-	if (MoveMouse = 1)
-	{
-		CoordMode, Mouse, Screen
-		WinGetPos, winX, winY, winW, winH, A
-		scaledSpeed := MouseMoveSpeed * 10
-		SendMode, Event
-		MouseMove, winX + winW // 2, winY + winH // 2, %scaledSpeed%
-		SendMode, Input
-	}
+	MoveMouseToActiveCenter()
 }
