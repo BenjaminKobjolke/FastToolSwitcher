@@ -85,7 +85,9 @@ Examples:
 
 ## Configuration File
 
-Settings are stored in `FastToolSwitcher.ini`:
+Personal settings are stored in `FastToolSwitcher.ini`. This file is ignored by Git.
+On first run, FastToolSwitcher creates it from the tracked `FastToolSwitcher.example.ini`
+when no local config exists.
 
 ```ini
 [Settings]

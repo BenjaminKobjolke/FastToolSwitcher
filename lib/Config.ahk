@@ -25,6 +25,10 @@ InitConfig() {
 	; Get script name without extension for INI file
 	SplitPath, A_ScriptName,, , , ScriptNameNoExt
 	IniFile := A_ScriptDir . "\" . ScriptNameNoExt . ".ini"
+	ExampleIniFile := A_ScriptDir . "\" . ScriptNameNoExt . ".example.ini"
+
+	if (!FileExist(IniFile) && FileExist(ExampleIniFile))
+		FileCopy, %ExampleIniFile%, %IniFile%
 
 	; Read main settings from INI (use temp var, then assign to globals)
 	IniRead, tmp, %IniFile%, Settings, MainHotkeyEnabled, 0
