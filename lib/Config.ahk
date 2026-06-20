@@ -14,6 +14,7 @@ global IgnoreHotkeyEnabled := 0
 global IgnoreHotkey := ""
 global IgnoredWindows := {}                          ; HWND -> 1, session only
 global IGNORED_SUFFIX := " - FastToolSwitcher - ignored"
+global NO_OTHER_WINDOW_MESSAGE := "Only one window - nothing to switch to"
 global IGNORED_STATE_FILE := A_Temp . "\FastToolSwitcher_ignored.txt"  ; reload handoff only
 global MoveMouse := 1
 global DarkMode := 1

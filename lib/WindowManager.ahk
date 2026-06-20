@@ -198,9 +198,12 @@ HandleToolHotkey:
 					; A valid window is active
 					if (validWindows.Length() = 1)
 					{
-						; Only one valid window - send to background if enabled for this tool
+						; Only one valid window - send to background if enabled,
+						; otherwise nothing to switch to: tell the user via tooltip
 						if (tool.SendToBackground = 1)
 							Send !{Esc}
+						else
+							ShowMouseTooltip(NO_OTHER_WINDOW_MESSAGE)
 					}
 					else
 					{
@@ -244,20 +247,19 @@ ToggleIgnoreActiveWindow:
 	{
 		IgnoredWindows.Delete(ignoreID)
 		RemoveIgnoreSuffix(ignoreID)
-		ToolTip, Window un-ignored
+		ShowMouseTooltip("Window un-ignored")
 	}
 	else
 	{
 		IgnoredWindows[ignoreID] := 1
 		ApplyIgnoreSuffix(ignoreID)
-		ToolTip, Window ignored
+		ShowMouseTooltip("Window ignored")
 	}
 	; Run the marker reconcile timer only while something is ignored
 	if (IgnoredWindows.Count() > 0)
 		SetTimer, MarkerWatch, 500
 	else
 		SetTimer, MarkerWatch, Off
-	SetTimer, RemoveToolTip, -1500
 return
 
 ; Re-apply the suffix if an app rewrote its own title; prune dead windows.
@@ -289,6 +291,7 @@ return
 
 ; Cycle through windows of the active process. direction = 1 forward, -1 backward.
 CycleProcessWindows(direction) {
+	global NO_OTHER_WINDOW_MESSAGE
 	; Get active window's process name
 	WinGet, activeExe, ProcessName, A
 	if (activeExe = "")
@@ -308,7 +311,10 @@ CycleProcessWindows(direction) {
 	}
 
 	if (validWindows.Length() <= 1)
+	{
+		ShowMouseTooltip(NO_OTHER_WINDOW_MESSAGE)
 		return
+	}
 
 	; Sort by handle for consistent ordering
 	SortByHandle(validWindows)

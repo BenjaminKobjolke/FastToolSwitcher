@@ -11,12 +11,14 @@ A lightweight AutoHotkey tool for quickly switching between applications using c
 - **Window cycling** - Press the same hotkey multiple times to cycle through multiple windows of the same application
 - **Auto-launch** - If the application isn't running, it will be launched automatically
 - **Background send** - If the application is already focused, pressing the hotkey sends it to the background
+- **No-switch feedback** - If only one window is available (nothing to switch to), a tooltip near the mouse shows *"Only one window - nothing to switch to"* so the hotkey never feels broken
 
 ### Window Cycling
 - **Main cycling hotkey** (default: `Ctrl+Shift+Space`) - Cycles **forward** through all windows of the currently active application
 - **Reverse cycling hotkey** (default: `Ctrl+Shift+Alt+Space`) - Cycles **backward** to the previous window of the same application
 - Both wrap around at the ends and are independently configurable in Settings
 - Useful when you have multiple instances of the same program open
+- If the active app has only one window, a mouse tooltip indicates there is nothing to cycle to
 
 ### Mouse Positioning
 - **Move mouse to center** - Optionally moves the mouse cursor to the center of the activated window

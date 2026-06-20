@@ -56,8 +56,7 @@ ToggleHotkeyPreview:
 
 	if (toolsWithHotkeys.Length() = 0)
 	{
-		ToolTip, No tools with hotkeys configured
-		SetTimer, RemoveToolTip, -2000
+		ShowMouseTooltip("No tools with hotkeys configured", 2000)
 		return
 	}
 
