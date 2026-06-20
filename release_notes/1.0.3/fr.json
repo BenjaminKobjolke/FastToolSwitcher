@@ -1,0 +1,8 @@
+{
+  "version": "1.0.3",
+  "date": "2026-06-20",
+  "notes": [
+    "Nouveau : raccourci clavier d’ignorance de fenêtre (Ctrl+Alt+I par défaut) pour exclure temporairement des fenêtres individuelles du cycle de basculement",
+    "Nouveau : activer/désactiver et configurer le raccourci clavier d’ignorance de fenêtre dans les Paramètres"
+  ]
+}

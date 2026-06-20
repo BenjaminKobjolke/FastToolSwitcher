@@ -1,0 +1,8 @@
+{
+  "version": "1.0.3",
+  "date": "2026-06-20",
+  "notes": [
+    "Neu: Hotkey zum Ignorieren von Fenstern (standardmäßig Strg+Alt+I), um einzelne Fenster vorübergehend aus dem Wechselzyklus auszuschließen",
+    "Neu: In den Einstellungen den Hotkey zum Ignorieren von Fenstern aktivieren/deaktivieren und konfigurieren"
+  ]
+}

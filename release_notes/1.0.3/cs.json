@@ -1,0 +1,8 @@
+{
+  "version": "1.0.3",
+  "date": "2026-06-20",
+  "notes": [
+    "Novinka: klávesová zkratka pro ignorování okna (výchozí Ctrl+Alt+I) pro dočasné vyloučení jednotlivých oken z cyklu přepínání",
+    "Novinka: v Nastavení můžete povolit/zakázat a nastavit klávesovou zkratku pro ignorování okna"
+  ]
+}

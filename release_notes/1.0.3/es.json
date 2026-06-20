@@ -1,0 +1,8 @@
+{
+  "version": "1.0.3",
+  "date": "2026-06-20",
+  "notes": [
+    "Nuevo: atajo de teclado para ignorar ventana (Ctrl+Alt+I de forma predeterminada) para excluir temporalmente ventanas individuales del ciclo de cambio",
+    "Nuevo: habilitar/deshabilitar y configurar el atajo de teclado para ignorar ventana en Configuración"
+  ]
+}

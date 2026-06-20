@@ -1,0 +1,8 @@
+{
+  "version": "1.0.3",
+  "date": "2026-06-20",
+  "notes": [
+    "Novità: tasto di scelta rapida per ignorare la finestra (predefinito Ctrl+Alt+I) per escludere temporaneamente singole finestre dal ciclo di commutazione",
+    "Novità: abilita/disabilita e configura il tasto di scelta rapida per ignorare la finestra nelle Impostazioni"
+  ]
+}

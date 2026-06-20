@@ -1,0 +1,8 @@
+{
+  "version": "1.0.3",
+  "date": "2026-06-20",
+  "notes": [
+    "Uusi: ohita ikkunan pikanäppäin (oletuksena Ctrl+Alt+I), jolla yksittäiset ikkunat voidaan tilapäisesti sulkea pois vaihtokierrosta",
+    "Uusi: ota ohita ikkunan pikanäppäin käyttöön/pois käytöstä ja määritä se Asetuksissa"
+  ]
+}

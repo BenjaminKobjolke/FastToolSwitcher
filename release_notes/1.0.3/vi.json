@@ -1,0 +1,8 @@
+{
+  "version": "1.0.3",
+  "date": "2026-06-20",
+  "notes": [
+    "Mới: phím tắt bỏ qua cửa sổ (mặc định Ctrl+Alt+I) để tạm thời loại trừ từng cửa sổ khỏi chu kỳ chuyển đổi",
+    "Mới: bật/tắt và cấu hình phím tắt bỏ qua cửa sổ trong Cài đặt"
+  ]
+}

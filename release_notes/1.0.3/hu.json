@@ -1,0 +1,8 @@
+{
+  "version": "1.0.3",
+  "date": "2026-06-20",
+  "notes": [
+    "Új: az ablak kihagyása gyorsbillentyű (alapértelmezés: Ctrl+Alt+I) az egyes ablakok ideiglenes kizárására a váltási ciklusból",
+    "Új: az ablak kihagyása gyorsbillentyű engedélyezése/letiltása és beállítása a Beállításokban"
+  ]
+}

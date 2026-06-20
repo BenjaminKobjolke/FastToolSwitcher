@@ -1,0 +1,8 @@
+{
+  "version": "1.0.3",
+  "date": "2026-06-20",
+  "notes": [
+    "Ny: Genvejstast til at ignorere vindue (standard Ctrl+Alt+I) til midlertidigt at udelukke enkelte vinduer fra skiftecyklussen",
+    "Ny: Aktivér/deaktivér og konfigurér genvejstasten til at ignorere vindue i Indstillinger"
+  ]
+}

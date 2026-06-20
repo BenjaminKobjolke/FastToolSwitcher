@@ -1,0 +1,8 @@
+{
+  "version": "1.0.3",
+  "date": "2026-06-20",
+  "notes": [
+    "Novo: tecla de atalho para ignorar janela (predefinição Ctrl+Alt+I) para excluir temporariamente janelas individuais do ciclo de alternância",
+    "Novo: ativar/desativar e configurar a tecla de atalho para ignorar janela nas Definições"
+  ]
+}

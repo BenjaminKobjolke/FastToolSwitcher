@@ -1,0 +1,8 @@
+{
+  "version": "1.0.3",
+  "date": "2026-06-20",
+  "notes": [
+    "Novo: prečac za ignoriranje prozora (zadano Ctrl+Alt+I) za privremeno izuzimanje pojedinačnih prozora iz ciklusa prebacivanja",
+    "Novo: u Postavkama omogućite/onemogućite i konfigurirajte prečac za ignoriranje prozora"
+  ]
+}

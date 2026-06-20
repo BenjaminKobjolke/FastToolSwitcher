@@ -1,0 +1,8 @@
+{
+    "version": "1.0.3",
+    "date": "2026-06-20",
+    "notes": [
+        "New: ignore window hotkey (default Ctrl+Alt+I) to temporarily exclude individual windows from the switching cycle",
+        "New: enable/disable and configure the ignore window hotkey in Settings"
+    ]
+}

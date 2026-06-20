@@ -1,0 +1,8 @@
+{
+  "version": "1.0.3",
+  "date": "2026-06-20",
+  "notes": [
+    "Nou: comandă rapidă pentru ignorarea ferestrei (implicit Ctrl+Alt+I) pentru a exclude temporar ferestre individuale din ciclul de comutare",
+    "Nou: activează/dezactivează și configurează comanda rapidă pentru ignorarea ferestrei în Setări"
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "version": "1.0.3",
+  "date": "2026-06-20",
+  "notes": [
+    "Uus: akna ignoreerimise kiirklahv (vaikimisi Ctrl+Alt+I), millega saab üksikuid aknaid ajutiselt vahetustsüklist välja jätta",
+    "Uus: seadetes saab akna ignoreerimise kiirklahvi sisse/välja lülitada ja seadistada"
+  ]
+}

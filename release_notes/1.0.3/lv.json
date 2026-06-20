@@ -1,0 +1,8 @@
+{
+  "version": "1.0.3",
+  "date": "2026-06-20",
+  "notes": [
+    "Jauns: ignorēt loga karsto taustiņu (pēc noklusējuma Ctrl+Alt+I), lai īslaicīgi izslēgtu atsevišķus logus no pārslēgšanas cikla",
+    "Jauns: iespējot/atspējot un konfigurēt ignorēt loga karsto taustiņu sadaļā Iestatījumi"
+  ]
+}

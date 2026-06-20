@@ -1,0 +1,8 @@
+{
+  "version": "1.0.3",
+  "date": "2026-06-20",
+  "notes": [
+    "Nyhet: hurtigtast for å ignorere vindu (standard Ctrl+Alt+I) for midlertidig å ekskludere enkeltvinduer fra byttesyklusen",
+    "Nyhet: aktiver/deaktiver og konfigurer hurtigtasten for å ignorere vindu i Innstillinger"
+  ]
+}

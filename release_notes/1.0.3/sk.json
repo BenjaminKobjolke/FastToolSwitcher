@@ -1,0 +1,8 @@
+{
+  "version": "1.0.3",
+  "date": "2026-06-20",
+  "notes": [
+    "Nové: klávesová skratka na ignorovanie okna (predvolene Ctrl+Alt+I) na dočasné vylúčenie jednotlivých okien z cyklu prepínania",
+    "Nové: povolenie/zakázanie a konfigurácia klávesovej skratky na ignorovanie okna v Nastaveniach"
+  ]
+}

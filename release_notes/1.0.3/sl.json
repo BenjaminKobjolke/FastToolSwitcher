@@ -1,0 +1,8 @@
+{
+  "version": "1.0.3",
+  "date": "2026-06-20",
+  "notes": [
+    "Novo: bližnjica za prezrtje okna (privzeto Ctrl+Alt+I) za začasno izključitev posameznih oken iz cikla preklapljanja",
+    "Novo: omogočite/onemogočite in nastavite bližnjico za prezrtje okna v Nastavitvah"
+  ]
+}

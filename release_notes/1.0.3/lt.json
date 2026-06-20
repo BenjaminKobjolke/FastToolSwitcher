@@ -1,0 +1,8 @@
+{
+  "version": "1.0.3",
+  "date": "2026-06-20",
+  "notes": [
+    "Nauja: lango ignoravimo sparčioji klavišų kombinacija (numatytoji Ctrl+Alt+I), skirta laikinai pašalinti atskirus langus iš perjungimo ciklo",
+    "Nauja: nustatymuose įjunkite/išjunkite ir sukonfigūruokite lango ignoravimo sparčiąją klavišų kombinaciją"
+  ]
+}

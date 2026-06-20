@@ -1,0 +1,8 @@
+{
+  "version": "1.0.3",
+  "date": "2026-06-20",
+  "notes": [
+    "Yeni: geçiş döngüsünden tek tek pencereleri geçici olarak hariç tutmak için pencereyi yok say kısayolu (varsayılan Ctrl+Alt+I)",
+    "Yeni: Ayarlar’da pencereyi yok say kısayolunu etkinleştirme/devre dışı bırakma ve yapılandırma"
+  ]
+}

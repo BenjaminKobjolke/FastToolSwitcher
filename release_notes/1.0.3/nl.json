@@ -1,0 +1,8 @@
+{
+  "version": "1.0.3",
+  "date": "2026-06-20",
+  "notes": [
+    "Nieuw: sneltoets voor venster negeren (standaard Ctrl+Alt+I) om afzonderlijke vensters tijdelijk uit te sluiten van de wisselcyclus",
+    "Nieuw: de sneltoets voor venster negeren in Instellingen in- of uitschakelen en configureren"
+  ]
+}

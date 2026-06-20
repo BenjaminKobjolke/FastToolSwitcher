@@ -1,0 +1,8 @@
+{
+  "version": "1.0.3",
+  "date": "2026-06-20",
+  "notes": [
+    "Nyhet: snabbtangent för att ignorera fönster (standard Ctrl+Alt+I) för att tillfälligt undanta enskilda fönster från växlingscykeln",
+    "Nyhet: aktivera/inaktivera och konfigurera snabbtangenten för att ignorera fönster i Inställningar"
+  ]
+}
