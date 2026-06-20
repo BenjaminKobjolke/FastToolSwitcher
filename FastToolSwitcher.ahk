@@ -13,6 +13,7 @@ SetTitleMatchMode, 2
 ; Include ONLY files with functions (no labels) before auto-execute section
 #Include lib/Utils.ahk
 #Include lib/Config.ahk
+#Include lib/HotkeyList.ahk
 
 ; Initialize configuration
 InitConfig()
@@ -22,6 +23,9 @@ RegisterHotkeys()
 
 ; Strip ignore-window title markers on exit/reload so no stale titles remain
 OnExit("StripIgnoreMarkers")
+
+; Restore ignored windows handed over from a previous instance across a reload
+RestoreIgnoredWindows()
 
 ; Setup system tray menu
 Menu, Tray, NoStandard
@@ -56,6 +60,7 @@ return
 
 ; Include files with LABELS after auto-execute section
 #Include lib/HotkeyCapture.ahk
+#Include lib/HotkeyEditor.ahk
 #Include lib/WindowManager.ahk
 #Include lib/HotkeyPreview.ahk
 #Include lib/SettingsGUI.ahk

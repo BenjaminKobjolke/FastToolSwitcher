@@ -6,6 +6,7 @@ A lightweight AutoHotkey tool for quickly switching between applications using c
 
 ### Application Switching
 - **Hotkey-based switching** - Assign custom hotkeys to your frequently used applications
+- **Multiple hotkeys per action** - Bind several hotkeys to the same tool or function; any of them triggers it (see [docs/MULTIPLE_HOTKEYS.md](docs/MULTIPLE_HOTKEYS.md))
 - **Smart window detection** - Finds windows by executable name or window title
 - **Window cycling** - Press the same hotkey multiple times to cycle through multiple windows of the same application
 - **Auto-launch** - If the application isn't running, it will be launched automatically
@@ -27,7 +28,7 @@ A lightweight AutoHotkey tool for quickly switching between applications using c
 ### Ignore Windows
 - **Ignore hotkey** (default: `Ctrl+Alt+I`) - Temporarily exclude the active window from the main cycling hotkey; press again to un-ignore
 - Ignored windows are marked with a ` - FastToolSwitcher - ignored` title suffix and skipped while cycling
-- Session-only (cleared on restart); can be disabled in Settings
+- Session-only and **preserved across a reload** (saving Settings / tray *Reload*); cleared on a full exit/restart; can be disabled in Settings
 - See [docs/IGNORE_WINDOWS.md](docs/IGNORE_WINDOWS.md) for details
 
 ### GUI Settings
@@ -69,12 +70,18 @@ Right-click the tray icon to access:
 3. Click **Add** to create a new tool entry
 4. Configure:
    - **Name** - Display name for the tool
-   - **Hotkey** - Keyboard shortcut (e.g., `^+b` for Ctrl+Shift+B)
+   - **Hotkey(s)** - One or more keyboard shortcuts. Use **Add** to compose a hotkey
+     (modifier checkboxes + **Set** key), **Edit**/**Remove** for an existing one. See
+     [docs/MULTIPLE_HOTKEYS.md](docs/MULTIPLE_HOTKEYS.md)
    - **Exe Name** - Process name (e.g., `brave.exe`)
    - **Exe Path** - Full path to the executable
    - **Window Title** - (Optional) Match by window title instead of exe name
    - **Arguments** - (Optional) Command line arguments
    - **Exclude Title** - (Optional) Exclude windows containing this text
+
+The global function hotkeys (window cycling, reverse, overview, ignore) on the
+**Settings** tab use the same Add/Edit/Remove list, so they can have multiple
+hotkeys too.
 
 ### Hotkey Format
 
@@ -88,6 +95,10 @@ Examples:
 - `^+b` = Ctrl+Shift+B
 - `!F1` = Alt+F1
 - `#e` = Win+E
+
+Multiple hotkeys for one action are stored in the same key, joined with `|`
+(e.g. `Hotkey=^+b|^!b`). A value with no `|` is a single hotkey, so older config
+files keep working.
 
 ## Configuration File
 
@@ -111,7 +122,7 @@ ToolCount=2
 
 [Tool1]
 Name=Brave
-Hotkey=^+b
+Hotkey=^+b|^!b
 ExeName=brave.exe
 ExePath=C:\Program Files\BraveSoftware\Brave-Browser\Application\brave.exe
 WindowTitle=

@@ -43,9 +43,16 @@ RemoveIgnoreSuffix(windowID) {
 	}
 }
 
-; Remove ignore markers from all ignored windows. Runs on exit/reload.
+; OnExit handler. On a Reload (Settings save / tray Reload / debug reload) the ignore
+; state is handed to the next instance via a temp file and the suffixes are left in
+; place. On a genuine exit the markers are stripped and the handoff file removed.
 StripIgnoreMarkers(ExitReason := "", ExitCode := "") {
-	global IgnoredWindows
+	global IgnoredWindows, IGNORED_STATE_FILE
+	if (ExitReason = "Reload")
+	{
+		SaveIgnoredWindows()
+		return
+	}
 	SetTimer, MarkerWatch, Off
 	for id in IgnoredWindows
 	{
@@ -54,6 +61,43 @@ StripIgnoreMarkers(ExitReason := "", ExitCode := "") {
 		RemoveIgnoreSuffix(id)
 	}
 	IgnoredWindows := {}
+	FileDelete, %IGNORED_STATE_FILE%
+}
+
+; Persist the ignored window handles so a Reload can restore them.
+SaveIgnoredWindows() {
+	global IgnoredWindows, IGNORED_STATE_FILE
+	ids := ""
+	for id in IgnoredWindows
+		ids .= (ids = "" ? "" : ",") . id
+	FileDelete, %IGNORED_STATE_FILE%
+	if (ids != "")
+		FileAppend, %ids%, %IGNORED_STATE_FILE%
+}
+
+; Restore the ignored window handles after a Reload, then consume the handoff file.
+; If the ignore feature was turned off in the save that caused the reload, the saved
+; windows are un-ignored (suffix stripped) instead of restored.
+RestoreIgnoredWindows() {
+	global IgnoredWindows, IGNORED_STATE_FILE, IgnoreHotkeyEnabled
+	if (!FileExist(IGNORED_STATE_FILE))
+		return
+	FileRead, ids, %IGNORED_STATE_FILE%
+	FileDelete, %IGNORED_STATE_FILE%
+	for index, id in StrSplit(ids, ",")
+	{
+		if (id = "" || !WinExist("ahk_id " . id))
+			continue
+		if (IgnoreHotkeyEnabled = 1)
+		{
+			IgnoredWindows[id] := 1
+			ApplyIgnoreSuffix(id)
+		}
+		else
+			RemoveIgnoreSuffix(id)
+	}
+	if (IgnoredWindows.Count() > 0)
+		SetTimer, MarkerWatch, 500
 }
 
 ; Move the mouse to the center of the active window when enabled.
@@ -75,7 +119,7 @@ HandleToolHotkey:
 
 	for index, tool in Tools
 	{
-		if (tool.Hotkey = triggeredHotkey)
+		if (HotkeyListContains(tool.Hotkey, triggeredHotkey))
 		{
 			; Determine window detection method
 			if (tool.WindowClass != "" && tool.WindowTitle != "")

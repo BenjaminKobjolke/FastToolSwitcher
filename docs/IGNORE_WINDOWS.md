@@ -14,8 +14,9 @@ browser windows) but only want to cycle through a few of them.
   suffix is removed and it rejoins the cycle.
 
 Ignoring is a temporary, "right now" convenience — it is **session only** and
-is kept in memory keyed by window handle. It is not saved to disk, so all
-windows are un-ignored when the application restarts.
+is kept in memory keyed by window handle. It survives a **reload** (saving
+Settings, tray *Reload*) but is **not** persisted long-term: all windows are
+un-ignored when the application is exited and restarted.
 
 ## Scope: what skips ignored windows
 
@@ -33,9 +34,15 @@ it on tab switch), the suffix is automatically re-applied within ~0.5 seconds by
 a background reconcile timer. That timer only runs while at least one window is
 ignored.
 
-When the application exits or reloads (including saving Settings, which reloads
-the script), all suffixes are stripped automatically, so no window keeps a stale
+Ignored windows **persist across a reload** — saving Settings or using the tray
+*Reload* keeps them ignored (the handles are handed to the restarted script via a
+short-lived temp file). They are cleared only on a real application **exit/restart**,
+where all suffixes are stripped automatically so no window keeps a stale
 ` - FastToolSwitcher - ignored` title.
+
+Turning the feature off in Settings (unticking **Enable ignore window hotkey**)
+and saving un-ignores every window — the suffixes are stripped and nothing is
+restored.
 
 ## Configuration
 

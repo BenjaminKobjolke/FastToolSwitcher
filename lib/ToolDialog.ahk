@@ -50,57 +50,44 @@ ShowToolDialog:
 	Gui, ToolDialog:Add, Text, x15 y20 w100, Name:
 	Gui, ToolDialog:Add, Edit, x120 y17 w300 vTdName, %tdName%
 
-	; Parse current hotkey into components
-	parsedTdHk := ParseHotkey(tdHotkey)
-	tdCtrl := parsedTdHk.ctrl
-	tdShift := parsedTdHk.shift
-	tdAlt := parsedTdHk.alt
-	tdWin := parsedTdHk.win
-	tdKeyVal := parsedTdHk.key
+	; Hotkey(s) via the shared list row + popup editor (multiple hotkeys allowed)
+	Gui, ToolDialog:Add, Text, x15 y45 w100, Hotkey(s):
+	AddHotkeyListRow("ToolDialog", "Td", 65, tdHotkey, 0, "", 0)
 
-	Gui, ToolDialog:Add, Text, x15 y60 w100, Hotkey:
-	Gui, ToolDialog:Add, Checkbox, x120 y60 vChkTdCtrl Checked%tdCtrl%, Ctrl
-	Gui, ToolDialog:Add, Checkbox, x180 y60 vChkTdShift Checked%tdShift%, Shift
-	Gui, ToolDialog:Add, Checkbox, x250 y60 vChkTdAlt Checked%tdAlt%, Alt
-	Gui, ToolDialog:Add, Checkbox, x310 y60 vChkTdWin Checked%tdWin%, Win
-	Gui, ToolDialog:Add, Text, x120 y95, Key:
-	Gui, ToolDialog:Add, Edit, x165 y92 w70 vTdKey ReadOnly, %tdKeyVal%
-	Gui, ToolDialog:Add, Button, x245 y91 w45 gSetToolKey, Set
+	Gui, ToolDialog:Add, Text, x15 y155 w100, Exe Name:
+	Gui, ToolDialog:Add, Edit, x120 y152 w300 vTdExeName, %tdExeName%
 
-	Gui, ToolDialog:Add, Text, x15 y135 w100, Exe Name:
-	Gui, ToolDialog:Add, Edit, x120 y132 w300 vTdExeName, %tdExeName%
+	Gui, ToolDialog:Add, Text, x15 y195 w100, Exe Path:
+	Gui, ToolDialog:Add, Edit, x120 y192 w260 vTdExePath, %tdExePath%
+	Gui, ToolDialog:Add, Button, x385 y191 w35 gBrowseExePath, ...
 
-	Gui, ToolDialog:Add, Text, x15 y175 w100, Exe Path:
-	Gui, ToolDialog:Add, Edit, x120 y172 w260 vTdExePath, %tdExePath%
-	Gui, ToolDialog:Add, Button, x385 y171 w35 gBrowseExePath, ...
-
-	Gui, ToolDialog:Add, Text, x15 y215 w100, Window Title:
-	Gui, ToolDialog:Add, Edit, x120 y212 w300 vTdWindowTitle, %tdWindowTitle%
+	Gui, ToolDialog:Add, Text, x15 y235 w100, Window Title:
+	Gui, ToolDialog:Add, Edit, x120 y232 w300 vTdWindowTitle, %tdWindowTitle%
 	if (DarkMode = 1)
-		Gui, ToolDialog:Add, Text, x15 y245 cWhite, (optional, for matching by title)
+		Gui, ToolDialog:Add, Text, x15 y265 cWhite, (optional, for matching by title)
 	else
-		Gui, ToolDialog:Add, Text, x15 y245 cGray, (optional, for matching by title)
+		Gui, ToolDialog:Add, Text, x15 y265 cGray, (optional, for matching by title)
 
-	Gui, ToolDialog:Add, Text, x15 y280 w100, Arguments:
-	Gui, ToolDialog:Add, Edit, x120 y277 w300 vTdArguments, %tdArguments%
+	Gui, ToolDialog:Add, Text, x15 y300 w100, Arguments:
+	Gui, ToolDialog:Add, Edit, x120 y297 w300 vTdArguments, %tdArguments%
 
-	Gui, ToolDialog:Add, Text, x15 y320 w100, Exclude Title:
-	Gui, ToolDialog:Add, Edit, x120 y317 w300 vTdExcludeTitle, %tdExcludeTitle%
+	Gui, ToolDialog:Add, Text, x15 y340 w100, Exclude Title:
+	Gui, ToolDialog:Add, Edit, x120 y337 w300 vTdExcludeTitle, %tdExcludeTitle%
 	if (DarkMode = 1)
-		Gui, ToolDialog:Add, Text, x15 y350 cWhite, (windows containing this text are ignored)
+		Gui, ToolDialog:Add, Text, x15 y370 cWhite, (windows containing this text are ignored)
 	else
-		Gui, ToolDialog:Add, Text, x15 y350 cGray, (windows containing this text are ignored)
+		Gui, ToolDialog:Add, Text, x15 y370 cGray, (windows containing this text are ignored)
 
 	; Send to background option
-	Gui, ToolDialog:Add, Checkbox, x15 y385 vChkSendToBackground Checked%tdSendToBackground%, Send to background when already focused
+	Gui, ToolDialog:Add, Checkbox, x15 y405 vChkSendToBackground Checked%tdSendToBackground%, Send to background when already focused
 
 	; Pick Window button
-	Gui, ToolDialog:Add, Button, x120 y425 w120 gStartTargetPicker, Pick Window
+	Gui, ToolDialog:Add, Button, x120 y445 w120 gStartTargetPicker, Pick Window
 
-	Gui, ToolDialog:Add, Button, x240 y475 w90 gToolDialogSave Default, Save
-	Gui, ToolDialog:Add, Button, x340 y475 w90 gToolDialogClose, Cancel
+	Gui, ToolDialog:Add, Button, x240 y495 w90 gToolDialogSave Default, Save
+	Gui, ToolDialog:Add, Button, x340 y495 w90 gToolDialogClose, Cancel
 
-	Gui, ToolDialog:Show, w440 h520
+	Gui, ToolDialog:Show, w520 h545
 
 	; Apply dark title bar after showing
 	if (DarkMode = 1)
@@ -109,11 +96,6 @@ ShowToolDialog:
 		toolDialogHwnd := WinExist()
 		ApplyDarkMode(toolDialogHwnd)
 	}
-return
-
-SetToolKey:
-	; Capture single key when Set button is clicked
-	CaptureKeyToControl("ToolDialog", "TdKey")
 return
 
 BrowseExePath:
@@ -141,16 +123,16 @@ ToolDialogSave:
 		return
 	}
 
-	; Build hotkey from checkboxes and key field
-	builtToolHotkey := BuildHotkey(ChkTdCtrl, ChkTdShift, ChkTdAlt, ChkTdWin, TdKey)
+	; Hotkey list comes from the shared list field (already "|"-joined)
+	builtToolHotkey := TdList
 
-	; Check for duplicate hotkey assignment
-	if (builtToolHotkey != "")
+	; Check each hotkey in the list for a duplicate assignment
+	for i, hk in SplitHotkeyList(builtToolHotkey)
 	{
-		conflict := FindHotkeyConflict(builtToolHotkey, EditingToolIndex)
+		conflict := FindHotkeyConflict(hk, EditingToolIndex)
 		if (conflict != "")
 		{
-			MsgBox, 48, Tool Switcher, Hotkey %builtToolHotkey% is already assigned to %conflict%.`n`nPlease choose a different hotkey.
+			MsgBox, 48, Tool Switcher, Hotkey %hk% is already assigned to %conflict%.`n`nPlease choose a different hotkey.
 			return
 		}
 	}

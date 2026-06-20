@@ -49,7 +49,7 @@ ToggleHotkeyPreview:
 		{
 			entry := {}
 			entry.Name := tool.Name != "" ? tool.Name : tool.ExeName
-			entry.HotkeyDisplay := FormatHotkeyDisplay(tool.Hotkey)
+			entry.HotkeyDisplay := FormatHotkeyList(tool.Hotkey)
 			toolsWithHotkeys.Push(entry)
 		}
 	}

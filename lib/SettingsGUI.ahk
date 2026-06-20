@@ -23,114 +23,25 @@ ShowSettings:
 		Gui, Settings:Font, s12 cBlack
 	}
 
-	Gui, Settings:Add, Tab3, x10 y10 w520 h620 vSettingsTab, Settings|Tools|Design|Release Notes
+	Gui, Settings:Add, Tab3, x10 y10 w520 h585 vSettingsTab, Settings|Tools|Design|Release Notes
 
 	; === Settings Tab ===
+	; Each function uses the shared hotkey-list row (lib/HotkeyList.ahk): an enable
+	; checkbox, a ListBox of bound hotkeys, and Add/Edit/Remove (the popup editor
+	; composes each hotkey). Multiple hotkeys may be bound to one function.
 	Gui, Settings:Tab, Settings
-	Gui, Settings:Add, Checkbox, x20 y50 vChkMainHotkeyEnabled Checked%MainHotkeyEnabled%, Enable window cycling hotkey
 
-	; Parse current hotkey into components
-	parsedHk := ParseHotkey(MainHotkey)
-	hkCtrl := parsedHk.ctrl
-	hkShift := parsedHk.shift
-	hkAlt := parsedHk.alt
-	hkWin := parsedHk.win
-	hkKey := parsedHk.key
+	AddHotkeyListRow("Settings", "Main", 50, MainHotkey, 1, "Enable window cycling hotkey", MainHotkeyEnabled)
+	AddHotkeyListRow("Settings", "Ov", 160, OverviewHotkey, 1, "Enable shortcuts overview hotkey", OverviewHotkeyEnabled)
+	AddHotkeyListRow("Settings", "Rev", 270, MainHotkeyReversed, 1, "Enable reverse window cycling hotkey", MainHotkeyReversedEnabled)
+	AddHotkeyListRow("Settings", "Ign", 380, IgnoreHotkey, 1, "Enable ignore window hotkey", IgnoreHotkeyEnabled)
 
-	Gui, Settings:Add, Text, x20 y90, Hotkey:
-	Gui, Settings:Add, Checkbox, x80 y90 vChkHkCtrl Checked%hkCtrl%, Ctrl
-	Gui, Settings:Add, Checkbox, x140 y90 vChkHkShift Checked%hkShift%, Shift
-	Gui, Settings:Add, Checkbox, x210 y90 vChkHkAlt Checked%hkAlt%, Alt
-	Gui, Settings:Add, Checkbox, x265 y90 vChkHkWin Checked%hkWin%, Win
-	Gui, Settings:Add, Text, x320 y90, Key:
-	Gui, Settings:Add, Edit, x360 y87 w70 vHkMainKey ReadOnly, %hkKey%
-	Gui, Settings:Add, Button, x435 y86 w45 gSetMainKey, Set
-
-	if (DarkMode = 1)
-		Gui, Settings:Add, Text, x20 y125 cWhite, (Cycles windows of same process)
-	else
-		Gui, Settings:Add, Text, x20 y125 cGray, (Cycles windows of same process)
-
-	; === Shortcuts Overview Hotkey ===
-	Gui, Settings:Add, Checkbox, x20 y160 vChkOverviewHotkeyEnabled Checked%OverviewHotkeyEnabled%, Enable shortcuts overview hotkey
-
-	; Parse current overview hotkey into components
-	parsedOvHk := ParseHotkey(OverviewHotkey)
-	ovCtrl := parsedOvHk.ctrl
-	ovShift := parsedOvHk.shift
-	ovAlt := parsedOvHk.alt
-	ovWin := parsedOvHk.win
-	ovKey := parsedOvHk.key
-
-	Gui, Settings:Add, Text, x20 y200, Hotkey:
-	Gui, Settings:Add, Checkbox, x80 y200 vChkOvCtrl Checked%ovCtrl%, Ctrl
-	Gui, Settings:Add, Checkbox, x140 y200 vChkOvShift Checked%ovShift%, Shift
-	Gui, Settings:Add, Checkbox, x210 y200 vChkOvAlt Checked%ovAlt%, Alt
-	Gui, Settings:Add, Checkbox, x265 y200 vChkOvWin Checked%ovWin%, Win
-	Gui, Settings:Add, Text, x320 y200, Key:
-	Gui, Settings:Add, Edit, x360 y197 w70 vHkOverviewKey ReadOnly, %ovKey%
-	Gui, Settings:Add, Button, x435 y196 w45 gSetOverviewKey, Set
-
-	if (DarkMode = 1)
-		Gui, Settings:Add, Text, x20 y235 cWhite, (Shows all tool hotkeys in an overlay)
-	else
-		Gui, Settings:Add, Text, x20 y235 cGray, (Shows all tool hotkeys in an overlay)
-
-	Gui, Settings:Add, Checkbox, x20 y275 vChkMoveMouse Checked%MoveMouse% gToggleSpeedVisibility, Move mouse to center of window when switching
+	; Mouse + startup options
+	Gui, Settings:Add, Checkbox, x20 y495 vChkMoveMouse Checked%MoveMouse% gToggleSpeedVisibility, Move mouse to center of window when switching
 	hideSpeed := (MoveMouse = 1) ? 0 : 1
-	Gui, Settings:Add, Text, x40 y315 vTxtMouseSpeed Hidden%hideSpeed%, Mouse move speed (0 = instant):
-	Gui, Settings:Add, Slider, x280 y312 w150 h25 Range0-10 ToolTip vSliderMouseMoveSpeed Hidden%hideSpeed%, %MouseMoveSpeed%
-	Gui, Settings:Add, Checkbox, x20 y360 vChkStartWithWindows Checked%StartWithWindows%, Start with Windows
-
-	; === Reverse Window Cycling Hotkey ===
-	Gui, Settings:Add, Checkbox, x20 y400 vChkMainHotkeyReversedEnabled Checked%MainHotkeyReversedEnabled%, Enable reverse window cycling hotkey
-
-	; Parse current reverse hotkey into components
-	parsedRevHk := ParseHotkey(MainHotkeyReversed)
-	revCtrl := parsedRevHk.ctrl
-	revShift := parsedRevHk.shift
-	revAlt := parsedRevHk.alt
-	revWin := parsedRevHk.win
-	revKey := parsedRevHk.key
-
-	Gui, Settings:Add, Text, x20 y440, Hotkey:
-	Gui, Settings:Add, Checkbox, x80 y440 vChkRevCtrl Checked%revCtrl%, Ctrl
-	Gui, Settings:Add, Checkbox, x140 y440 vChkRevShift Checked%revShift%, Shift
-	Gui, Settings:Add, Checkbox, x210 y440 vChkRevAlt Checked%revAlt%, Alt
-	Gui, Settings:Add, Checkbox, x265 y440 vChkRevWin Checked%revWin%, Win
-	Gui, Settings:Add, Text, x320 y440, Key:
-	Gui, Settings:Add, Edit, x360 y437 w70 vHkRevKey ReadOnly, %revKey%
-	Gui, Settings:Add, Button, x435 y436 w45 gSetRevKey, Set
-
-	if (DarkMode = 1)
-		Gui, Settings:Add, Text, x20 y475 cWhite, (Cycles windows of same process in reverse)
-	else
-		Gui, Settings:Add, Text, x20 y475 cGray, (Cycles windows of same process in reverse)
-
-	; === Ignore Window Hotkey ===
-	Gui, Settings:Add, Checkbox, x20 y515 vChkIgnoreHotkeyEnabled Checked%IgnoreHotkeyEnabled%, Enable ignore window hotkey
-
-	; Parse current ignore hotkey into components
-	parsedIgnHk := ParseHotkey(IgnoreHotkey)
-	ignCtrl := parsedIgnHk.ctrl
-	ignShift := parsedIgnHk.shift
-	ignAlt := parsedIgnHk.alt
-	ignWin := parsedIgnHk.win
-	ignKey := parsedIgnHk.key
-
-	Gui, Settings:Add, Text, x20 y555, Hotkey:
-	Gui, Settings:Add, Checkbox, x80 y555 vChkIgnCtrl Checked%ignCtrl%, Ctrl
-	Gui, Settings:Add, Checkbox, x140 y555 vChkIgnShift Checked%ignShift%, Shift
-	Gui, Settings:Add, Checkbox, x210 y555 vChkIgnAlt Checked%ignAlt%, Alt
-	Gui, Settings:Add, Checkbox, x265 y555 vChkIgnWin Checked%ignWin%, Win
-	Gui, Settings:Add, Text, x320 y555, Key:
-	Gui, Settings:Add, Edit, x360 y552 w70 vHkIgnoreKey ReadOnly, %ignKey%
-	Gui, Settings:Add, Button, x435 y551 w45 gSetIgnoreKey, Set
-
-	if (DarkMode = 1)
-		Gui, Settings:Add, Text, x20 y590 cWhite, (Excludes the active window from same-type cycling)
-	else
-		Gui, Settings:Add, Text, x20 y590 cGray, (Excludes the active window from same-type cycling)
+	Gui, Settings:Add, Text, x40 y530 vTxtMouseSpeed Hidden%hideSpeed%, Mouse move speed (0 = instant):
+	Gui, Settings:Add, Slider, x280 y527 w150 h25 Range0-10 ToolTip vSliderMouseMoveSpeed Hidden%hideSpeed%, %MouseMoveSpeed%
+	Gui, Settings:Add, Checkbox, x20 y562 vChkStartWithWindows Checked%StartWithWindows%, Start with Windows
 
 	; === Tools Tab ===
 	Gui, Settings:Tab, Tools
@@ -249,21 +160,21 @@ ShowSettings:
 
 	; === Bottom buttons (outside tabs) ===
 	Gui, Settings:Tab
-	Gui, Settings:Add, Button, x350 y660 w90 gSaveSettings Default, Save
-	Gui, Settings:Add, Button, x450 y660 w90 gSettingsGuiClose, Cancel
+	Gui, Settings:Add, Button, x350 y605 w90 gSaveSettings Default, Save
+	Gui, Settings:Add, Button, x450 y605 w90 gSettingsGuiClose, Cancel
 
 	; Add link at bottom
 	if (DarkMode = 1)
 		Gui, Settings:Font, cAqua
 	else
 		Gui, Settings:Font, cBlue
-	Gui, Settings:Add, Text, x20 y668 gOpenMoreTools, More tools to improve your workflow
+	Gui, Settings:Add, Text, x20 y613 gOpenMoreTools, More tools to improve your workflow
 	if (DarkMode = 1)
 		Gui, Settings:Font, s12 cWhite
 	else
 		Gui, Settings:Font, s12 cBlack
 
-	Gui, Settings:Show, w550 h700
+	Gui, Settings:Show, w550 h645
 
 	; Apply dark mode to window after showing
 	if (DarkMode = 1)
@@ -286,22 +197,6 @@ ThemePreview:
 	Gosub, ShowSettings
 	; Switch back to Design tab
 	GuiControl, Settings:Choose, SettingsTab, 3
-return
-
-SetMainKey:
-	CaptureKeyToControl("Settings", "HkMainKey")
-return
-
-SetOverviewKey:
-	CaptureKeyToControl("Settings", "HkOverviewKey")
-return
-
-SetRevKey:
-	CaptureKeyToControl("Settings", "HkRevKey")
-return
-
-SetIgnoreKey:
-	CaptureKeyToControl("Settings", "HkIgnoreKey")
 return
 
 ToggleSpeedVisibility:
@@ -332,107 +227,48 @@ return
 SaveSettings:
 	Gui, Settings:Submit, NoHide
 
-	; Build main hotkey from checkboxes and key field
-	builtMainHotkey := BuildHotkey(ChkHkCtrl, ChkHkShift, ChkHkAlt, ChkHkWin, HkMainKey)
+	; Hotkey lists come straight from each row's list field (already "|"-joined)
+	builtMainHotkey := MainList
+	builtOverviewHotkey := OvList
+	builtReverseHotkey := RevList
+	builtIgnoreHotkey := IgnList
 
-	; Build overview hotkey from checkboxes and key field
-	builtOverviewHotkey := BuildHotkey(ChkOvCtrl, ChkOvShift, ChkOvAlt, ChkOvWin, HkOverviewKey)
-
-	; Build reverse window cycling hotkey from checkboxes and key field
-	builtReverseHotkey := BuildHotkey(ChkRevCtrl, ChkRevShift, ChkRevAlt, ChkRevWin, HkRevKey)
-
-	; Build ignore window hotkey from checkboxes and key field
-	builtIgnoreHotkey := BuildHotkey(ChkIgnCtrl, ChkIgnShift, ChkIgnAlt, ChkIgnWin, HkIgnoreKey)
-
-	; Check for duplicate hotkey assignments
-	; Cannot reuse FindHotkeyConflict() because globals still hold old values
-	if (ChkMainHotkeyEnabled = 1 && builtMainHotkey != "")
+	; Check for duplicate hotkey assignments across enabled functions + tools.
+	; Each value may contain multiple hotkeys; the shared scan expands them.
+	dupPairs := []
+	if (MainEnabled = 1)
+		dupPairs.Push({list: builtMainHotkey, owner: "Window Cycling"})
+	if (OvEnabled = 1)
+		dupPairs.Push({list: builtOverviewHotkey, owner: "Shortcuts Overview"})
+	if (RevEnabled = 1)
+		dupPairs.Push({list: builtReverseHotkey, owner: "Reverse Window Cycling"})
+	if (IgnEnabled = 1)
+		dupPairs.Push({list: builtIgnoreHotkey, owner: "Ignore Window"})
+	Gui, Settings:Default
+	Gui, ListView, ToolListView
+	dupToolCount := LV_GetCount()
+	Loop, %dupToolCount%
 	{
-		for idx, tool in Tools
-		{
-			if (tool.Hotkey != "" && tool.Hotkey = builtMainHotkey)
-			{
-				conflictName := tool.Name != "" ? tool.Name : tool.ExeName
-				MsgBox, 48, Tool Switcher, Window Cycling hotkey is already assigned to tool '%conflictName%'.`n`nPlease choose a different hotkey.
-				return
-			}
-		}
+		LV_GetText(dupName, A_Index, 1)
+		LV_GetText(dupHotkey, A_Index, 2)
+		if (dupHotkey != "")
+			dupPairs.Push({list: dupHotkey, owner: (dupName != "" ? dupName : "Tool " . A_Index)})
 	}
-	if (ChkOverviewHotkeyEnabled = 1 && builtOverviewHotkey != "")
+	dupMsg := CollectHotkeyDuplicates(dupPairs)
+	if (dupMsg != "")
 	{
-		for idx, tool in Tools
-		{
-			if (tool.Hotkey != "" && tool.Hotkey = builtOverviewHotkey)
-			{
-				conflictName := tool.Name != "" ? tool.Name : tool.ExeName
-				MsgBox, 48, Tool Switcher, Shortcuts Overview hotkey is already assigned to tool '%conflictName%'.`n`nPlease choose a different hotkey.
-				return
-			}
-		}
-	}
-	if (ChkMainHotkeyEnabled = 1 && builtMainHotkey != "" && ChkOverviewHotkeyEnabled = 1 && builtOverviewHotkey != "" && builtMainHotkey = builtOverviewHotkey)
-	{
-		MsgBox, 48, Tool Switcher, Window Cycling hotkey and Shortcuts Overview hotkey cannot be the same.`n`nPlease choose different hotkeys.
+		MsgBox, 48, Tool Switcher - Duplicate Hotkeys, The following hotkey conflicts were detected:`n`n%dupMsg%`nPlease choose different hotkeys.
 		return
-	}
-	if (ChkMainHotkeyReversedEnabled = 1 && builtReverseHotkey != "")
-	{
-		for idx, tool in Tools
-		{
-			if (tool.Hotkey != "" && tool.Hotkey = builtReverseHotkey)
-			{
-				conflictName := tool.Name != "" ? tool.Name : tool.ExeName
-				MsgBox, 48, Tool Switcher, Reverse Window Cycling hotkey is already assigned to tool '%conflictName%'.`n`nPlease choose a different hotkey.
-				return
-			}
-		}
-		if (ChkMainHotkeyEnabled = 1 && builtMainHotkey != "" && builtReverseHotkey = builtMainHotkey)
-		{
-			MsgBox, 48, Tool Switcher, Reverse Window Cycling hotkey and Window Cycling hotkey cannot be the same.`n`nPlease choose different hotkeys.
-			return
-		}
-		if (ChkOverviewHotkeyEnabled = 1 && builtOverviewHotkey != "" && builtReverseHotkey = builtOverviewHotkey)
-		{
-			MsgBox, 48, Tool Switcher, Reverse Window Cycling hotkey and Shortcuts Overview hotkey cannot be the same.`n`nPlease choose different hotkeys.
-			return
-		}
-	}
-	if (ChkIgnoreHotkeyEnabled = 1 && builtIgnoreHotkey != "")
-	{
-		for idx, tool in Tools
-		{
-			if (tool.Hotkey != "" && tool.Hotkey = builtIgnoreHotkey)
-			{
-				conflictName := tool.Name != "" ? tool.Name : tool.ExeName
-				MsgBox, 48, Tool Switcher, Ignore Window hotkey is already assigned to tool '%conflictName%'.`n`nPlease choose a different hotkey.
-				return
-			}
-		}
-		if (ChkMainHotkeyEnabled = 1 && builtMainHotkey != "" && builtIgnoreHotkey = builtMainHotkey)
-		{
-			MsgBox, 48, Tool Switcher, Ignore Window hotkey and Window Cycling hotkey cannot be the same.`n`nPlease choose different hotkeys.
-			return
-		}
-		if (ChkOverviewHotkeyEnabled = 1 && builtOverviewHotkey != "" && builtIgnoreHotkey = builtOverviewHotkey)
-		{
-			MsgBox, 48, Tool Switcher, Ignore Window hotkey and Shortcuts Overview hotkey cannot be the same.`n`nPlease choose different hotkeys.
-			return
-		}
-		if (ChkMainHotkeyReversedEnabled = 1 && builtReverseHotkey != "" && builtIgnoreHotkey = builtReverseHotkey)
-		{
-			MsgBox, 48, Tool Switcher, Ignore Window hotkey and Reverse Window Cycling hotkey cannot be the same.`n`nPlease choose different hotkeys.
-			return
-		}
 	}
 
 	; Save main settings
-	IniWrite, %ChkMainHotkeyEnabled%, %IniFile%, Settings, MainHotkeyEnabled
+	IniWrite, %MainEnabled%, %IniFile%, Settings, MainHotkeyEnabled
 	IniWrite, %builtMainHotkey%, %IniFile%, Settings, MainHotkey
-	IniWrite, %ChkMainHotkeyReversedEnabled%, %IniFile%, Settings, MainHotkeyReversedEnabled
+	IniWrite, %RevEnabled%, %IniFile%, Settings, MainHotkeyReversedEnabled
 	IniWrite, %builtReverseHotkey%, %IniFile%, Settings, MainHotkeyReversed
-	IniWrite, %ChkOverviewHotkeyEnabled%, %IniFile%, Settings, OverviewHotkeyEnabled
+	IniWrite, %OvEnabled%, %IniFile%, Settings, OverviewHotkeyEnabled
 	IniWrite, %builtOverviewHotkey%, %IniFile%, Settings, OverviewHotkey
-	IniWrite, %ChkIgnoreHotkeyEnabled%, %IniFile%, Settings, IgnoreHotkeyEnabled
+	IniWrite, %IgnEnabled%, %IniFile%, Settings, IgnoreHotkeyEnabled
 	IniWrite, %builtIgnoreHotkey%, %IniFile%, Settings, IgnoreHotkey
 	IniWrite, %ChkMoveMouse%, %IniFile%, Settings, MoveMouse
 	IniWrite, %SliderMouseMoveSpeed%, %IniFile%, Settings, MouseMoveSpeed

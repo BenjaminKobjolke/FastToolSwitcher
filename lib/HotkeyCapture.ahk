@@ -77,25 +77,25 @@ FindHotkeyConflict(hotkeyToCheck, excludeToolIndex := 0) {
 	if (hotkeyToCheck = "")
 		return ""
 
-	; Check against all tool hotkeys
+	; Check against all tool hotkeys (each may hold multiple hotkeys)
 	for index, tool in Tools
 	{
 		if (index = excludeToolIndex)
 			continue
-		if (tool.Hotkey != "" && tool.Hotkey = hotkeyToCheck)
+		if (HotkeyListContains(tool.Hotkey, hotkeyToCheck))
 		{
 			displayName := tool.Name != "" ? tool.Name : tool.ExeName
-			return "tool '" . displayName . "' (" . FormatHotkeyDisplay(tool.Hotkey) . ")"
+			return "tool '" . displayName . "' (" . FormatHotkeyList(tool.Hotkey) . ")"
 		}
 	}
 
 	; Check against MainHotkey
-	if (MainHotkeyEnabled = 1 && MainHotkey != "" && MainHotkey = hotkeyToCheck)
-		return "Window Cycling hotkey (" . FormatHotkeyDisplay(MainHotkey) . ")"
+	if (MainHotkeyEnabled = 1 && HotkeyListContains(MainHotkey, hotkeyToCheck))
+		return "Window Cycling hotkey (" . FormatHotkeyList(MainHotkey) . ")"
 
 	; Check against OverviewHotkey
-	if (OverviewHotkeyEnabled = 1 && OverviewHotkey != "" && OverviewHotkey = hotkeyToCheck)
-		return "Shortcuts Overview hotkey (" . FormatHotkeyDisplay(OverviewHotkey) . ")"
+	if (OverviewHotkeyEnabled = 1 && HotkeyListContains(OverviewHotkey, hotkeyToCheck))
+		return "Shortcuts Overview hotkey (" . FormatHotkeyList(OverviewHotkey) . ")"
 
 	return ""
 }
@@ -138,4 +138,10 @@ CaptureKeyToControl(guiName, controlVar) {
 
     ; Update the control with just the key
     GuiControl, %guiName%:, %controlVar%, %capturedKey%
+}
+
+; Whether a key field holds a real captured key rather than empty or one of the
+; placeholders CaptureKeyToControl writes above. Single source for those texts.
+IsCapturedKeyValid(key) {
+    return (key != "" && key != "Press key..." && key != "(timeout)" && key != "(cancelled)")
 }

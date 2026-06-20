@@ -14,6 +14,7 @@ global IgnoreHotkeyEnabled := 0
 global IgnoreHotkey := ""
 global IgnoredWindows := {}                          ; HWND -> 1, session only
 global IGNORED_SUFFIX := " - FastToolSwitcher - ignored"
+global IGNORED_STATE_FILE := A_Temp . "\FastToolSwitcher_ignored.txt"  ; reload handoff only
 global MoveMouse := 1
 global DarkMode := 1
 global MouseMoveSpeed := 0
@@ -219,90 +220,57 @@ RegisterHotkeys() {
 	global Tools, MainHotkeyEnabled, MainHotkey, MainHotkeyReversedEnabled, MainHotkeyReversed, OverviewHotkeyEnabled, OverviewHotkey, IgnoreHotkeyEnabled, IgnoreHotkey
 
 	; Startup duplicate detection - warn about duplicate hotkeys in config
-	seenHotkeys := {}
-	duplicateWarnings := ""
+	; (each value may be a "|"-joined list of hotkeys)
+	dupPairs := []
 	for index, tool in Tools
 	{
-		if (tool.Hotkey = "")
-			continue
-		StringLower, normalizedKey, % tool.Hotkey
-		toolLabel := tool.Name != "" ? tool.Name : tool.ExeName
-		if (seenHotkeys.HasKey(normalizedKey))
-		{
-			duplicateWarnings .= "- '" . toolLabel . "' conflicts with '" . seenHotkeys[normalizedKey] . "' (hotkey: " . tool.Hotkey . ")`n"
-		}
-		else
-		{
-			seenHotkeys[normalizedKey] := toolLabel
-		}
+		if (tool.Hotkey != "")
+			dupPairs.Push({list: tool.Hotkey, owner: (tool.Name != "" ? tool.Name : tool.ExeName)})
 	}
 	if (MainHotkeyEnabled = 1 && MainHotkey != "")
-	{
-		StringLower, normalizedKey, % MainHotkey
-		if (seenHotkeys.HasKey(normalizedKey))
-			duplicateWarnings .= "- 'Window Cycling' conflicts with '" . seenHotkeys[normalizedKey] . "' (hotkey: " . MainHotkey . ")`n"
-		else
-			seenHotkeys[normalizedKey] := "Window Cycling"
-	}
+		dupPairs.Push({list: MainHotkey, owner: "Window Cycling"})
 	if (MainHotkeyReversedEnabled = 1 && MainHotkeyReversed != "")
-	{
-		StringLower, normalizedKey, % MainHotkeyReversed
-		if (seenHotkeys.HasKey(normalizedKey))
-			duplicateWarnings .= "- 'Window Cycling (Reverse)' conflicts with '" . seenHotkeys[normalizedKey] . "' (hotkey: " . MainHotkeyReversed . ")`n"
-		else
-			seenHotkeys[normalizedKey] := "Window Cycling (Reverse)"
-	}
+		dupPairs.Push({list: MainHotkeyReversed, owner: "Window Cycling (Reverse)"})
 	if (OverviewHotkeyEnabled = 1 && OverviewHotkey != "")
-	{
-		StringLower, normalizedKey, % OverviewHotkey
-		if (seenHotkeys.HasKey(normalizedKey))
-			duplicateWarnings .= "- 'Shortcuts Overview' conflicts with '" . seenHotkeys[normalizedKey] . "' (hotkey: " . OverviewHotkey . ")`n"
-		else
-			seenHotkeys[normalizedKey] := "Shortcuts Overview"
-	}
+		dupPairs.Push({list: OverviewHotkey, owner: "Shortcuts Overview"})
 	if (IgnoreHotkeyEnabled = 1 && IgnoreHotkey != "")
-	{
-		StringLower, normalizedKey, % IgnoreHotkey
-		if (seenHotkeys.HasKey(normalizedKey))
-			duplicateWarnings .= "- 'Ignore Window' conflicts with '" . seenHotkeys[normalizedKey] . "' (hotkey: " . IgnoreHotkey . ")`n"
-		else
-			seenHotkeys[normalizedKey] := "Ignore Window"
-	}
+		dupPairs.Push({list: IgnoreHotkey, owner: "Ignore Window"})
+	duplicateWarnings := CollectHotkeyDuplicates(dupPairs)
 	if (duplicateWarnings != "")
 	{
 		MsgBox, 48, Tool Switcher - Duplicate Hotkeys, The following hotkey conflicts were detected:`n`n%duplicateWarnings%`nOnly one assignment per hotkey will work. Please fix this in Settings.
 	}
 
-	; Create hotkeys dynamically
+	; Create hotkeys dynamically (each value may hold multiple hotkeys)
 	for index, tool in Tools
 	{
 		if (tool.Hotkey != "" && tool.ExePath != "")
 		{
-			Hotkey, % tool.Hotkey, HandleToolHotkey
+			RegisterHotkeyList(tool.Hotkey, "HandleToolHotkey")
 		}
 	}
 
 	; Create main window cycling hotkey if enabled
 	if (MainHotkeyEnabled = 1 && MainHotkey != "")
 	{
-		Hotkey, %MainHotkey%, MainWindowCycleHotkey
+		RegisterHotkeyList(MainHotkey, "MainWindowCycleHotkey")
 	}
 
 	; Create reverse window cycling hotkey if enabled
 	if (MainHotkeyReversedEnabled = 1 && MainHotkeyReversed != "")
 	{
-		Hotkey, %MainHotkeyReversed%, MainWindowCycleHotkeyReversed
+		RegisterHotkeyList(MainHotkeyReversed, "MainWindowCycleHotkeyReversed")
 	}
 
 	; Create overview hotkey if enabled
 	if (OverviewHotkeyEnabled = 1 && OverviewHotkey != "")
 	{
-		Hotkey, %OverviewHotkey%, ToggleHotkeyPreview
+		RegisterHotkeyList(OverviewHotkey, "ToggleHotkeyPreview")
 	}
 
 	; Create ignore-window hotkey if enabled (feature off when disabled)
 	if (IgnoreHotkeyEnabled = 1 && IgnoreHotkey != "")
 	{
-		Hotkey, %IgnoreHotkey%, ToggleIgnoreActiveWindow
+		RegisterHotkeyList(IgnoreHotkey, "ToggleIgnoreActiveWindow")
 	}
 }
