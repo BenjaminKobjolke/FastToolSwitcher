@@ -104,3 +104,7 @@ Tests**, and **Test Runner Scripts** (`run_tests.bat` / `run_integration_tests.b
   reserve `MsgBox` for genuine user-facing prompts.
 
 - **Manual verification.** No automated test suite for AHK — run the app, confirm hotkeys/behavior.
+
+- **Do not launch the app yourself.** The AI must **never** start `FastToolSwitcher.ahk`
+  (or any AutoHotkey exe) to test. After making changes, state clearly that **the user
+  should test** by running the app, and list what to check. The user runs and verifies.
