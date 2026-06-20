@@ -1,0 +1,8 @@
+{
+  "version": "1.0.4",
+  "date": "2026-06-20",
+  "notes": [
+    "Novinka: přiřaďte více klávesových zkratek stejnému nástroji nebo funkci, takže můžete akci spustit několika kombinacemi kláves",
+    "Vylepšení: klávesové zkratky nyní zobrazí popisek, když není žádné jiné okno, na které by se dalo přepnout, místo aby to vypadalo, že se nic neděje"
+  ]
+}

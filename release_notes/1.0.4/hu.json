@@ -1,0 +1,8 @@
+{
+  "version": "1.0.4",
+  "date": "2026-06-20",
+  "notes": [
+    "Új: több gyorsbillentyű hozzárendelése ugyanahhoz az eszközhöz vagy funkcióhoz, így egy műveletet több billentyűkombinációval is aktiválhat",
+    "Fejlesztés: a gyorsbillentyűk most már eszköztippet jelenítenek meg, ha nincs másik ablak, amire át lehetne váltani, ahelyett hogy úgy tűnne, nem történik semmi"
+  ]
+}

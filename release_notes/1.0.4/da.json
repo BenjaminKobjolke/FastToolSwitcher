@@ -1,0 +1,8 @@
+{
+  "version": "1.0.4",
+  "date": "2026-06-20",
+  "notes": [
+    "Nyt: Tildel flere genvejstaster til det samme værktøj eller den samme funktion, så du kan udløse en handling fra flere tastkombinationer",
+    "Forbedret: Genvejstaster viser nu et værktøjstip, når der ikke er noget andet vindue at skifte til, i stedet for at se ud som om der ikke sker noget"
+  ]
+}

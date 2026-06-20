@@ -1,0 +1,8 @@
+{
+  "version": "1.0.4",
+  "date": "2026-06-20",
+  "notes": [
+    "Nytt: tilldela flera kortkommandon till samma verktyg eller funktion, så att du kan utlösa en åtgärd från flera tangentkombinationer",
+    "Förbättrat: kortkommandon visar nu ett verktygstips när det inte finns något annat fönster att växla till, i stället för att verka inte göra någonting"
+  ]
+}

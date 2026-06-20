@@ -1,0 +1,8 @@
+{
+  "version": "1.0.4",
+  "date": "2026-06-20",
+  "notes": [
+    "Nauja: priskirkite kelis sparčiuosius klavišus tam pačiam įrankiui ar funkcijai, kad galėtumėte paleisti veiksmą keliomis klavišų kombinacijomis",
+    "Patobulinta: kai nėra kito lango, į kurį būtų galima perjungti, sparčiųjų klavišų funkcija dabar rodo paaiškinimą (tooltip), užuot atrodžiusi, kad nieko nedaro"
+  ]
+}

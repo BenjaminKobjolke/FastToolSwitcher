@@ -1,0 +1,8 @@
+{
+  "version": "1.0.4",
+  "date": "2026-06-20",
+  "notes": [
+    "Nuevo: asigna varias teclas de acceso rápido a la misma herramienta o función, para que puedas activar una acción desde varias combinaciones de teclas",
+    "Mejorado: las teclas de acceso rápido ahora muestran una descripción emergente cuando no hay otra ventana a la que cambiar, en lugar de parecer que no hacen nada"
+  ]
+}

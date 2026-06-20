@@ -1,0 +1,8 @@
+{
+  "version": "1.0.4",
+  "date": "2026-06-20",
+  "notes": [
+    "Uus: määra samale tööriistale või funktsioonile mitu kiirklahvi, et saaksid toimingu käivitada mitme klahvikombinatsiooniga",
+    "Parandatud: kiirklahvid kuvavad nüüd vihje, kui pole ühtegi teist akent, millele ümber lülituda, selle asemel et näida, nagu ei juhtuks midagi"
+  ]
+}

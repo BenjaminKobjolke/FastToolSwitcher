@@ -1,0 +1,8 @@
+{
+  "version": "1.0.4",
+  "date": "2026-06-20",
+  "notes": [
+    "Mới: gán nhiều phím tắt cho cùng một công cụ hoặc chức năng, để bạn có thể kích hoạt một hành động từ nhiều tổ hợp phím khác nhau",
+    "Cải thiện: phím tắt giờ sẽ hiển thị chú giải công cụ khi không có cửa sổ nào khác để chuyển sang, thay vì trông như không làm gì cả"
+  ]
+}

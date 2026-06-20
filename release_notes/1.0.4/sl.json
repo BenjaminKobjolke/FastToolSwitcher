@@ -1,0 +1,8 @@
+{
+  "version": "1.0.4",
+  "date": "2026-06-20",
+  "notes": [
+    "Novo: isti orodje ali funkcijo lahko dodelite več bližnjičnim tipkam, tako da lahko dejanje sprožite z več kombinacijami tipk",
+    "Izboljšano: bližnjične tipke zdaj prikažejo opisno oblaček, ko ni drugega okna, na katerega bi lahko preklopili, namesto da bi bilo videti, kot da se ne zgodi nič"
+  ]
+}

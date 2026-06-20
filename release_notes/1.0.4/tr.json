@@ -1,0 +1,8 @@
+{
+  "version": "1.0.4",
+  "date": "2026-06-20",
+  "notes": [
+    "Yeni: aynı araca veya işleve birden fazla kısayol tuşu atayın; böylece bir eylemi birden çok tuş kombinasyonuyla tetikleyebilirsiniz",
+    "İyileştirildi: artık kısayol tuşları, geçiş yapılacak başka bir pencere olmadığında hiçbir şey olmuyormuş gibi görünmek yerine bir araç ipucu gösteriyor"
+  ]
+}

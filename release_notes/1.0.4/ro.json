@@ -1,0 +1,8 @@
+{
+  "version": "1.0.4",
+  "date": "2026-06-20",
+  "notes": [
+    "Nou: atribuie mai multe taste rapide aceluiași instrument sau aceleiași funcții, astfel încât să poți declanșa o acțiune din mai multe combinații de taste",
+    "Îmbunătățit: tastele rapide afișează acum un tooltip atunci când nu există nicio altă fereastră la care să se comute, în loc să pară că nu fac nimic"
+  ]
+}

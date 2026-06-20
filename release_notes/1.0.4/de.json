@@ -1,0 +1,8 @@
+{
+  "version": "1.0.4",
+  "date": "2026-06-20",
+  "notes": [
+    "Neu: Mehrere Tastenkombinationen derselben Funktion oder demselben Werkzeug zuweisen, sodass du eine Aktion über verschiedene Tastenkombinationen auslösen kannst",
+    "Verbessert: Tastenkombinationen zeigen jetzt einen Tooltip an, wenn es kein anderes Fenster zum Wechseln gibt, statt so zu wirken, als würden sie nichts tun"
+  ]
+}

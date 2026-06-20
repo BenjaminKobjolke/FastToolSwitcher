@@ -1,0 +1,8 @@
+{
+  "version": "1.0.4",
+  "date": "2026-06-20",
+  "notes": [
+    "Nieuw: wijs meerdere sneltoetsen toe aan hetzelfde hulpmiddel of dezelfde functie, zodat je een actie kunt starten met meerdere toetscombinaties",
+    "Verbeterd: sneltoetsen tonen nu een tooltip wanneer er geen ander venster is om naartoe te schakelen, in plaats van dat het lijkt alsof er niets gebeurt"
+  ]
+}

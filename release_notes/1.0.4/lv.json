@@ -1,0 +1,8 @@
+{
+  "version": "1.0.4",
+  "date": "2026-06-20",
+  "notes": [
+    "Jauns: piešķiriet vairākus īsinājumtaustiņus vienam un tam pašam rīkam vai funkcijai, lai varētu aktivizēt darbību ar vairākām taustiņu kombinācijām",
+    "Uzlabots: īsinājumtaustiņi tagad rāda paskaidrojuma uznirstošo norādi, ja nav neviena cita loga, uz kuru pārslēgties, nevis šķietami neko nedarot"
+  ]
+}

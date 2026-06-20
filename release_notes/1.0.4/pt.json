@@ -1,0 +1,8 @@
+{
+  "version": "1.0.4",
+  "date": "2026-06-20",
+  "notes": [
+    "Novo: atribua várias teclas de atalho à mesma ferramenta ou função, para que possa acionar uma ação a partir de várias combinações de teclas",
+    "Melhorado: as teclas de atalho agora mostram uma dica quando não existe outra janela para a qual alternar, em vez de parecer que não fazem nada"
+  ]
+}

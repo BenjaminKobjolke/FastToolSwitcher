@@ -1,0 +1,8 @@
+{
+  "version": "1.0.4",
+  "date": "2026-06-20",
+  "notes": [
+    "Novità: assegna più tasti di scelta rapida allo stesso strumento o funzione, così puoi attivare un’azione da diverse combinazioni di tasti",
+    "Miglioramento: ora i tasti di scelta rapida mostrano un suggerimento quando non c’è un’altra finestra a cui passare, invece di sembrare che non facciano nulla"
+  ]
+}

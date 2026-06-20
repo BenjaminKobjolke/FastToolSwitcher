@@ -1,0 +1,8 @@
+{
+  "version": "1.0.4",
+  "date": "2026-06-20",
+  "notes": [
+    "Novo: dodelite više prečica na tastaturi istom alatu ili funkciji, tako da možete pokrenuti radnju iz više kombinacija tastera",
+    "Poboljšano: prečice na tastaturi sada prikazuju opis u oblačiću kada nema drugog prozora na koji bi se prebacilo, umesto da izgleda kao da ne rade ništa"
+  ]
+}

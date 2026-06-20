@@ -1,0 +1,8 @@
+{
+  "version": "1.0.4",
+  "date": "2026-06-20",
+  "notes": [
+    "Nouveau : assignez plusieurs raccourcis clavier au même outil ou à la même fonction, afin de pouvoir déclencher une action depuis plusieurs combinaisons de touches",
+    "Amélioration : les raccourcis clavier affichent désormais une infobulle lorsqu’il n’y a aucune autre fenêtre vers laquelle basculer, au lieu de donner l’impression de ne rien faire"
+  ]
+}

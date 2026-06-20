@@ -1,0 +1,8 @@
+{
+  "version": "1.0.4",
+  "date": "2026-06-20",
+  "notes": [
+    "Nové: priraďte viacero klávesových skratiek k tomu istému nástroju alebo funkcii, aby ste mohli spustiť akciu viacerými kombináciami klávesov",
+    "Vylepšené: klávesové skratky teraz zobrazujú popis v bublinovej nápovede, keď nie je k dispozícii žiadne iné okno na prepnutie, namiesto toho, aby sa zdalo, že nerobia nič"
+  ]
+}

@@ -1,0 +1,8 @@
+{
+    "version": "1.0.4",
+    "date": "2026-06-20",
+    "notes": [
+        "New: assign multiple hotkeys to the same tool or function, so you can trigger an action from several key combinations",
+        "Improved: hotkeys now show a tooltip when there is no other window to switch to, instead of appearing to do nothing"
+    ]
+}

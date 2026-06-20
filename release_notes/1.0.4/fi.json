@@ -1,0 +1,8 @@
+{
+  "version": "1.0.4",
+  "date": "2026-06-20",
+  "notes": [
+    "Uutta: määritä useita pikanäppäimiä samalle työkalulle tai toiminnolle, jotta voit käynnistää toiminnon useilla eri näppäinyhdistelmillä",
+    "Parannettu: pikanäppäimet näyttävät nyt työkaluvihjeen, kun ei ole muuta ikkunaa, johon vaihtaa, sen sijaan että vaikuttaisi siltä kuin mitään ei tapahtuisi"
+  ]
+}

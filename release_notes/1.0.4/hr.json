@@ -1,0 +1,8 @@
+{
+  "version": "1.0.4",
+  "date": "2026-06-20",
+  "notes": [
+    "Novo: dodijelite više prečaca istoj alatki ili funkciji, tako da možete pokrenuti radnju s više kombinacija tipki",
+    "Poboljšano: prečaci sada prikazuju opis u alatu kada nema drugog prozora na koji se može prebaciti, umjesto da izgleda kao da se ništa ne događa"
+  ]
+}

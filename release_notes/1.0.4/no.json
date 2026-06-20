@@ -1,0 +1,8 @@
+{
+  "version": "1.0.4",
+  "date": "2026-06-20",
+  "notes": [
+    "Nyhet: tilordne flere hurtigtaster til samme verktøy eller funksjon, slik at du kan utløse en handling fra flere tastekombinasjoner",
+    "Forbedret: hurtigtaster viser nå et verktøytips når det ikke finnes noe annet vindu å bytte til, i stedet for å se ut som om ingenting skjer"
+  ]
+}

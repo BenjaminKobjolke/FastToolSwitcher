@@ -1,0 +1,8 @@
+{
+  "version": "1.0.4",
+  "date": "2026-06-20",
+  "notes": [
+    "Nowość: przypisz wiele skrótów klawiszowych do tego samego narzędzia lub funkcji, aby móc uruchamiać akcję za pomocą kilku kombinacji klawiszy",
+    "Ulepszenie: skróty klawiszowe wyświetlają teraz podpowiedź, gdy nie ma innego okna, na które można się przełączyć, zamiast sprawiać wrażenie, że nic się nie dzieje"
+  ]
+}
