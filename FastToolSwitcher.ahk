@@ -20,6 +20,9 @@ LoadTools()
 SearchMissingExePaths()
 RegisterHotkeys()
 
+; Strip ignore-window title markers on exit/reload so no stale titles remain
+OnExit("StripIgnoreMarkers")
+
 ; Setup system tray menu
 Menu, Tray, NoStandard
 Menu, Tray, Add, Settings, ShowSettings

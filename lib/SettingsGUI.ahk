@@ -23,7 +23,7 @@ ShowSettings:
 		Gui, Settings:Font, s12 cBlack
 	}
 
-	Gui, Settings:Add, Tab3, x10 y10 w520 h510 vSettingsTab, Settings|Tools|Design|Release Notes
+	Gui, Settings:Add, Tab3, x10 y10 w520 h620 vSettingsTab, Settings|Tools|Design|Release Notes
 
 	; === Settings Tab ===
 	Gui, Settings:Tab, Settings
@@ -106,6 +106,31 @@ ShowSettings:
 		Gui, Settings:Add, Text, x20 y475 cWhite, (Cycles windows of same process in reverse)
 	else
 		Gui, Settings:Add, Text, x20 y475 cGray, (Cycles windows of same process in reverse)
+
+	; === Ignore Window Hotkey ===
+	Gui, Settings:Add, Checkbox, x20 y515 vChkIgnoreHotkeyEnabled Checked%IgnoreHotkeyEnabled%, Enable ignore window hotkey
+
+	; Parse current ignore hotkey into components
+	parsedIgnHk := ParseHotkey(IgnoreHotkey)
+	ignCtrl := parsedIgnHk.ctrl
+	ignShift := parsedIgnHk.shift
+	ignAlt := parsedIgnHk.alt
+	ignWin := parsedIgnHk.win
+	ignKey := parsedIgnHk.key
+
+	Gui, Settings:Add, Text, x20 y555, Hotkey:
+	Gui, Settings:Add, Checkbox, x80 y555 vChkIgnCtrl Checked%ignCtrl%, Ctrl
+	Gui, Settings:Add, Checkbox, x140 y555 vChkIgnShift Checked%ignShift%, Shift
+	Gui, Settings:Add, Checkbox, x210 y555 vChkIgnAlt Checked%ignAlt%, Alt
+	Gui, Settings:Add, Checkbox, x265 y555 vChkIgnWin Checked%ignWin%, Win
+	Gui, Settings:Add, Text, x320 y555, Key:
+	Gui, Settings:Add, Edit, x360 y552 w70 vHkIgnoreKey ReadOnly, %ignKey%
+	Gui, Settings:Add, Button, x435 y551 w45 gSetIgnoreKey, Set
+
+	if (DarkMode = 1)
+		Gui, Settings:Add, Text, x20 y590 cWhite, (Excludes the active window from same-type cycling)
+	else
+		Gui, Settings:Add, Text, x20 y590 cGray, (Excludes the active window from same-type cycling)
 
 	; === Tools Tab ===
 	Gui, Settings:Tab, Tools
@@ -224,21 +249,21 @@ ShowSettings:
 
 	; === Bottom buttons (outside tabs) ===
 	Gui, Settings:Tab
-	Gui, Settings:Add, Button, x350 y530 w90 gSaveSettings Default, Save
-	Gui, Settings:Add, Button, x450 y530 w90 gSettingsGuiClose, Cancel
+	Gui, Settings:Add, Button, x350 y660 w90 gSaveSettings Default, Save
+	Gui, Settings:Add, Button, x450 y660 w90 gSettingsGuiClose, Cancel
 
 	; Add link at bottom
 	if (DarkMode = 1)
 		Gui, Settings:Font, cAqua
 	else
 		Gui, Settings:Font, cBlue
-	Gui, Settings:Add, Text, x20 y538 gOpenMoreTools, More tools to improve your workflow
+	Gui, Settings:Add, Text, x20 y668 gOpenMoreTools, More tools to improve your workflow
 	if (DarkMode = 1)
 		Gui, Settings:Font, s12 cWhite
 	else
 		Gui, Settings:Font, s12 cBlack
 
-	Gui, Settings:Show, w550 h560
+	Gui, Settings:Show, w550 h700
 
 	; Apply dark mode to window after showing
 	if (DarkMode = 1)
@@ -273,6 +298,10 @@ return
 
 SetRevKey:
 	CaptureKeyToControl("Settings", "HkRevKey")
+return
+
+SetIgnoreKey:
+	CaptureKeyToControl("Settings", "HkIgnoreKey")
 return
 
 ToggleSpeedVisibility:
@@ -311,6 +340,9 @@ SaveSettings:
 
 	; Build reverse window cycling hotkey from checkboxes and key field
 	builtReverseHotkey := BuildHotkey(ChkRevCtrl, ChkRevShift, ChkRevAlt, ChkRevWin, HkRevKey)
+
+	; Build ignore window hotkey from checkboxes and key field
+	builtIgnoreHotkey := BuildHotkey(ChkIgnCtrl, ChkIgnShift, ChkIgnAlt, ChkIgnWin, HkIgnoreKey)
 
 	; Check for duplicate hotkey assignments
 	; Cannot reuse FindHotkeyConflict() because globals still hold old values
@@ -365,6 +397,33 @@ SaveSettings:
 			return
 		}
 	}
+	if (ChkIgnoreHotkeyEnabled = 1 && builtIgnoreHotkey != "")
+	{
+		for idx, tool in Tools
+		{
+			if (tool.Hotkey != "" && tool.Hotkey = builtIgnoreHotkey)
+			{
+				conflictName := tool.Name != "" ? tool.Name : tool.ExeName
+				MsgBox, 48, Tool Switcher, Ignore Window hotkey is already assigned to tool '%conflictName%'.`n`nPlease choose a different hotkey.
+				return
+			}
+		}
+		if (ChkMainHotkeyEnabled = 1 && builtMainHotkey != "" && builtIgnoreHotkey = builtMainHotkey)
+		{
+			MsgBox, 48, Tool Switcher, Ignore Window hotkey and Window Cycling hotkey cannot be the same.`n`nPlease choose different hotkeys.
+			return
+		}
+		if (ChkOverviewHotkeyEnabled = 1 && builtOverviewHotkey != "" && builtIgnoreHotkey = builtOverviewHotkey)
+		{
+			MsgBox, 48, Tool Switcher, Ignore Window hotkey and Shortcuts Overview hotkey cannot be the same.`n`nPlease choose different hotkeys.
+			return
+		}
+		if (ChkMainHotkeyReversedEnabled = 1 && builtReverseHotkey != "" && builtIgnoreHotkey = builtReverseHotkey)
+		{
+			MsgBox, 48, Tool Switcher, Ignore Window hotkey and Reverse Window Cycling hotkey cannot be the same.`n`nPlease choose different hotkeys.
+			return
+		}
+	}
 
 	; Save main settings
 	IniWrite, %ChkMainHotkeyEnabled%, %IniFile%, Settings, MainHotkeyEnabled
@@ -373,6 +432,8 @@ SaveSettings:
 	IniWrite, %builtReverseHotkey%, %IniFile%, Settings, MainHotkeyReversed
 	IniWrite, %ChkOverviewHotkeyEnabled%, %IniFile%, Settings, OverviewHotkeyEnabled
 	IniWrite, %builtOverviewHotkey%, %IniFile%, Settings, OverviewHotkey
+	IniWrite, %ChkIgnoreHotkeyEnabled%, %IniFile%, Settings, IgnoreHotkeyEnabled
+	IniWrite, %builtIgnoreHotkey%, %IniFile%, Settings, IgnoreHotkey
 	IniWrite, %ChkMoveMouse%, %IniFile%, Settings, MoveMouse
 	IniWrite, %SliderMouseMoveSpeed%, %IniFile%, Settings, MouseMoveSpeed
 	IniWrite, %RadioDarkMode%, %IniFile%, Settings, DarkMode

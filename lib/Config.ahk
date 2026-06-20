@@ -10,6 +10,10 @@ global MainHotkeyReversedEnabled := 0
 global MainHotkeyReversed := ""
 global OverviewHotkeyEnabled := 0
 global OverviewHotkey := ""
+global IgnoreHotkeyEnabled := 0
+global IgnoreHotkey := ""
+global IgnoredWindows := {}                          ; HWND -> 1, session only
+global IGNORED_SUFFIX := " - FastToolSwitcher - ignored"
 global MoveMouse := 1
 global DarkMode := 1
 global MouseMoveSpeed := 0
@@ -43,6 +47,10 @@ InitConfig() {
 	OverviewHotkeyEnabled := tmp
 	IniRead, tmp, %IniFile%, Settings, OverviewHotkey, %A_Space%
 	OverviewHotkey := tmp
+	IniRead, tmp, %IniFile%, Settings, IgnoreHotkeyEnabled, 1
+	IgnoreHotkeyEnabled := tmp
+	IniRead, tmp, %IniFile%, Settings, IgnoreHotkey, ^!i
+	IgnoreHotkey := tmp
 	IniRead, tmp, %IniFile%, Settings, MoveMouse, 1
 	MoveMouse := tmp
 	IniRead, tmp, %IniFile%, Settings, DarkMode, 1
@@ -208,7 +216,7 @@ SearchMissingExePaths() {
 }
 
 RegisterHotkeys() {
-	global Tools, MainHotkeyEnabled, MainHotkey, MainHotkeyReversedEnabled, MainHotkeyReversed, OverviewHotkeyEnabled, OverviewHotkey
+	global Tools, MainHotkeyEnabled, MainHotkey, MainHotkeyReversedEnabled, MainHotkeyReversed, OverviewHotkeyEnabled, OverviewHotkey, IgnoreHotkeyEnabled, IgnoreHotkey
 
 	; Startup duplicate detection - warn about duplicate hotkeys in config
 	seenHotkeys := {}
@@ -252,6 +260,14 @@ RegisterHotkeys() {
 		else
 			seenHotkeys[normalizedKey] := "Shortcuts Overview"
 	}
+	if (IgnoreHotkeyEnabled = 1 && IgnoreHotkey != "")
+	{
+		StringLower, normalizedKey, % IgnoreHotkey
+		if (seenHotkeys.HasKey(normalizedKey))
+			duplicateWarnings .= "- 'Ignore Window' conflicts with '" . seenHotkeys[normalizedKey] . "' (hotkey: " . IgnoreHotkey . ")`n"
+		else
+			seenHotkeys[normalizedKey] := "Ignore Window"
+	}
 	if (duplicateWarnings != "")
 	{
 		MsgBox, 48, Tool Switcher - Duplicate Hotkeys, The following hotkey conflicts were detected:`n`n%duplicateWarnings%`nOnly one assignment per hotkey will work. Please fix this in Settings.
@@ -282,5 +298,11 @@ RegisterHotkeys() {
 	if (OverviewHotkeyEnabled = 1 && OverviewHotkey != "")
 	{
 		Hotkey, %OverviewHotkey%, ToggleHotkeyPreview
+	}
+
+	; Create ignore-window hotkey if enabled (feature off when disabled)
+	if (IgnoreHotkeyEnabled = 1 && IgnoreHotkey != "")
+	{
+		Hotkey, %IgnoreHotkey%, ToggleIgnoreActiveWindow
 	}
 }

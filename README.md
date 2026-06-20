@@ -24,6 +24,12 @@ A lightweight AutoHotkey tool for quickly switching between applications using c
 ### Exclude Windows
 - **Exclude by title** - Exclude specific windows from switching (e.g., exclude DevTools windows from browser switching)
 
+### Ignore Windows
+- **Ignore hotkey** (default: `Ctrl+Alt+I`) - Temporarily exclude the active window from the main cycling hotkey; press again to un-ignore
+- Ignored windows are marked with a ` - FastToolSwitcher - ignored` title suffix and skipped while cycling
+- Session-only (cleared on restart); can be disabled in Settings
+- See [docs/IGNORE_WINDOWS.md](docs/IGNORE_WINDOWS.md) for details
+
 ### GUI Settings
 - **Tabbed interface** - Settings, Tools, and Design tabs
 - **Dark/Light mode** - Switch between dark and light themes with live preview
@@ -95,6 +101,8 @@ MainHotkeyEnabled=1
 MainHotkey=^+Space
 MainHotkeyReversedEnabled=1
 MainHotkeyReversed=^+!Space
+IgnoreHotkeyEnabled=1
+IgnoreHotkey=^!i
 MoveMouse=1
 DarkMode=1
 

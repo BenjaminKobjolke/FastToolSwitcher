@@ -18,6 +18,44 @@ SortByHandle(ByRef windows) {
 	}
 }
 
+; Whether a window is currently marked as ignored for the main cycle.
+IsWindowIgnored(windowID) {
+	global IgnoredWindows
+	return IgnoredWindows.HasKey(windowID)
+}
+
+; Append the ignore marker to a window's title (no-op if already present).
+ApplyIgnoreSuffix(windowID) {
+	global IGNORED_SUFFIX
+	WinGetTitle, currentTitle, ahk_id %windowID%
+	if (!InStr(currentTitle, IGNORED_SUFFIX))
+		WinSetTitle, ahk_id %windowID%, , % currentTitle . IGNORED_SUFFIX
+}
+
+; Remove the ignore marker from a window's title (no-op if absent).
+RemoveIgnoreSuffix(windowID) {
+	global IGNORED_SUFFIX
+	WinGetTitle, currentTitle, ahk_id %windowID%
+	if (InStr(currentTitle, IGNORED_SUFFIX))
+	{
+		StringReplace, currentTitle, currentTitle, %IGNORED_SUFFIX%,
+		WinSetTitle, ahk_id %windowID%, , %currentTitle%
+	}
+}
+
+; Remove ignore markers from all ignored windows. Runs on exit/reload.
+StripIgnoreMarkers(ExitReason := "", ExitCode := "") {
+	global IgnoredWindows
+	SetTimer, MarkerWatch, Off
+	for id in IgnoredWindows
+	{
+		if (!WinExist("ahk_id " . id))
+			continue
+		RemoveIgnoreSuffix(id)
+	}
+	IgnoredWindows := {}
+}
+
 ; Move the mouse to the center of the active window when enabled.
 MoveMouseToActiveCenter() {
 	global MoveMouse, MouseMoveSpeed
@@ -132,8 +170,17 @@ HandleToolHotkey:
 				}
 				else
 				{
-					; No valid window is active, activate first one
-					WinActivate, % "ahk_id " . validWindows[1]
+					; No valid window is active, activate first non-ignored one
+					targetID := validWindows[1]
+					for vi, wid in validWindows
+					{
+						if (!IsWindowIgnored(wid))
+						{
+							targetID := wid
+							break
+						}
+					}
+					WinActivate, % "ahk_id " . targetID
 					MoveMouseToActiveCenter()
 				}
 			}
@@ -141,6 +188,51 @@ HandleToolHotkey:
 			break
 		}
 	}
+return
+
+; Toggle the active window's ignored state for the main cycle.
+ToggleIgnoreActiveWindow:
+	global IgnoredWindows
+	WinGet, ignoreID, ID, A
+	if (ignoreID = "")
+		return
+	if (IgnoredWindows.HasKey(ignoreID))
+	{
+		IgnoredWindows.Delete(ignoreID)
+		RemoveIgnoreSuffix(ignoreID)
+		ToolTip, Window un-ignored
+	}
+	else
+	{
+		IgnoredWindows[ignoreID] := 1
+		ApplyIgnoreSuffix(ignoreID)
+		ToolTip, Window ignored
+	}
+	; Run the marker reconcile timer only while something is ignored
+	if (IgnoredWindows.Count() > 0)
+		SetTimer, MarkerWatch, 500
+	else
+		SetTimer, MarkerWatch, Off
+	SetTimer, RemoveToolTip, -1500
+return
+
+; Re-apply the suffix if an app rewrote its own title; prune dead windows.
+MarkerWatch:
+	global IgnoredWindows
+	deadIDs := []
+	for id in IgnoredWindows
+	{
+		if (!WinExist("ahk_id " . id))
+		{
+			deadIDs.Push(id)
+			continue
+		}
+		ApplyIgnoreSuffix(id)
+	}
+	for index, id in deadIDs
+		IgnoredWindows.Delete(id)
+	if (IgnoredWindows.Count() = 0)
+		SetTimer, MarkerWatch, Off
 return
 
 MainWindowCycleHotkey:
@@ -166,6 +258,8 @@ CycleProcessWindows(direction) {
 	Loop, %windowList%
 	{
 		windowID := windowList%A_Index%
+		if (IsWindowIgnored(windowID))
+			continue
 		validWindows.Push(windowID)
 	}
 
