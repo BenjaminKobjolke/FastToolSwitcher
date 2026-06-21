@@ -2,6 +2,18 @@
 
 AutoHotkey **v1.x** GUI app. Entry: `FastToolSwitcher.ahk`; logic in `lib/*.ahk`; config in `FastToolSwitcher.ini`.
 
+## Code Analysis
+
+After implementing new features or making significant changes, run the code analysis:
+
+```bash
+powershell -Command "cd 'D:\GIT\BenjaminKobjolke\FastTools\FastToolSwitcher'; cmd /c '.\tools\analyze_code.bat'"
+```
+
+Results are written to `code_analysis_results/` as **per-rule CSV files** (e.g.
+`autohotkey_analyze.csv`, `line_count_report.csv`) — there is no `.md` report, and a
+missing CSV means that rule found nothing. Fix any reported issues before committing.
+
 ## Coding Rules Source
 
 Master rules live in: `D:\GIT\BenjaminKobjolke\claude-code\coding-rules`
