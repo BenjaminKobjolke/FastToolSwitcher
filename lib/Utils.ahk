@@ -7,6 +7,59 @@ ShowMouseTooltip(message, duration := 1500) {
 	SetTimer, RemoveToolTip, % -1 * duration
 }
 
+; Apply theme window background colors (dark only; light uses GUI defaults).
+ApplyThemeWindowColors(guiName) {
+	global DarkMode
+	if (DarkMode = 1)
+		Gui, %guiName%:Color, 0x1E1E1E, 0x2D2D2D
+}
+
+; Set a GUI font with the theme's text color appended. `opts` is the font
+; options without color (e.g. "s12", "s14 Bold"); the dark/light color is
+; chosen here so call sites stop branching on DarkMode.
+ApplyThemeFont(guiName, opts, darkColor := "cWhite", lightColor := "cBlack") {
+	global DarkMode
+	color := (DarkMode = 1) ? darkColor : lightColor
+	Gui, %guiName%:Font, % opts . " " . color
+}
+
+; Generic in-place bubble sort. `comparator` is the name of a function taking
+; (a, b) and returning >0 when a must come after b. One algorithm for every
+; sort in the project (window handles, release-note versions).
+BubbleSort(ByRef arr, comparator) {
+	n := arr.Length()
+	Loop
+	{
+		swapped := false
+		Loop % n - 1
+		{
+			if (%comparator%(arr[A_Index], arr[A_Index + 1]) > 0)
+			{
+				tmp := arr[A_Index]
+				arr[A_Index] := arr[A_Index + 1]
+				arr[A_Index + 1] := tmp
+				swapped := true
+			}
+		}
+		if (!swapped)
+			break
+	}
+}
+
+; Ascending numeric comparator (e.g. window handles).
+CompareNumericAsc(a, b) {
+	return a - b
+}
+
+; Descending string comparator (e.g. release-note versions, newest first).
+CompareVersionDesc(a, b) {
+	if (a < b)
+		return 1
+	if (a > b)
+		return -1
+	return 0
+}
+
 ApplyDarkMode(hwnd) {
 	; Dark title bar (Windows 10 1809+)
 	DllCall("dwmapi\DwmSetWindowAttribute", "Ptr", hwnd, "Int", 20, "Int*", 1, "Int", 4)
@@ -50,6 +103,35 @@ ParseReleaseNotesJson(jsonStr) {
 	return result
 }
 
+; Load one release note version into a display-ready object:
+; {version: "Version x.y", date: "...", notesText: "• ...`n• ..."}.
+; Single source for the load+format used by both the tab init and navigation.
+LoadReleaseNote(version) {
+	result := {}
+	result.version := "Version " . version
+	result.date := ""
+	result.notesText := ""
+
+	rnFile := A_ScriptDir . "\release_notes\" . version . "\en.json"
+	if (!FileExist(rnFile))
+	{
+		result.notesText := "No release notes file found for version " . version
+		return result
+	}
+
+	FileRead, jsonStr, %rnFile%
+	rn := ParseReleaseNotesJson(jsonStr)
+	result.version := "Version " . rn.version
+	result.date := rn.date
+	for idx, note in rn.notes
+	{
+		if (idx > 1)
+			result.notesText .= "`n"
+		result.notesText .= chr(0x2022) . "  " . note
+	}
+	return result
+}
+
 CollectReleaseNoteVersions() {
 	versions := []
 	rnDir := A_ScriptDir . "\release_notes"
@@ -58,22 +140,6 @@ CollectReleaseNoteVersions() {
 		versions.Push(A_LoopFileName)
 	}
 	; Sort reverse-alphabetically (newest first)
-	n := versions.Length()
-	Loop
-	{
-		swapped := false
-		Loop, % n - 1
-		{
-			if (versions[A_Index] < versions[A_Index + 1])
-			{
-				tmp := versions[A_Index]
-				versions[A_Index] := versions[A_Index + 1]
-				versions[A_Index + 1] := tmp
-				swapped := true
-			}
-		}
-		if (!swapped)
-			break
-	}
+	BubbleSort(versions, "CompareVersionDesc")
 	return versions
 }

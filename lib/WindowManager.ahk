@@ -1,103 +1,11 @@
 ; ==================== WindowManager.ahk ====================
-; Window cycling and hotkey handlers
+; Window cycling and hotkey handlers. The "ignore window" feature lives in
+; lib/IgnoreWindows.ahk; the marker/suffix helpers used here come from there.
 
-; Sort an array of window IDs by handle for consistent ordering.
+; Sort an array of window IDs ascending by handle for consistent ordering.
 ; (WinGet returns windows in Z-order, which changes after each activation.)
 SortByHandle(ByRef windows) {
-	Loop % windows.Length() - 1
-	{
-		for i, val in windows
-		{
-			if (i < windows.Length() && windows[i] > windows[i+1])
-			{
-				temp := windows[i]
-				windows[i] := windows[i+1]
-				windows[i+1] := temp
-			}
-		}
-	}
-}
-
-; Whether a window is currently marked as ignored for the main cycle.
-IsWindowIgnored(windowID) {
-	global IgnoredWindows
-	return IgnoredWindows.HasKey(windowID)
-}
-
-; Append the ignore marker to a window's title (no-op if already present).
-ApplyIgnoreSuffix(windowID) {
-	global IGNORED_SUFFIX
-	WinGetTitle, currentTitle, ahk_id %windowID%
-	if (!InStr(currentTitle, IGNORED_SUFFIX))
-		WinSetTitle, ahk_id %windowID%, , % currentTitle . IGNORED_SUFFIX
-}
-
-; Remove the ignore marker from a window's title (no-op if absent).
-RemoveIgnoreSuffix(windowID) {
-	global IGNORED_SUFFIX
-	WinGetTitle, currentTitle, ahk_id %windowID%
-	if (InStr(currentTitle, IGNORED_SUFFIX))
-	{
-		StringReplace, currentTitle, currentTitle, %IGNORED_SUFFIX%,
-		WinSetTitle, ahk_id %windowID%, , %currentTitle%
-	}
-}
-
-; OnExit handler. On a Reload (Settings save / tray Reload / debug reload) the ignore
-; state is handed to the next instance via a temp file and the suffixes are left in
-; place. On a genuine exit the markers are stripped and the handoff file removed.
-StripIgnoreMarkers(ExitReason := "", ExitCode := "") {
-	global IgnoredWindows, IGNORED_STATE_FILE
-	if (ExitReason = "Reload")
-	{
-		SaveIgnoredWindows()
-		return
-	}
-	SetTimer, MarkerWatch, Off
-	for id in IgnoredWindows
-	{
-		if (!WinExist("ahk_id " . id))
-			continue
-		RemoveIgnoreSuffix(id)
-	}
-	IgnoredWindows := {}
-	FileDelete, %IGNORED_STATE_FILE%
-}
-
-; Persist the ignored window handles so a Reload can restore them.
-SaveIgnoredWindows() {
-	global IgnoredWindows, IGNORED_STATE_FILE
-	ids := ""
-	for id in IgnoredWindows
-		ids .= (ids = "" ? "" : ",") . id
-	FileDelete, %IGNORED_STATE_FILE%
-	if (ids != "")
-		FileAppend, %ids%, %IGNORED_STATE_FILE%
-}
-
-; Restore the ignored window handles after a Reload, then consume the handoff file.
-; If the ignore feature was turned off in the save that caused the reload, the saved
-; windows are un-ignored (suffix stripped) instead of restored.
-RestoreIgnoredWindows() {
-	global IgnoredWindows, IGNORED_STATE_FILE, IgnoreHotkeyEnabled
-	if (!FileExist(IGNORED_STATE_FILE))
-		return
-	FileRead, ids, %IGNORED_STATE_FILE%
-	FileDelete, %IGNORED_STATE_FILE%
-	for index, id in StrSplit(ids, ",")
-	{
-		if (id = "" || !WinExist("ahk_id " . id))
-			continue
-		if (IgnoreHotkeyEnabled = 1)
-		{
-			IgnoredWindows[id] := 1
-			ApplyIgnoreSuffix(id)
-		}
-		else
-			RemoveIgnoreSuffix(id)
-	}
-	if (IgnoredWindows.Count() > 0)
-		SetTimer, MarkerWatch, 500
+	BubbleSort(windows, "CompareNumericAsc")
 }
 
 ; Move the mouse to the center of the active window when enabled.
@@ -111,6 +19,29 @@ MoveMouseToActiveCenter() {
 	SendMode, Event
 	MouseMove, winX + winW // 2, winY + winH // 2, %scaledSpeed%
 	SendMode, Input
+}
+
+; Activate the window adjacent to the active one in `windows` (already sorted).
+; direction = 1 forward, -1 backward; wraps at both ends. Falls back to the
+; first window when the active window is not in the list. Shared by the per-tool
+; and per-process cycles so the step lives in one place.
+ActivateNextWindow(windows, direction) {
+	WinGet, activeID, ID, A
+	targetIndex := 1
+	for idx, winID in windows
+	{
+		if (winID = activeID)
+		{
+			targetIndex := idx + direction
+			if (targetIndex > windows.Length())
+				targetIndex := 1
+			else if (targetIndex < 1)
+				targetIndex := windows.Length()
+			break
+		}
+	}
+	WinActivate, % "ahk_id " . windows[targetIndex]
+	MoveMouseToActiveCenter()
 }
 
 HandleToolHotkey:
@@ -185,14 +116,12 @@ HandleToolHotkey:
 				; Find if any valid window is currently active
 				WinGet, activeID, ID, A
 				activeFound := false
-				activeIndex := 0
 
 				for validIndex, windowID in validWindows
 				{
 					if (windowID = activeID)
 					{
 						activeFound := true
-						activeIndex := validIndex
 						break
 					}
 				}
@@ -212,11 +141,7 @@ HandleToolHotkey:
 					else
 					{
 						; Multiple valid windows, cycle to next
-						nextIndex := activeIndex + 1
-						if (nextIndex > validWindows.Length())
-							nextIndex := 1
-						WinActivate, % "ahk_id " . validWindows[nextIndex]
-						MoveMouseToActiveCenter()
+						ActivateNextWindow(validWindows, 1)
 					}
 				}
 				else
@@ -240,50 +165,6 @@ HandleToolHotkey:
 			break
 		}
 	}
-return
-
-; Toggle the active window's ignored state for the main cycle.
-ToggleIgnoreActiveWindow:
-	global IgnoredWindows
-	WinGet, ignoreID, ID, A
-	if (ignoreID = "")
-		return
-	if (IgnoredWindows.HasKey(ignoreID))
-	{
-		IgnoredWindows.Delete(ignoreID)
-		RemoveIgnoreSuffix(ignoreID)
-		ShowMouseTooltip("Window un-ignored")
-	}
-	else
-	{
-		IgnoredWindows[ignoreID] := 1
-		ApplyIgnoreSuffix(ignoreID)
-		ShowMouseTooltip("Window ignored")
-	}
-	; Run the marker reconcile timer only while something is ignored
-	if (IgnoredWindows.Count() > 0)
-		SetTimer, MarkerWatch, 500
-	else
-		SetTimer, MarkerWatch, Off
-return
-
-; Re-apply the suffix if an app rewrote its own title; prune dead windows.
-MarkerWatch:
-	global IgnoredWindows
-	deadIDs := []
-	for id in IgnoredWindows
-	{
-		if (!WinExist("ahk_id " . id))
-		{
-			deadIDs.Push(id)
-			continue
-		}
-		ApplyIgnoreSuffix(id)
-	}
-	for index, id in deadIDs
-		IgnoredWindows.Delete(id)
-	if (IgnoredWindows.Count() = 0)
-		SetTimer, MarkerWatch, Off
 return
 
 MainWindowCycleHotkey:
@@ -321,25 +202,7 @@ CycleProcessWindows(direction) {
 		return
 	}
 
-	; Sort by handle for consistent ordering
+	; Sort by handle for consistent ordering, then cycle
 	SortByHandle(validWindows)
-
-	; Find current window and cycle in the requested direction
-	WinGet, activeID, ID, A
-	targetIndex := 1
-	for idx, winID in validWindows
-	{
-		if (winID = activeID)
-		{
-			targetIndex := idx + direction
-			if (targetIndex > validWindows.Length())
-				targetIndex := 1
-			else if (targetIndex < 1)
-				targetIndex := validWindows.Length()
-			break
-		}
-	}
-
-	WinActivate, % "ahk_id " . validWindows[targetIndex]
-	MoveMouseToActiveCenter()
+	ActivateNextWindow(validWindows, direction)
 }

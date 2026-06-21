@@ -35,13 +35,8 @@ OpenHotkeyEditor(guiName, prefix, editIndex) {
 
 	Gui, HotkeyEditor:Destroy
 	Gui, HotkeyEditor:New, % "+Owner" . ownerHwnd, % (editIndex > 0 ? "Edit Hotkey" : "Add Hotkey")
-	if (DarkMode = 1)
-	{
-		Gui, HotkeyEditor:Color, 0x1E1E1E, 0x2D2D2D
-		Gui, HotkeyEditor:Font, s12 cWhite
-	}
-	else
-		Gui, HotkeyEditor:Font, s12 cBlack
+	ApplyThemeWindowColors("HotkeyEditor")
+	ApplyThemeFont("HotkeyEditor", "s12")
 
 	Gui, HotkeyEditor:Add, Text, x15 y15, Modifiers:
 	Gui, HotkeyEditor:Add, Checkbox, x15 y45 vHkEdCtrl Checked%seedCtrl%, Ctrl
@@ -81,7 +76,7 @@ EditHotkeyEntry:
 	hkSelIdx := GetListBoxSelectedIndex(hkEditGui, hkPrefix . "ListBox")
 	if (hkSelIdx = 0)
 	{
-		MsgBox, 48, Tool Switcher, Please select a hotkey to edit.
+		MsgBox, 48, %APP_TITLE%, Please select a hotkey to edit.
 		return
 	}
 	OpenHotkeyEditor(hkEditGui, hkPrefix, hkSelIdx)
@@ -93,7 +88,7 @@ RemoveHotkeyEntry:
 	hkSelIdx := GetListBoxSelectedIndex(hkRemGui, hkPrefix . "ListBox")
 	if (hkSelIdx = 0)
 	{
-		MsgBox, 48, Tool Switcher, Please select a hotkey to remove.
+		MsgBox, 48, %APP_TITLE%, Please select a hotkey to remove.
 		return
 	}
 	GuiControlGet, hkRemJoined, %hkRemGui%:, %hkPrefix%List
@@ -105,10 +100,10 @@ return
 
 HotkeyEditorOK:
 	Gui, HotkeyEditor:Submit, NoHide
-	hkBuilt := BuildHotkey(HkEdCtrl, HkEdShift, HkEdAlt, HkEdWin, HkEdKey)
+	hkBuilt := BuildHotkey({ctrl: HkEdCtrl, shift: HkEdShift, alt: HkEdAlt, win: HkEdWin, key: HkEdKey})
 	if (!IsCapturedKeyValid(HkEdKey) || hkBuilt = "")
 	{
-		MsgBox, 48, Tool Switcher, Please set a key for the hotkey.
+		MsgBox, 48, %APP_TITLE%, Please set a key for the hotkey.
 		return
 	}
 	GuiControlGet, hkOkJoined, %HkEdOwnerGui%:, %HkEdPrefix%List

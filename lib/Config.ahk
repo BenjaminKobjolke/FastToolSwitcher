@@ -13,8 +13,12 @@ global OverviewHotkey := ""
 global IgnoreHotkeyEnabled := 0
 global IgnoreHotkey := ""
 global IgnoredWindows := {}                          ; HWND -> 1, session only
+global APP_TITLE := "Tool Switcher"                  ; MsgBox title, one source
 global IGNORED_SUFFIX := " - FastToolSwitcher - ignored"
 global NO_OTHER_WINDOW_MESSAGE := "Only one window - nothing to switch to"
+global KEY_PLACEHOLDER_PROMPT := "Press key..."     ; key-capture field placeholders,
+global KEY_PLACEHOLDER_TIMEOUT := "(timeout)"       ; written + validated from one source
+global KEY_PLACEHOLDER_CANCELLED := "(cancelled)"
 global IGNORED_STATE_FILE := A_Temp . "\FastToolSwitcher_ignored.txt"  ; reload handoff only
 global MoveMouse := 1
 global DarkMode := 1
@@ -135,7 +139,7 @@ LoadTools() {
 }
 
 SearchMissingExePaths() {
-	global Tools, IniFile
+	global Tools, IniFile, APP_TITLE
 
 	; Search for missing exe paths
 	NeedSearch := false
@@ -147,7 +151,7 @@ SearchMissingExePaths() {
 
 	if (NeedSearch)
 	{
-		MsgBox, 64, Tool Switcher, Searching for tool executables on C drive. This may take a moment...
+		MsgBox, 64, %APP_TITLE%, Searching for tool executables on C drive. This may take a moment...
 
 		for index, tool in Tools
 		{
@@ -202,7 +206,7 @@ SearchMissingExePaths() {
 				; If still not found, show error
 				if (!Found)
 				{
-					MsgBox, 48, Tool Switcher Warning, % tool.ExeName . " could not be found on C drive. Please update the path manually in:`n" . IniFile . "`n`nSection: [" . tool.Section . "]"
+					MsgBox, 48, %APP_TITLE% Warning, % tool.ExeName . " could not be found on C drive. Please update the path manually in:`n" . IniFile . "`n`nSection: [" . tool.Section . "]"
 					Tools[index].ExePath := ""
 				}
 				else
@@ -213,12 +217,12 @@ SearchMissingExePaths() {
 			}
 		}
 
-		MsgBox, 64, Tool Switcher, Tool search completed. Configuration saved.
+		MsgBox, 64, %APP_TITLE%, Tool search completed. Configuration saved.
 	}
 }
 
 RegisterHotkeys() {
-	global Tools, MainHotkeyEnabled, MainHotkey, MainHotkeyReversedEnabled, MainHotkeyReversed, OverviewHotkeyEnabled, OverviewHotkey, IgnoreHotkeyEnabled, IgnoreHotkey
+	global Tools, MainHotkeyEnabled, MainHotkey, MainHotkeyReversedEnabled, MainHotkeyReversed, OverviewHotkeyEnabled, OverviewHotkey, IgnoreHotkeyEnabled, IgnoreHotkey, APP_TITLE
 
 	; Startup duplicate detection - warn about duplicate hotkeys in config
 	; (each value may be a "|"-joined list of hotkeys)
@@ -239,7 +243,7 @@ RegisterHotkeys() {
 	duplicateWarnings := CollectHotkeyDuplicates(dupPairs)
 	if (duplicateWarnings != "")
 	{
-		MsgBox, 48, Tool Switcher - Duplicate Hotkeys, The following hotkey conflicts were detected:`n`n%duplicateWarnings%`nOnly one assignment per hotkey will work. Please fix this in Settings.
+		MsgBox, 48, %APP_TITLE% - Duplicate Hotkeys, The following hotkey conflicts were detected:`n`n%duplicateWarnings%`nOnly one assignment per hotkey will work. Please fix this in Settings.
 	}
 
 	; Create hotkeys dynamically (each value may hold multiple hotkeys)

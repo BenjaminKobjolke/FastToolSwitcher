@@ -49,21 +49,21 @@ ParseHotkey(hotkeyStr) {
     return result
 }
 
-; Build a hotkey string from components
-; Returns string like "^+Space"
-BuildHotkey(ctrl, shift, alt, win, key) {
+; Build a hotkey string from a components object (same shape ParseHotkey returns:
+; {ctrl, shift, alt, win, key}). Returns string like "^+Space".
+BuildHotkey(parts) {
     hotkeyStr := ""
 
-    if (ctrl)
+    if (parts.ctrl)
         hotkeyStr .= "^"
-    if (shift)
+    if (parts.shift)
         hotkeyStr .= "+"
-    if (alt)
+    if (parts.alt)
         hotkeyStr .= "!"
-    if (win)
+    if (parts.win)
         hotkeyStr .= "#"
 
-    hotkeyStr .= key
+    hotkeyStr .= parts.key
 
     return hotkeyStr
 }
@@ -102,8 +102,9 @@ FindHotkeyConflict(hotkeyToCheck, excludeToolIndex := 0) {
 
 ; Capture a single key (no modifiers) and update the control
 CaptureKeyToControl(guiName, controlVar) {
+    global KEY_PLACEHOLDER_PROMPT, KEY_PLACEHOLDER_TIMEOUT, KEY_PLACEHOLDER_CANCELLED
     ; Show placeholder
-    GuiControl, %guiName%:, %controlVar%, Press key...
+    GuiControl, %guiName%:, %controlVar%, %KEY_PLACEHOLDER_PROMPT%
 
     ; Define end keys for special keys
     endKeys := "{Space}{Tab}{Escape}{Backspace}{Delete}{Insert}{Home}{End}{PgUp}{PgDn}"
@@ -119,7 +120,7 @@ CaptureKeyToControl(guiName, controlVar) {
     ; Handle timeout
     if (ErrorLevel = "Timeout")
     {
-        GuiControl, %guiName%:, %controlVar%, (timeout)
+        GuiControl, %guiName%:, %controlVar%, %KEY_PLACEHOLDER_TIMEOUT%
         return
     }
 
@@ -132,7 +133,7 @@ CaptureKeyToControl(guiName, controlVar) {
     ; If nothing captured
     if (capturedKey = "")
     {
-        GuiControl, %guiName%:, %controlVar%, (cancelled)
+        GuiControl, %guiName%:, %controlVar%, %KEY_PLACEHOLDER_CANCELLED%
         return
     }
 
@@ -143,5 +144,6 @@ CaptureKeyToControl(guiName, controlVar) {
 ; Whether a key field holds a real captured key rather than empty or one of the
 ; placeholders CaptureKeyToControl writes above. Single source for those texts.
 IsCapturedKeyValid(key) {
-    return (key != "" && key != "Press key..." && key != "(timeout)" && key != "(cancelled)")
+    global KEY_PLACEHOLDER_PROMPT, KEY_PLACEHOLDER_TIMEOUT, KEY_PLACEHOLDER_CANCELLED
+    return (key != "" && key != KEY_PLACEHOLDER_PROMPT && key != KEY_PLACEHOLDER_TIMEOUT && key != KEY_PLACEHOLDER_CANCELLED)
 }

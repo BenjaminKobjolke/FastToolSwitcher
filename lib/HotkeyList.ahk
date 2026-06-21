@@ -77,19 +77,25 @@ CollectHotkeyDuplicates(pairs) {
 ; read by Gui Submit / save). Control names are derived from `prefix` so a single
 ; set of handlers serves every instance. The actual compose/edit happens in the
 ; popup hotkey editor (lib/HotkeyEditor.ahk).
+; cfg fields (one object instead of a long parameter list):
 ;   prefix       - unique per row (e.g. "Main", "Ov", "Rev", "Ign", "Td")
 ;   yBase        - top y of the group
 ;   listValue    - initial "|"-joined hotkey list
 ;   withEnable   - 1 to emit the leading enable checkbox (global functions),
 ;                  0 for the tool dialog (no enable)
-AddHotkeyListRow(guiName, prefix, yBase, listValue, withEnable, enableLabel, enableChecked) {
+;   enableLabel  - text for the enable checkbox (when withEnable = 1)
+;   enableChecked- initial checked state for the enable checkbox
+AddHotkeyListRow(guiName, cfg) {
 	; Assume-global: control variables created here (vMainList, vMainListBox, ...)
 	; must be global so Gui Submit can populate them and the save handlers read them.
 	global
-	local yRow
-	if (withEnable)
+	local yRow, prefix, yBase, listValue
+	prefix := cfg.prefix
+	yBase := cfg.yBase
+	listValue := cfg.listValue
+	if (cfg.withEnable)
 	{
-		Gui, %guiName%:Add, Checkbox, % "x20 y" . yBase . " v" . prefix . "Enabled Checked" . enableChecked, %enableLabel%
+		Gui, %guiName%:Add, Checkbox, % "x20 y" . yBase . " v" . prefix . "Enabled Checked" . cfg.enableChecked, % cfg.enableLabel
 		yRow := yBase + 28
 	}
 	else

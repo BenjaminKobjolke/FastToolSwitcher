@@ -62,8 +62,10 @@ return
 #Include lib/HotkeyCapture.ahk
 #Include lib/HotkeyEditor.ahk
 #Include lib/WindowManager.ahk
+#Include lib/IgnoreWindows.ahk
 #Include lib/HotkeyPreview.ahk
 #Include lib/SettingsGUI.ahk
+#Include lib/ReleaseNotesTab.ahk
 #Include lib/ToolDialog.ahk
 #Include lib/TargetPicker.ahk
 

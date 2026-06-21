@@ -7,15 +7,9 @@ ShowToolDialog:
 	Gui, ToolDialog:+OwnerSettings
 
 	; Apply theme colors and font BEFORE adding controls
-	if (DarkMode = 1)
-	{
-		Gui, ToolDialog:Color, 0x1E1E1E, 0x2D2D2D
-		Gui, ToolDialog:Font, s12 cWhite
-	}
-	else
-	{
-		Gui, ToolDialog:Font, s12 cBlack
-	}
+	ApplyThemeWindowColors("ToolDialog")
+	ApplyThemeFont("ToolDialog", "s12")
+	tdHint := (DarkMode = 1) ? "cWhite" : "cGray"   ; inline hint color, both hints
 
 	; Reset picked window class (will be set by Pick Window button)
 	PickedWindowClass := ""
@@ -52,7 +46,7 @@ ShowToolDialog:
 
 	; Hotkey(s) via the shared list row + popup editor (multiple hotkeys allowed)
 	Gui, ToolDialog:Add, Text, x15 y45 w100, Hotkey(s):
-	AddHotkeyListRow("ToolDialog", "Td", 65, tdHotkey, 0, "", 0)
+	AddHotkeyListRow("ToolDialog", {prefix: "Td", yBase: 65, listValue: tdHotkey, withEnable: 0, enableLabel: "", enableChecked: 0})
 
 	Gui, ToolDialog:Add, Text, x15 y155 w100, Exe Name:
 	Gui, ToolDialog:Add, Edit, x120 y152 w300 vTdExeName, %tdExeName%
@@ -63,20 +57,14 @@ ShowToolDialog:
 
 	Gui, ToolDialog:Add, Text, x15 y235 w100, Window Title:
 	Gui, ToolDialog:Add, Edit, x120 y232 w300 vTdWindowTitle, %tdWindowTitle%
-	if (DarkMode = 1)
-		Gui, ToolDialog:Add, Text, x15 y265 cWhite, (optional, for matching by title)
-	else
-		Gui, ToolDialog:Add, Text, x15 y265 cGray, (optional, for matching by title)
+	Gui, ToolDialog:Add, Text, % "x15 y265 " . tdHint, (optional, for matching by title)
 
 	Gui, ToolDialog:Add, Text, x15 y300 w100, Arguments:
 	Gui, ToolDialog:Add, Edit, x120 y297 w300 vTdArguments, %tdArguments%
 
 	Gui, ToolDialog:Add, Text, x15 y340 w100, Exclude Title:
 	Gui, ToolDialog:Add, Edit, x120 y337 w300 vTdExcludeTitle, %tdExcludeTitle%
-	if (DarkMode = 1)
-		Gui, ToolDialog:Add, Text, x15 y370 cWhite, (windows containing this text are ignored)
-	else
-		Gui, ToolDialog:Add, Text, x15 y370 cGray, (windows containing this text are ignored)
+	Gui, ToolDialog:Add, Text, % "x15 y370 " . tdHint, (windows containing this text are ignored)
 
 	; Send to background option
 	Gui, ToolDialog:Add, Checkbox, x15 y405 vChkSendToBackground Checked%tdSendToBackground%, Send to background when already focused
@@ -119,7 +107,7 @@ ToolDialogSave:
 	; Validate required fields
 	if (TdName = "" || TdExeName = "" || TdExePath = "")
 	{
-		MsgBox, 48, Tool Switcher, Name, Exe Name, and Exe Path are required.
+		MsgBox, 48, %APP_TITLE%, Name, Exe Name, and Exe Path are required.
 		return
 	}
 
@@ -132,7 +120,7 @@ ToolDialogSave:
 		conflict := FindHotkeyConflict(hk, EditingToolIndex)
 		if (conflict != "")
 		{
-			MsgBox, 48, Tool Switcher, Hotkey %hk% is already assigned to %conflict%.`n`nPlease choose a different hotkey.
+			MsgBox, 48, %APP_TITLE%, Hotkey %hk% is already assigned to %conflict%.`n`nPlease choose a different hotkey.
 			return
 		}
 	}

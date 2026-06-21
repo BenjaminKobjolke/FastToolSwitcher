@@ -13,15 +13,8 @@ ShowSettings:
 	Gui, Settings:New, +Resize, Tool Switcher Settings
 
 	; Apply theme colors and font BEFORE adding controls
-	if (DarkMode = 1)
-	{
-		Gui, Settings:Color, 0x1E1E1E, 0x2D2D2D
-		Gui, Settings:Font, s12 cWhite
-	}
-	else
-	{
-		Gui, Settings:Font, s12 cBlack
-	}
+	ApplyThemeWindowColors("Settings")
+	ApplyThemeFont("Settings", "s12")
 
 	Gui, Settings:Add, Tab3, x10 y10 w520 h585 vSettingsTab, Settings|Tools|Design|Release Notes
 
@@ -31,10 +24,10 @@ ShowSettings:
 	; composes each hotkey). Multiple hotkeys may be bound to one function.
 	Gui, Settings:Tab, Settings
 
-	AddHotkeyListRow("Settings", "Main", 50, MainHotkey, 1, "Enable window cycling hotkey", MainHotkeyEnabled)
-	AddHotkeyListRow("Settings", "Ov", 160, OverviewHotkey, 1, "Enable shortcuts overview hotkey", OverviewHotkeyEnabled)
-	AddHotkeyListRow("Settings", "Rev", 270, MainHotkeyReversed, 1, "Enable reverse window cycling hotkey", MainHotkeyReversedEnabled)
-	AddHotkeyListRow("Settings", "Ign", 380, IgnoreHotkey, 1, "Enable ignore window hotkey", IgnoreHotkeyEnabled)
+	AddHotkeyListRow("Settings", {prefix: "Main", yBase: 50, listValue: MainHotkey, withEnable: 1, enableLabel: "Enable window cycling hotkey", enableChecked: MainHotkeyEnabled})
+	AddHotkeyListRow("Settings", {prefix: "Ov", yBase: 160, listValue: OverviewHotkey, withEnable: 1, enableLabel: "Enable shortcuts overview hotkey", enableChecked: OverviewHotkeyEnabled})
+	AddHotkeyListRow("Settings", {prefix: "Rev", yBase: 270, listValue: MainHotkeyReversed, withEnable: 1, enableLabel: "Enable reverse window cycling hotkey", enableChecked: MainHotkeyReversedEnabled})
+	AddHotkeyListRow("Settings", {prefix: "Ign", yBase: 380, listValue: IgnoreHotkey, withEnable: 1, enableLabel: "Enable ignore window hotkey", enableChecked: IgnoreHotkeyEnabled})
 
 	; Mouse + startup options
 	Gui, Settings:Add, Checkbox, x20 y495 vChkMoveMouse Checked%MoveMouse% gToggleSpeedVisibility, Move mouse to center of window when switching
@@ -72,91 +65,7 @@ ShowSettings:
 	Gui, Settings:Add, Radio, x20 y120 Checked%lightModeChecked% gThemePreview, Light Mode
 
 	; === Release Notes Tab ===
-	Gui, Settings:Tab, Release Notes
-
-	global RNVersions, CurrentRNIndex
-	RNVersions := CollectReleaseNoteVersions()
-
-	if (!CurrentRNIndex || CurrentRNIndex < 1 || CurrentRNIndex > RNVersions.Length())
-		CurrentRNIndex := 1
-
-	; Build initial content for named controls
-	rnInitVersion := ""
-	rnInitDate := ""
-	rnInitNotes := ""
-	rnHasVersions := (RNVersions.Length() > 0)
-
-	if (rnHasVersions)
-	{
-		rnVersion := RNVersions[CurrentRNIndex]
-		rnNotesFile := A_ScriptDir . "\release_notes\" . rnVersion . "\en.json"
-
-		if (FileExist(rnNotesFile))
-		{
-			FileRead, rnJsonStr, %rnNotesFile%
-			rn := ParseReleaseNotesJson(rnJsonStr)
-			rnInitVersion := "Version " . rn.version
-			rnInitDate := rn.date
-			for rnIdx, rnNote in rn.notes
-			{
-				if (rnIdx > 1)
-					rnInitNotes .= "`n"
-				rnInitNotes .= chr(0x2022) . "  " . rnNote
-			}
-		}
-		else
-		{
-			rnInitVersion := "Version " . rnVersion
-			rnInitNotes := "No release notes file found for version " . rnVersion
-		}
-	}
-	else
-	{
-		rnInitNotes := "No release notes available."
-	}
-
-	; Version header
-	if (DarkMode = 1)
-		Gui, Settings:Font, s14 Bold cWhite
-	else
-		Gui, Settings:Font, s14 Bold cBlack
-	Gui, Settings:Add, Text, x20 y50 w300 vRNVersionText, %rnInitVersion%
-
-	; Navigation buttons
-	if (DarkMode = 1)
-		Gui, Settings:Font, s10 Normal cWhite
-	else
-		Gui, Settings:Font, s10 Normal cBlack
-	olderDisabled := (!rnHasVersions || CurrentRNIndex >= RNVersions.Length()) ? " Disabled" : ""
-	newerDisabled := (!rnHasVersions || CurrentRNIndex <= 1) ? " Disabled" : ""
-	Gui, Settings:Add, Button, x350 y47 w70 gRNOlder vBtnRNOlder%olderDisabled%, < Older
-	Gui, Settings:Add, Button, x425 y47 w70 gRNNewer vBtnRNNewer%newerDisabled%, Newer >
-
-	; Date
-	Gui, Settings:Font, s10 Normal
-	if (DarkMode = 1)
-		Gui, Settings:Font, cSilver
-	else
-		Gui, Settings:Font, cGray
-	Gui, Settings:Add, Text, x20 y78 w480 vRNDateText, %rnInitDate%
-
-	; Notes as read-only multi-line Edit
-	if (DarkMode = 1)
-	{
-		Gui, Settings:Font, s11 Normal cWhite
-		Gui, Settings:Add, Edit, x20 y115 w480 h350 vRNNotesEdit +ReadOnly +Multi -WantReturn -E0x200 -TabStop Background0x1E1E1E, %rnInitNotes%
-	}
-	else
-	{
-		Gui, Settings:Font, s11 Normal cBlack
-		Gui, Settings:Add, Edit, x20 y115 w480 h350 vRNNotesEdit +ReadOnly +Multi -WantReturn -E0x200 -TabStop, %rnInitNotes%
-	}
-
-	; Reset font for bottom buttons
-	if (DarkMode = 1)
-		Gui, Settings:Font, s12 cWhite
-	else
-		Gui, Settings:Font, s12 cBlack
+	BuildReleaseNotesTab()
 
 	; === Bottom buttons (outside tabs) ===
 	Gui, Settings:Tab
@@ -164,15 +73,9 @@ ShowSettings:
 	Gui, Settings:Add, Button, x450 y605 w90 gSettingsGuiClose, Cancel
 
 	; Add link at bottom
-	if (DarkMode = 1)
-		Gui, Settings:Font, cAqua
-	else
-		Gui, Settings:Font, cBlue
+	ApplyThemeFont("Settings", "", "cAqua", "cBlue")
 	Gui, Settings:Add, Text, x20 y613 gOpenMoreTools, More tools to improve your workflow
-	if (DarkMode = 1)
-		Gui, Settings:Font, s12 cWhite
-	else
-		Gui, Settings:Font, s12 cBlack
+	ApplyThemeFont("Settings", "s12")
 
 	Gui, Settings:Show, w550 h645
 
@@ -257,7 +160,7 @@ SaveSettings:
 	dupMsg := CollectHotkeyDuplicates(dupPairs)
 	if (dupMsg != "")
 	{
-		MsgBox, 48, Tool Switcher - Duplicate Hotkeys, The following hotkey conflicts were detected:`n`n%dupMsg%`nPlease choose different hotkeys.
+		MsgBox, 48, %APP_TITLE% - Duplicate Hotkeys, The following hotkey conflicts were detected:`n`n%dupMsg%`nPlease choose different hotkeys.
 		return
 	}
 
@@ -347,7 +250,7 @@ ToolEdit:
 	EditingToolIndex := LV_GetNext()
 	if (EditingToolIndex = 0)
 	{
-		MsgBox, 48, Tool Switcher, Please select a tool to edit.
+		MsgBox, 48, %APP_TITLE%, Please select a tool to edit.
 		return
 	}
 	Gosub, ShowToolDialog
@@ -359,7 +262,7 @@ ToolDelete:
 	selectedRow := LV_GetNext()
 	if (selectedRow = 0)
 	{
-		MsgBox, 48, Tool Switcher, Please select a tool to delete.
+		MsgBox, 48, %APP_TITLE%, Please select a tool to delete.
 		return
 	}
 
@@ -375,64 +278,4 @@ return
 
 OpenMoreTools:
 	Run, http://workflow-tools.com/fast-tool-switcher/app-link
-return
-
-RNOlder:
-	global CurrentRNIndex, RNVersions
-	if (CurrentRNIndex < RNVersions.Length())
-		CurrentRNIndex++
-	Gosub, UpdateReleaseNotes
-return
-
-RNNewer:
-	global CurrentRNIndex
-	if (CurrentRNIndex > 1)
-		CurrentRNIndex--
-	Gosub, UpdateReleaseNotes
-return
-
-UpdateReleaseNotes:
-	global CurrentRNIndex, RNVersions
-	if (RNVersions.Length() = 0)
-		return
-
-	rnVersion := RNVersions[CurrentRNIndex]
-	rnNotesFile := A_ScriptDir . "\release_notes\" . rnVersion . "\en.json"
-
-	rnNewVersion := "Version " . rnVersion
-	rnNewDate := ""
-	rnNewNotes := ""
-
-	if (FileExist(rnNotesFile))
-	{
-		FileRead, rnJsonStr, %rnNotesFile%
-		rn := ParseReleaseNotesJson(rnJsonStr)
-		rnNewVersion := "Version " . rn.version
-		rnNewDate := rn.date
-		for rnIdx, rnNote in rn.notes
-		{
-			if (rnIdx > 1)
-				rnNewNotes .= "`n"
-			rnNewNotes .= chr(0x2022) . "  " . rnNote
-		}
-	}
-	else
-	{
-		rnNewNotes := "No release notes file found for version " . rnVersion
-	}
-
-	GuiControl, Settings:, RNVersionText, %rnNewVersion%
-	GuiControl, Settings:, RNDateText, %rnNewDate%
-	GuiControl, Settings:, RNNotesEdit, %rnNewNotes%
-
-	; Enable/disable navigation buttons at boundaries
-	if (CurrentRNIndex >= RNVersions.Length())
-		GuiControl, Settings:Disable, BtnRNOlder
-	else
-		GuiControl, Settings:Enable, BtnRNOlder
-
-	if (CurrentRNIndex <= 1)
-		GuiControl, Settings:Disable, BtnRNNewer
-	else
-		GuiControl, Settings:Enable, BtnRNNewer
 return
