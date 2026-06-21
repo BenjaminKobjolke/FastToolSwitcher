@@ -74,10 +74,7 @@ RestoreIgnoredWindows() {
 	saved := ReadStateFile(IGNORED_STATE_FILE)
 	for id, exe in saved
 	{
-		if (!WinExist("ahk_id " . id))
-			continue
-		WinGet, curExe, ProcessName, ahk_id %id%
-		if (curExe != exe)
+		if (!WindowMatchesExe(id, exe))
 			continue
 		if (IgnoreHotkeyEnabled = 1)
 		{

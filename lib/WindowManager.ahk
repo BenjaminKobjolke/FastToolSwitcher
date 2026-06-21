@@ -118,10 +118,7 @@ RestoreTrackedWindows() {
 	for index, tool in Tools
 	{
 		hwnd := saved[tool.Section]
-		if (hwnd = "" || !WinExist("ahk_id " . hwnd))
-			continue
-		WinGet, exe, ProcessName, ahk_id %hwnd%
-		if (exe = tool.ExeName)
+		if (hwnd != "" && WindowMatchesExe(hwnd, tool.ExeName))
 			tool.TrackedHwnd := hwnd
 	}
 }

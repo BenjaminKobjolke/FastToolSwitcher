@@ -71,6 +71,15 @@ WriteStateFile(path, obj) {
 		FileAppend, %data%, %path%
 }
 
+; True when the window handle is live and its process matches `exe`.
+; Guards a recycled handle (e.g. after a reboot) from matching a stale record.
+WindowMatchesExe(id, exe) {
+	if (!WinExist("ahk_id " . id))
+		return false
+	WinGet, curExe, ProcessName, ahk_id %id%
+	return (curExe = exe)
+}
+
 ; Read key=value lines into a {key:value} object, consuming (deleting) the file.
 ReadStateFile(path) {
 	result := {}
