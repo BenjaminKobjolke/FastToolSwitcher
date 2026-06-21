@@ -213,6 +213,7 @@ SaveSettings:
 		tArguments := ""
 		tExcludeTitle := ""
 		tSendToBackground := 0
+		tTrackInstance := 0
 		if (A_Index <= Tools.Length())
 		{
 			tWindowTitle := Tools[A_Index].WindowTitle
@@ -220,6 +221,7 @@ SaveSettings:
 			tArguments := Tools[A_Index].Arguments
 			tExcludeTitle := Tools[A_Index].ExcludeTitle
 			tSendToBackground := Tools[A_Index].SendToBackground
+			tTrackInstance := Tools[A_Index].TrackInstance
 		}
 
 		section := "Tool" . A_Index
@@ -232,6 +234,7 @@ SaveSettings:
 		IniWrite, %tArguments%, %IniFile%, %section%, Arguments
 		IniWrite, %tExcludeTitle%, %IniFile%, %section%, ExcludeTitle
 		IniWrite, %tSendToBackground%, %IniFile%, %section%, SendToBackground
+		IniWrite, %tTrackInstance%, %IniFile%, %section%, TrackInstance
 	}
 
 	Suspend, Off

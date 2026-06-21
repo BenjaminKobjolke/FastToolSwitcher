@@ -44,6 +44,88 @@ ActivateNextWindow(windows, direction) {
 	MoveMouseToActiveCenter()
 }
 
+; Launch a tool's executable, appending Arguments when present.
+LaunchTool(tool) {
+	if (tool.Arguments != "")
+		Run, % tool.ExePath . " " . tool.Arguments
+	else
+		Run, % tool.ExePath
+}
+
+; Launch a tool and record the handle of the window it spawned. Snapshots the
+; exe's current windows, launches, then polls for the first new (non-excluded)
+; window and stores it on tool.TrackedHwnd so future presses return to it.
+; ponytail: 5s poll, first new window wins — may catch a transient window in
+; rare cases; bump the timeout / add a title filter if it misbehaves.
+LaunchAndTrack(ByRef tool) {
+	spec := "ahk_exe " . tool.ExeName
+	WinGet, beforeList, List, %spec%
+	existing := {}
+	Loop, %beforeList%
+		existing[beforeList%A_Index%] := 1
+
+	LaunchTool(tool)
+
+	newHwnd := ""
+	Loop, 50
+	{
+		Sleep, 100
+		WinGet, afterList, List, %spec%
+		Loop, %afterList%
+		{
+			hwnd := afterList%A_Index%
+			if (existing.HasKey(hwnd))
+				continue
+			if (tool.ExcludeTitle != "")
+			{
+				WinGetTitle, candidateTitle, ahk_id %hwnd%
+				if (InStr(candidateTitle, tool.ExcludeTitle))
+					continue
+			}
+			newHwnd := hwnd
+			break
+		}
+		if (newHwnd != "")
+			break
+	}
+
+	if (newHwnd != "")
+	{
+		tool.TrackedHwnd := newHwnd
+		WinActivate, % "ahk_id " . newHwnd
+		MoveMouseToActiveCenter()
+	}
+}
+
+; OnExit handler: persist live tracked handles so the next instance (after a
+; Reload, which keeps target windows open) can return to the same windows.
+SaveTrackedWindows(ExitReason := "", ExitCode := "") {
+	global Tools, TRACKED_STATE_FILE
+	obj := {}
+	for index, tool in Tools
+	{
+		if (tool.TrackInstance = 1 && tool.TrackedHwnd != "" && WinExist("ahk_id " . tool.TrackedHwnd))
+			obj[tool.Section] := tool.TrackedHwnd
+	}
+	WriteStateFile(TRACKED_STATE_FILE, obj)
+}
+
+; Startup: restore tracked handles by tool section, keeping only handles that are
+; still live AND still belong to the tool's exe (guards a recycled handle).
+RestoreTrackedWindows() {
+	global Tools, TRACKED_STATE_FILE
+	saved := ReadStateFile(TRACKED_STATE_FILE)
+	for index, tool in Tools
+	{
+		hwnd := saved[tool.Section]
+		if (hwnd = "" || !WinExist("ahk_id " . hwnd))
+			continue
+		WinGet, exe, ProcessName, ahk_id %hwnd%
+		if (exe = tool.ExeName)
+			tool.TrackedHwnd := hwnd
+	}
+}
+
 HandleToolHotkey:
 	; Find which tool triggered this hotkey
 	triggeredHotkey := A_ThisHotkey
@@ -98,18 +180,27 @@ HandleToolHotkey:
 			; Sort validWindows by window handle for consistent cycling order
 			SortByHandle(validWindows)
 
+			; Instance tracking: narrow to the single window this tool launched,
+			; or (re)launch and record it when none is tracked/alive yet.
+			if (tool.TrackInstance = 1)
+			{
+				if (tool.TrackedHwnd != "" && WinExist("ahk_id " . tool.TrackedHwnd))
+				{
+					validWindows := [tool.TrackedHwnd]
+					zOrderWindows := [tool.TrackedHwnd]
+				}
+				else
+				{
+					LaunchAndTrack(tool)
+					break
+				}
+			}
+
 			; Handle based on valid window count
 			if (validWindows.Length() = 0)
 			{
 				; No valid windows exist, launch new instance
-				if (tool.Arguments != "")
-				{
-					Run, % tool.ExePath . " " . tool.Arguments
-				}
-				else
-				{
-					Run, % tool.ExePath
-				}
+				LaunchTool(tool)
 			}
 			else
 			{

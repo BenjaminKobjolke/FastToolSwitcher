@@ -27,6 +27,7 @@ ShowToolDialog:
 		tdArguments := editTool.Arguments
 		tdExcludeTitle := editTool.ExcludeTitle
 		tdSendToBackground := editTool.SendToBackground
+		tdTrackInstance := editTool.TrackInstance
 	}
 	else
 	{
@@ -39,6 +40,7 @@ ShowToolDialog:
 		tdArguments := ""
 		tdExcludeTitle := ""
 		tdSendToBackground := 0
+		tdTrackInstance := 0
 	}
 
 	Gui, ToolDialog:Add, Text, x15 y20 w100, Name:
@@ -52,8 +54,8 @@ ShowToolDialog:
 	Gui, ToolDialog:Add, Edit, x120 y152 w300 vTdExeName, %tdExeName%
 
 	Gui, ToolDialog:Add, Text, x15 y195 w100, Exe Path:
-	Gui, ToolDialog:Add, Edit, x120 y192 w260 vTdExePath, %tdExePath%
-	Gui, ToolDialog:Add, Button, x385 y191 w35 gBrowseExePath, ...
+	Gui, ToolDialog:Add, Edit, x120 y192 w260 r1 vTdExePath, %tdExePath%
+	Gui, ToolDialog:Add, Button, x385 y191 w35 h23 gBrowseExePath, ...
 
 	Gui, ToolDialog:Add, Text, x15 y235 w100, Window Title:
 	Gui, ToolDialog:Add, Edit, x120 y232 w300 vTdWindowTitle, %tdWindowTitle%
@@ -69,13 +71,16 @@ ShowToolDialog:
 	; Send to background option
 	Gui, ToolDialog:Add, Checkbox, x15 y405 vChkSendToBackground Checked%tdSendToBackground%, Send to background when already focused
 
+	; Track launched instance (return to the exact window this tool launched)
+	Gui, ToolDialog:Add, Checkbox, x15 y435 vChkTrackInstance Checked%tdTrackInstance%, Track launched instance (return to this window)
+
 	; Pick Window button
-	Gui, ToolDialog:Add, Button, x120 y445 w120 gStartTargetPicker, Pick Window
+	Gui, ToolDialog:Add, Button, x120 y475 w120 gStartTargetPicker, Pick Window
 
-	Gui, ToolDialog:Add, Button, x240 y495 w90 gToolDialogSave Default, Save
-	Gui, ToolDialog:Add, Button, x340 y495 w90 gToolDialogClose, Cancel
+	Gui, ToolDialog:Add, Button, x240 y525 w90 gToolDialogSave Default, Save
+	Gui, ToolDialog:Add, Button, x340 y525 w90 gToolDialogClose, Cancel
 
-	Gui, ToolDialog:Show, w520 h545
+	Gui, ToolDialog:Show, w520 h575
 
 	; Apply dark title bar after showing
 	if (DarkMode = 1)
@@ -142,6 +147,7 @@ ToolDialogSave:
 	newTool.Arguments := TdArguments
 	newTool.ExcludeTitle := TdExcludeTitle
 	newTool.SendToBackground := ChkSendToBackground
+	newTool.TrackInstance := ChkTrackInstance
 
 	Gui, Settings:Default
 	Gui, ListView, ToolListView

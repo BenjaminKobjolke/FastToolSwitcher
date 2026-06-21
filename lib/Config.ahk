@@ -19,7 +19,8 @@ global NO_OTHER_WINDOW_MESSAGE := "Only one window - nothing to switch to"
 global KEY_PLACEHOLDER_PROMPT := "Press key..."     ; key-capture field placeholders,
 global KEY_PLACEHOLDER_TIMEOUT := "(timeout)"       ; written + validated from one source
 global KEY_PLACEHOLDER_CANCELLED := "(cancelled)"
-global IGNORED_STATE_FILE := A_Temp . "\FastToolSwitcher_ignored.txt"  ; reload handoff only
+global IGNORED_STATE_FILE := A_Temp . "\FastToolSwitcher_ignored.txt"  ; reload + relaunch handoff
+global TRACKED_STATE_FILE := A_Temp . "\FastToolSwitcher_tracked.txt"  ; tracked-instance handles
 global MoveMouse := 1
 global DarkMode := 1
 global MouseMoveSpeed := 0
@@ -116,6 +117,7 @@ LoadTools() {
 		IniRead, ToolArguments, %IniFile%, %ToolSection%, Arguments, %A_Space%
 		IniRead, ToolExcludeTitle, %IniFile%, %ToolSection%, ExcludeTitle, %A_Space%
 		IniRead, ToolSendToBackground, %IniFile%, %ToolSection%, SendToBackground, 0
+		IniRead, ToolTrackInstance, %IniFile%, %ToolSection%, TrackInstance, 0
 
 		; Skip tools with empty ExeName (invalid/missing tool definition)
 		if (ToolExeName = "")
@@ -132,6 +134,7 @@ LoadTools() {
 		Tool.Arguments := ToolArguments
 		Tool.ExcludeTitle := ToolExcludeTitle
 		Tool.SendToBackground := ToolSendToBackground
+		Tool.TrackInstance := ToolTrackInstance
 		Tool.Section := ToolSection
 
 		Tools.Push(Tool)

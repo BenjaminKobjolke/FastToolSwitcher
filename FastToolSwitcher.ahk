@@ -27,6 +27,10 @@ OnExit("StripIgnoreMarkers")
 ; Restore ignored windows handed over from a previous instance across a reload
 RestoreIgnoredWindows()
 
+; Persist/restore tracked-instance window handles across a reload
+OnExit("SaveTrackedWindows")
+RestoreTrackedWindows()
+
 ; Setup system tray menu
 Menu, Tray, NoStandard
 Menu, Tray, Add, Settings, ShowSettings

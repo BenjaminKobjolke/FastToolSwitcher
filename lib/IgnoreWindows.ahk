@@ -1,6 +1,6 @@
 ; ==================== IgnoreWindows.ahk ====================
 ; "Ignore window" feature: mark windows so the main cycle skips them, persist the
-; marks across a Reload, and reconcile the title suffix that flags them.
+; marks across a Reload or relaunch, and reconcile the title suffix that flags them.
 ; Contains labels (ToggleIgnoreActiveWindow, MarkerWatch), so it must be
 ; #Included AFTER the auto-execute section.
 
@@ -33,50 +33,55 @@ RemoveIgnoreSuffix(windowID) {
 ; state is handed to the next instance via a temp file and the suffixes are left in
 ; place. On a genuine exit the markers are stripped and the handoff file removed.
 StripIgnoreMarkers(ExitReason := "", ExitCode := "") {
-	global IgnoredWindows, IGNORED_STATE_FILE
+	global IgnoredWindows
 	if (ExitReason = "Reload")
 	{
 		SaveIgnoredWindows()
 		return
 	}
+	; Genuine exit: remember the handles for the next launch, but clean the
+	; visible title suffixes so no marked titles linger while the app is closed.
 	SetTimer, MarkerWatch, Off
+	SaveIgnoredWindows()
 	for id in IgnoredWindows
 	{
 		if (!WinExist("ahk_id " . id))
 			continue
 		RemoveIgnoreSuffix(id)
 	}
-	IgnoredWindows := {}
-	FileDelete, %IGNORED_STATE_FILE%
 }
 
-; Persist the ignored window handles so a Reload can restore them.
+; Persist the ignored window handles (with their exe) so a Reload or a later
+; relaunch can restore them. Only live windows are written.
 SaveIgnoredWindows() {
 	global IgnoredWindows, IGNORED_STATE_FILE
-	ids := ""
-	for id in IgnoredWindows
-		ids .= (ids = "" ? "" : ",") . id
-	FileDelete, %IGNORED_STATE_FILE%
-	if (ids != "")
-		FileAppend, %ids%, %IGNORED_STATE_FILE%
+	obj := {}
+	for id, exe in IgnoredWindows
+	{
+		if (WinExist("ahk_id " . id))
+			obj[id] := exe
+	}
+	WriteStateFile(IGNORED_STATE_FILE, obj)
 }
 
-; Restore the ignored window handles after a Reload, then consume the handoff file.
-; If the ignore feature was turned off in the save that caused the reload, the saved
-; windows are un-ignored (suffix stripped) instead of restored.
+; Restore the ignored window handles after a Reload or relaunch, consuming the
+; handoff file. Each handle must still be live AND belong to the same exe it had
+; when ignored (guards a recycled handle after a reboot). If the ignore feature
+; was turned off in the save that caused the reload, the saved windows are
+; un-ignored (suffix stripped) instead of restored.
 RestoreIgnoredWindows() {
 	global IgnoredWindows, IGNORED_STATE_FILE, IgnoreHotkeyEnabled
-	if (!FileExist(IGNORED_STATE_FILE))
-		return
-	FileRead, ids, %IGNORED_STATE_FILE%
-	FileDelete, %IGNORED_STATE_FILE%
-	for index, id in StrSplit(ids, ",")
+	saved := ReadStateFile(IGNORED_STATE_FILE)
+	for id, exe in saved
 	{
-		if (id = "" || !WinExist("ahk_id " . id))
+		if (!WinExist("ahk_id " . id))
+			continue
+		WinGet, curExe, ProcessName, ahk_id %id%
+		if (curExe != exe)
 			continue
 		if (IgnoreHotkeyEnabled = 1)
 		{
-			IgnoredWindows[id] := 1
+			IgnoredWindows[id] := exe
 			ApplyIgnoreSuffix(id)
 		}
 		else
@@ -100,7 +105,8 @@ ToggleIgnoreActiveWindow:
 	}
 	else
 	{
-		IgnoredWindows[ignoreID] := 1
+		WinGet, ignoreExe, ProcessName, A
+		IgnoredWindows[ignoreID] := ignoreExe
 		ApplyIgnoreSuffix(ignoreID)
 		ShowMouseTooltip("Window ignored")
 	}

@@ -60,6 +60,34 @@ CompareVersionDesc(a, b) {
 	return 0
 }
 
+; Serialize a {key:value} object as key=value lines; delete the file when empty.
+; Shared temp-file handoff used by the ignore-window and instance-tracking state.
+WriteStateFile(path, obj) {
+	data := ""
+	for key, val in obj
+		data .= key . "=" . val . "`n"
+	FileDelete, %path%
+	if (data != "")
+		FileAppend, %data%, %path%
+}
+
+; Read key=value lines into a {key:value} object, consuming (deleting) the file.
+ReadStateFile(path) {
+	result := {}
+	if (!FileExist(path))
+		return result
+	FileRead, content, %path%
+	FileDelete, %path%
+	for index, line in StrSplit(content, "`n", "`r")
+	{
+		if (line = "")
+			continue
+		pair := StrSplit(line, "=")
+		result[pair[1]] := pair[2]
+	}
+	return result
+}
+
 ApplyDarkMode(hwnd) {
 	; Dark title bar (Windows 10 1809+)
 	DllCall("dwmapi\DwmSetWindowAttribute", "Ptr", hwnd, "Int", 20, "Int*", 1, "Int", 4)
