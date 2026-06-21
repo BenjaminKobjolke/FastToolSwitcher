@@ -1,0 +1,7 @@
+{
+  "version": "1.0.5",
+  "date": "2026-06-21",
+  "notes": [
+    "Nuevo: al volver a pulsar la tecla de acceso rápido de una herramienta, ahora se activa la última ventana que usaste para esa herramienta, en lugar de saltar siempre a la primera. FastToolSwitcher rastrea las ventanas que abre cada herramienta."
+  ]
+}

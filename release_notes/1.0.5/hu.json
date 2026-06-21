@@ -1,0 +1,7 @@
+{
+  "version": "1.0.5",
+  "date": "2026-06-21",
+  "notes": [
+    "Új: egy eszköz gyorsbillentyűjének újbóli megnyomása most az adott eszközhöz legutóbb használt ablakot aktiválja, ahelyett hogy mindig az elsőre ugrana — a FastToolSwitcher nyomon követi az egyes eszközök által megnyitott ablakokat"
+  ]
+}

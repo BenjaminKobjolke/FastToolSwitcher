@@ -1,0 +1,7 @@
+{
+  "version": "1.0.5",
+  "date": "2026-06-21",
+  "notes": [
+    "Neu: Wenn du die Hotkey-Taste eines Tools erneut drückst, wird jetzt das zuletzt verwendete Fenster dieses Tools aktiviert, statt immer zum ersten zu springen – FastToolSwitcher merkt sich die Fenster, die jedes Tool öffnet."
+  ]
+}

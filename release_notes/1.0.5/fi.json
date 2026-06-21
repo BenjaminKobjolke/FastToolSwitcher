@@ -1,0 +1,7 @@
+{
+  "version": "1.0.5",
+  "date": "2026-06-21",
+  "notes": [
+    "Uutta: työkalun pikanäppäimen painaminen uudelleen aktivoi nyt viimeksi kyseisellä työkalulla käyttämäsi ikkunan sen sijaan, että se hyppäisi aina ensimmäiseen — FastToolSwitcher seuraa kunkin työkalun avaamia ikkunoita"
+  ]
+}

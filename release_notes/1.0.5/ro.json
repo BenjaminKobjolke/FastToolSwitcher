@@ -1,0 +1,7 @@
+{
+  "version": "1.0.5",
+  "date": "2026-06-21",
+  "notes": [
+    "Nou: apăsarea din nou a tastei rapide a unei unelte activează acum ultima fereastră pe care ai folosit-o pentru acea unealtă, în loc să sară întotdeauna la prima — FastToolSwitcher urmărește ferestrele pe care le deschide fiecare unealtă"
+  ]
+}

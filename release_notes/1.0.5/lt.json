@@ -1,0 +1,7 @@
+{
+  "version": "1.0.5",
+  "date": "2026-06-21",
+  "notes": [
+    "Nauja: dar kartą paspaudus įrankio spartųjį klavišą dabar suaktyvinamas paskutinis langas, kurį naudojote su tuo įrankiu, užuot visada peršokus į pirmąjį — „FastToolSwitcher“ seka kiekvieno įrankio atidarytus langus"
+  ]
+}

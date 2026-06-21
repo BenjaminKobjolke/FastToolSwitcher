@@ -1,0 +1,7 @@
+{
+  "version": "1.0.5",
+  "date": "2026-06-21",
+  "notes": [
+    "Jauns: atkārtoti nospiežot rīka īsinājumtaustiņu, tagad tiek aktivizēts pēdējais logs, ko izmantojāt šim rīkam, nevis vienmēr tiek pārslēgts uz pirmo — FastToolSwitcher seko līdzi logiem, ko atver katrs rīks"
+  ]
+}

@@ -1,0 +1,7 @@
+{
+  "version": "1.0.5",
+  "date": "2026-06-21",
+  "notes": [
+    "Nyhet: Å trykke på hurtigtasten til et verktøy på nytt aktiverer nå det siste vinduet du brukte for det verktøyet, i stedet for alltid å hoppe til det første — FastToolSwitcher sporer vinduene hvert verktøy åpner"
+  ]
+}

@@ -1,0 +1,7 @@
+{
+  "version": "1.0.5",
+  "date": "2026-06-21",
+  "notes": [
+    "Uus: tööriista kiirklahvi uuesti vajutamine aktiveerib nüüd viimase akna, mida selle tööriistaga kasutasid, selle asemel et alati hüpata esimesele — FastToolSwitcher jälgib aknaid, mida iga tööriist avab"
+  ]
+}

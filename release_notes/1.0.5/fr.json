@@ -1,0 +1,7 @@
+{
+  "version": "1.0.5",
+  "date": "2026-06-21",
+  "notes": [
+    "Nouveau : réappuyer sur le raccourci clavier d’un outil active désormais la dernière fenêtre que vous avez utilisée pour cet outil, au lieu de revenir systématiquement à la première — FastToolSwitcher suit les fenêtres ouvertes par chaque outil"
+  ]
+}

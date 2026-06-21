@@ -1,0 +1,7 @@
+{
+  "version": "1.0.5",
+  "date": "2026-06-21",
+  "notes": [
+    "Nyhed: Hvis du trykker på et værktøjs genvejstast igen, aktiveres nu det seneste vindue, du brugte til det værktøj, i stedet for altid at hoppe til det første — FastToolSwitcher sporer de vinduer, som hvert værktøj åbner"
+  ]
+}

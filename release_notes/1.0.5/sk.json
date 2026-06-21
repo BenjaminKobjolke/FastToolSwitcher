@@ -1,0 +1,7 @@
+{
+  "version": "1.0.5",
+  "date": "2026-06-21",
+  "notes": [
+    "Nové: opätovné stlačenie klávesovej skratky nástroja teraz aktivuje posledné okno, ktoré ste pre daný nástroj použili, namiesto toho, aby vždy preskočilo na prvé — FastToolSwitcher sleduje okná, ktoré jednotlivé nástroje otvárajú"
+  ]
+}

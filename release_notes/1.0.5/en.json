@@ -1,0 +1,7 @@
+{
+    "version": "1.0.5",
+    "date": "2026-06-21",
+    "notes": [
+        "New: re-pressing a tool's hotkey now activates the last window you used for that tool, instead of always jumping to the first one — FastToolSwitcher tracks the windows each tool opens"
+    ]
+}

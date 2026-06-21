@@ -1,0 +1,7 @@
+{
+  "version": "1.0.5",
+  "date": "2026-06-21",
+  "notes": [
+    "Novo: ponovni pritisak prečaca alata sada aktivira posljednji prozor koji ste koristili za taj alat, umjesto da uvijek skače na prvi — FastToolSwitcher prati prozore koje svaki alat otvara"
+  ]
+}

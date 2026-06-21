@@ -1,0 +1,7 @@
+{
+  "version": "1.0.5",
+  "date": "2026-06-21",
+  "notes": [
+    "Nowość: ponowne naciśnięcie skrótu klawiszowego narzędzia aktywuje teraz ostatnie okno, którego używałeś(-aś) dla tego narzędzia, zamiast zawsze przeskakiwać do pierwszego — FastToolSwitcher śledzi okna otwierane przez każde narzędzie"
+  ]
+}

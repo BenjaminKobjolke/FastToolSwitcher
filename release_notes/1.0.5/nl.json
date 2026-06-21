@@ -1,0 +1,7 @@
+{
+  "version": "1.0.5",
+  "date": "2026-06-21",
+  "notes": [
+    "Nieuw: als je de sneltoets van een tool opnieuw indrukt, wordt nu het laatste venster geactiveerd dat je voor die tool hebt gebruikt, in plaats van altijd naar het eerste te springen — FastToolSwitcher houdt de vensters bij die elke tool opent"
+  ]
+}

@@ -1,0 +1,7 @@
+{
+  "version": "1.0.5",
+  "date": "2026-06-21",
+  "notes": [
+    "Mới: nhấn lại phím tắt của một công cụ giờ sẽ kích hoạt cửa sổ cuối cùng bạn đã dùng cho công cụ đó, thay vì luôn nhảy về cửa sổ đầu tiên — FastToolSwitcher theo dõi các cửa sổ mà mỗi công cụ mở"
+  ]
+}

@@ -1,0 +1,7 @@
+{
+  "version": "1.0.5",
+  "date": "2026-06-21",
+  "notes": [
+    "Novo: voltar a premir a tecla de atalho de uma ferramenta ativa agora a última janela que utilizou para essa ferramenta, em vez de saltar sempre para a primeira — o FastToolSwitcher acompanha as janelas que cada ferramenta abre"
+  ]
+}

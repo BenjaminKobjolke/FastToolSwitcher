@@ -1,0 +1,7 @@
+{
+  "version": "1.0.5",
+  "date": "2026-06-21",
+  "notes": [
+    "Nyhet: om du trycker på ett verktygs snabbtangent igen aktiveras nu det senaste fönstret du använde för det verktyget, i stället för att alltid hoppa till det första — FastToolSwitcher håller reda på fönstren som varje verktyg öppnar"
+  ]
+}

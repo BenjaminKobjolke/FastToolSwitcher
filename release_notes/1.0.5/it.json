@@ -1,0 +1,7 @@
+{
+  "version": "1.0.5",
+  "date": "2026-06-21",
+  "notes": [
+    "Novità: premendo di nuovo il tasto di scelta rapida di uno strumento si attiva ora l’ultima finestra usata per quello strumento, invece di saltare sempre alla prima — FastToolSwitcher tiene traccia delle finestre aperte da ciascuno strumento"
+  ]
+}

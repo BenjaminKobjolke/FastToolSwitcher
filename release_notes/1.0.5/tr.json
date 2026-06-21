@@ -1,0 +1,7 @@
+{
+  "version": "1.0.5",
+  "date": "2026-06-21",
+  "notes": [
+    "Yeni: Bir aracın kısayol tuşuna yeniden basmak artık her zaman ilk pencereye atlamak yerine, o araç için en son kullandığınız pencereyi etkinleştirir — FastToolSwitcher her aracın açtığı pencereleri takip eder"
+  ]
+}

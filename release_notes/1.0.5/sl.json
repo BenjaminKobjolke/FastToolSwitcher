@@ -1,0 +1,7 @@
+{
+  "version": "1.0.5",
+  "date": "2026-06-21",
+  "notes": [
+    "Novo: ponovni pritisk bližnjične tipke orodja zdaj aktivira zadnje okno, ki ste ga uporabili za to orodje, namesto da bi vedno preskočil na prvo — FastToolSwitcher spremlja okna, ki jih odpre posamezno orodje"
+  ]
+}
