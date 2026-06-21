@@ -160,7 +160,11 @@ HandleToolHotkey:
 				validWindows.Push(windowID)
 			}
 
-			; Sort validWindows by window handle for consistent ordering
+			; Capture Z-order (most-recently-used first) before sorting.
+			; validWindows is in Z-order from WinGet; SortByHandle sorts in place.
+			zOrderWindows := validWindows.Clone()
+
+			; Sort validWindows by window handle for consistent cycling order
 			SortByHandle(validWindows)
 
 			; Handle based on valid window count
@@ -217,9 +221,10 @@ HandleToolHotkey:
 				}
 				else
 				{
-					; No valid window is active, activate first non-ignored one
-					targetID := validWindows[1]
-					for vi, wid in validWindows
+					; No valid window is active, activate the most-recently-used
+					; (first in Z-order) non-ignored window
+					targetID := zOrderWindows[1]
+					for vi, wid in zOrderWindows
 					{
 						if (!IsWindowIgnored(wid))
 						{

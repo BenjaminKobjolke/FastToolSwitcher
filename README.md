@@ -8,6 +8,7 @@ A lightweight AutoHotkey tool for quickly switching between applications using c
 - **Hotkey-based switching** - Assign custom hotkeys to your frequently used applications
 - **Multiple hotkeys per action** - Bind several hotkeys to the same tool or function; any of them triggers it (see [docs/MULTIPLE_HOTKEYS.md](docs/MULTIPLE_HOTKEYS.md))
 - **Smart window detection** - Finds windows by executable name or window title
+- **Return to last-used window** - When you are on another application and press a tool's hotkey, it activates the window of that tool you used most recently (not the oldest one)
 - **Window cycling** - Press the same hotkey multiple times to cycle through multiple windows of the same application
 - **Auto-launch** - If the application isn't running, it will be launched automatically
 - **Background send** - If the application is already focused, pressing the hotkey sends it to the background
