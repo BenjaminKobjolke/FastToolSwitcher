@@ -48,6 +48,8 @@ bugs:fix → /verify:after-change
   repeated values. (AHK form: extract into an `#Include`d helper rather than copy-paste.)
 - **Derive, don't duplicate.** When one value strictly determines another, pass only the
   determinant and derive the rest — never thread both side-by-side into illegal combinations.
+- **Use objects for related values.** When several related values travel together between
+  functions/classes, bundle them into one config/settings object instead of long parameter lists.
 - **Reuse existing models/structures** before inventing parallel data shapes. Search first.
 - **String constants centralized.** No raw strings scattered across the codebase.
 - **Prefer type-safe / explicit values** over stringly-typed magic where the language allows.
