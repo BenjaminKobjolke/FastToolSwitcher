@@ -1,6 +1,6 @@
-REM @echo off
-cd D:\GIT\BenjaminKobjolke\release-tool
+@echo off
+cd /d D:\GIT\BenjaminKobjolke\release-tool
 
 call uv run python -m release_tool "%~dp0..\FastToolSwitcher.exe" "%~dp0publish_settings.ini" --previous-version 1.0.4 --verbose
 
-cd "%~dp0"
+cd /d "%~dp0"
